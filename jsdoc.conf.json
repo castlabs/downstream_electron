@@ -1,0 +1,19 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": [
+      "jsdoc"
+    ]
+  },
+  "plugins": [],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "name": "DOWNstream For Electron",
+    "footerText": "castLabs DOWNstream For Electron",
+    "default": {
+      "outputSourceFiles": false,
+      "useLongnameInNav": true
+    }
+  }
+}
