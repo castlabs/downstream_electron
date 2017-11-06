@@ -35,7 +35,7 @@
   "dependencies": {
     "biguint-format": "1.0.0",
     "cors": "2.8.4",
-    "electron-castlabs": "https://github.com/castlabs/electron-releases#v1.8.1-vmp1010",
+    "electron": "https://github.com/castlabs/electron-releases#v1.8.1-vmp1010",
     "electron-window-manager": "1.0.4",
     "express": "4.16.2",
     "flake-idgen": "1.1.0",
