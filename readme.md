@@ -1,5 +1,13 @@
 # Downstream For Electron 
 
+## castLabs Electron Release
+
+To simplify the use of Widevine DRM and allow protected playback of offline content castLabs has created a fork of Electron with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. Such a release is installed by the default npm package scripts, see [Development](#development) and [Build](#build) sections below.
+
+More information is available here:
+
+https://github.com/castlabs/electron-releases
+
 ## Development
 1. `npm install`
 2. `npm start`
