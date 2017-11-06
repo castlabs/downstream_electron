@@ -1,8 +1,12 @@
-# Downstream For Electron 
+# DOWNstream For Electron
 
-## castLabs Electron Release
+## Summary
 
-To simplify the use of Widevine DRM and allow protected playback of offline content castLabs has created a fork of Electron with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. Such a release is installed by the default npm package scripts, see [Development](#development) and [Build](#build) sections below.
+DOWNstream is an open-source plugin for use with Electron allowing encrypted MPEG-DASH streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.
+
+## castLabs Electron Release for Content Security
+
+To simplify the use of Widevine DRM and allow protected playback of offline content within Electron castLabs has created a fork with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. Such a release is installed by the default npm package scripts, see [Development](#development) and [Build](#build) sections below.
 
 More information is available here:
 
