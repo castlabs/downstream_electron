@@ -55,7 +55,7 @@ const AdaptationSetNode = (function (_super) {
   };
 
   AdaptationSetNode.prototype.isMimeType = function (str) {
-    return this.attributeList['mimeType'].indexOf(str) != -1 ? true : false;
+    return (this.attributeList['mimeType'].indexOf(str) != -1 || this.attributeList['contentType'].indexOf(str) != -1) ? true : false;
   };
   AdaptationSetNode.prototype.getRepresentations = function () {
     const coll = this.representationColl.map(function (item) {
