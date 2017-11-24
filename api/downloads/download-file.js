@@ -160,10 +160,10 @@ DownloadFile.prototype._onDownloadFailure = function (err, aborted) {
     if (this._errors <= this._options.maxDownloadRetry) {
       this._retryDownload();
     } else {
-      this.emit("error", err);
+      this.emit("error", { message: err});
     }
   } else {
-    this.emit("error", err);
+    this.emit("error", { message: err});
   }
 
 };

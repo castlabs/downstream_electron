@@ -5,6 +5,8 @@ const downstreamElectron = require('./api/index');
 // TESTING PRODUCTION
 // const downstreamElectron = require('./dist/index');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const exampleFile = `file://${__dirname}/examples/main/index.html`;
 const path = require("path");
 
