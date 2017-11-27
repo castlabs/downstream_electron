@@ -163,6 +163,10 @@ const SegmentInformation = (function () {
     const segmentDuration = parseInt(this.segmentTemplate.attributes.getNamedItem("duration").nodeValue);
     const segmentTimescale = (this.segmentTemplate.attributes.getNamedItem("timescale")) ? parseInt(
         this.segmentTemplate.attributes.getNamedItem("timescale").nodeValue) : 1;
+
+    // use math.ceil, instead of math.floor, because floor returns the largest integer less than or equal to a given number.
+    // math.ceil returns the smallest integer greater than or equal to a given number.
+    // using math.floor may lead to an incorrect number of segments.
     const numSegments = Math.ceil(this.presentationDuration / (segmentDuration / segmentTimescale) / 1000);
     const mediaTemplateStringSegment = this.mediaTemplate.split('$');
     let templateReplaceableIndex;
@@ -173,6 +177,7 @@ const SegmentInformation = (function () {
       }
     }
     const paddingAmount = ZeroPadding_1.ZeroPadding.getPaddingAmount(templateReplaceableIndex);
+    // end condition of loop must be strictly inferior (to avoid to compute too many mediaUrls)
     for (let i = startNumber; i < numSegments + startNumber; i++) {
       const segmentIndex = ZeroPadding_1.ZeroPadding.addPadding(i, paddingAmount);
       let fragment;

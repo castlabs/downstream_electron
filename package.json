@@ -16,6 +16,7 @@
     "jasmine_test": "./node_modules/jasmine-node/bin/jasmine-node units/ --junitreport --output tmp",
     "jasmine_report": "./node_modules/junit-viewer/bin/junit-viewer --results=tmp/TEST-utildownloadsjs.xml --save=tmp/units_result.html",
     "start": "electron .",
+    "debug": "electron --inspect=5858 .",
     "travis-build": "npm run eslint && npm run jasmine_test && npm run build && npm run jsdoc && true"
   },
   "author": "castlabs GmbH",
