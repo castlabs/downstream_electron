@@ -5,6 +5,9 @@ const downstreamElectronBE = require('./api/downstream-electron-be');
 //BUILD
 // const downstreamElectronBE = require('./build/downstream-electron-be');
 
+// allow self-signed certificates (this is the case for some Dash.js manifest)
+app.commandLine.appendSwitch('ignore-certificate-errors');
+
 const exampleFile = `file://${__dirname}/examples/main/index.html`;
 const path = require("path");
 

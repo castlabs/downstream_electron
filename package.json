@@ -42,7 +42,7 @@
     "jsonfile": "4.0.0",
     "mkdirp": "0.5.1",
     "moment": "2.19.0",
-    "request": "https://github.com/castlabs/request",
+    "electron-fetch": "1.0.0",
     "underscore": "1.8.3",
     "url-parse": "1.1.9",
     "xmldom": "0.1.27"
