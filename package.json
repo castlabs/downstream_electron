@@ -1,7 +1,7 @@
 {
   "name": "downstream-electron",
   "version": "0.1.0",
-  "description": "Downstream For Electron",
+  "description": "DOWNstream For Electron",
   "main": "index.js",
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {

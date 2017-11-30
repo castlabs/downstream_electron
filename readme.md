@@ -24,6 +24,9 @@ https://github.com/castlabs/electron-releases
 5. `npm start`
 
 ## Documentation 
+Documentation is available publicly at 
+https://castlabs.github.io/downstream_electron/
+
 1. `npm run jsdoc`
 2. Open `jsdoc/index.html` in any browser
 3. If you want to generate docs with private methods run `npm run jsdoc_prv`
