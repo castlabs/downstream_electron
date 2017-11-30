@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Interface: Persistent</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Interface: Persistent</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>Persistent</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">object which should be passed during the initialization for <a href="DownstreamElectronFE.html#init">DownstreamElectronFE#init</a>.
+It should implements 2 methods for creating and removing the persistent session</div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="PersistentConfig"><span class="type-signature"></span>PersistentConfig<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    persistent config needed to be passed to <a href="Persistent.html#createPersistentSession">Persistent#createPersistentSession</a>
+</div>
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>licenseUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">url to license server</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>serverCertificate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Uint8Array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">server certificate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pssh</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">protection information from manifest for widevine (ContentProtection), this is base64 string
+if not provided it will be injected automatically by API</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>licenseRequest</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The callback function that will be triggered before the
+<a href="https://developer.mozilla.org/pl/docs/XMLHttpRequest">request</a>, for example when you need to add request headers</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>licenseResponse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The callback function that will be triggered with the
+<a href="https://developer.mozilla.org/pl/docs/XMLHttpRequest">request</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var config = {
+  licenseUrl: 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/',
+  serverCertificate: new Uint8Array(&lt;server_certificate>),
+  licenseRequest: function (<a href="https://developer.mozilla.org/pl/docs/XMLHttpRequest">request</a>) {
+    request.setRequestHeader('&lt;headerParam>', '&lt;headerValue>');
+    .....
+    request.setRequestHeader('Authorization', '........');
+    request.setRequestHeader('dt-custom-data', '........');
+  },
+  licenseResponse: function (<a href="https://developer.mozilla.org/pl/docs/XMLHttpRequest">request</a>) {
+    console.log(request.getAllResponseHeaders());
+  }
+};</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="createPersistentSession"><span class="type-signature"></span>createPersistentSession<span class="signature">(config)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    should create a persistent session and resolve it with sessionId
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Persistent.html#PersistentConfig">Persistent#PersistentConfig</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">persistent config</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removePersistentSession"><span class="type-signature"></span>removePersistentSession<span class="signature">(sessionId)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    remove persistent session
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">session identifier</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Namespaces</h3><ul><li><a href="downloadUtil.html">downloadUtil</a></li><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 19:19:27 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
