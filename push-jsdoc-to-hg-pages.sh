@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo `pwd`
-if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "travis_test" ]; then
+if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
     echo -e "Publishing jsdoc...\n"
     echo `pwd`
