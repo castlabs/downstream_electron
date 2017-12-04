@@ -12,7 +12,7 @@ if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_
     git rm -rf *.html
     cp -r ../jsdoc/ .
     cp -r ../build/ ./build
-    git add .
+    git add -f .
     git commit --amend -m "Latest documentation on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
     git push -fq origin gh-pages > /dev/null
     cd ..
