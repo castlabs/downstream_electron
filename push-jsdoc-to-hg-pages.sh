@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-echo `pwd`
 if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
     echo -e "Publishing jsdoc...\n"
@@ -19,10 +18,9 @@ if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_
     git add -f .
     git commit --amend -m "Latest documentation on successful travis build $TRAVIS_BUILD_NUMBER auto-pushed to gh-pages"
     git push -fq origin gh-pages > /dev/null
-#    cd ..
-#    rm -rf gh-pages
 
     echo -e "Published jsdoc to gh-pages.\n"
-
+else
+    echo -e "JSDoc not published until changes will be merged to master.\n"
 fi
 
