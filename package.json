@@ -5,7 +5,7 @@
   "main": "index.js",
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {
-    "build": "webpack && npm run jsdoc",
+    "build": "webpack",
     "eslint": "./node_modules/.bin/eslint api",
     "jsdoc": "./node_modules/.bin/jsdoc api -r --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
     "jsdoc_prv": "./node_modules/.bin/jsdoc api -r -p --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
@@ -29,14 +29,12 @@
     "jsdoc": "3.5.5",
     "jsdoc-webpack-plugin": "0.0.2",
     "shaka-player": "2.2.2",
-    "webpack": "3.6.0",
-    "webpack-node-externals": "1.6.0"
+    "webpack": "3.6.0"
   },
   "dependencies": {
     "biguint-format": "1.0.0",
     "cors": "2.8.4",
     "electron": "https://github.com/castlabs/electron-releases#v1.8.1-vmp1010",
-    "electron-window-manager": "1.0.4",
     "express": "4.16.2",
     "flake-idgen": "1.1.0",
     "fs-extra": "4.0.2",
