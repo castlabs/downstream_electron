@@ -4,7 +4,7 @@ if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_
     echo -e "Publishing jsdoc...\n"
 
     rm -rf gh-pages
-    git clone --quiet --branch=gh-pages https://$GH_TOKEN@github.com/castlabs/downstream_electron gh-pages > /dev/null
+    git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/castlabs/downstream_electron gh-pages > /dev/null
     cd gh-pages
     git rm -rf ./fonts
     git rm -rf ./scripts
