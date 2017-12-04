@@ -6,6 +6,7 @@ node_js:
   - "7"
 before_install:
   - npm install --only=dev
+install:
   - npm run jsdoc
   - npm run build
 script: ./push-jsdoc-to-hg-pages.sh
