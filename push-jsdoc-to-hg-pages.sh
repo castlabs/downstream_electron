@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+echo "$TRAVIS_REPO_SLUG"
+echo "$TRAVIS_PULL_REQUEST"
+echo "$TRAVIS_BRANCH"
+
 if [ "$TRAVIS_REPO_SLUG" == "castlabs/downstream_electron" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "travis_test" ]; then
 
     echo -e "Publishing jsdoc...\n"
