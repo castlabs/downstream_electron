@@ -6,6 +6,6 @@ node_js:
   - "7"
 install:
   - npm install --only=dev
-script: travis_build_sh
+script: build.sh
 after_success:
   - ./push-jsdoc-to-hg-pages.sh
