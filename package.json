@@ -9,8 +9,7 @@
     "eslint": "./node_modules/.bin/eslint api",
     "jsdoc": "./node_modules/.bin/jsdoc api -r --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
     "jsdoc_prv": "./node_modules/.bin/jsdoc api -r -p --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
-    "start": "electron .",
-    "test": "./node_modules/.bin/eslint api"
+    "start": "electron ."
   },
   "author": "castlabs GmbH",
   "maintainers": [
