@@ -6,6 +6,7 @@
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {
     "build": "webpack",
+    "travis-build": "npm run eslint && npm run build && npm run jsdoc",
     "eslint": "./node_modules/.bin/eslint api",
     "jsdoc": "./node_modules/.bin/jsdoc api -r --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
     "jsdoc_prv": "./node_modules/.bin/jsdoc api -r -p --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
