@@ -1,4 +1,4 @@
-## DOWNstream For Electron
+## DOWNstream For Electron [![Build Status](https://travis-ci.org/castlabs/downstream_electron.svg?branch=master)](https://travis-ci.org/castlabs/downstream_electron)
  
 [DOWNstream](https://github.com/castlabs/downstream_electron) is an open-source plugin for use with Electron allowing encrypted MPEG-DASH streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.
 
