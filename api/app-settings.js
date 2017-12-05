@@ -45,7 +45,6 @@
  * app.on('ready', createWindow);
  */
 
-const unused = "unused";
 const electronApp = require("electron").app;
 const path = require("path");
 let settings = {
