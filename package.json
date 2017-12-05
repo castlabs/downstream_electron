@@ -27,6 +27,7 @@
     "clean-webpack-plugin": "0.1.17",
     "electron": "https://github.com/castlabs/electron-releases#v1.8.1-vmp1010",
     "eslint": "4.8.0",
+    "electron": "https://github.com/castlabs/electron-releases#v1.8.1-vmp1010",
     "jquery": "3.2.1",
     "jsdoc": "3.5.5",
     "jsdoc-webpack-plugin": "0.0.2",
