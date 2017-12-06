@@ -1,5 +1,5 @@
 "use strict";
-const request = require('request');
+const { net } = require('electron');
 const appSettings = require('../../app-settings');
 
 const ManifestLoader = (function () {
@@ -9,18 +9,34 @@ const ManifestLoader = (function () {
     return this.sendXMLHttpRequest(url);
   };
   ManifestLoader.prototype.sendXMLHttpRequest = function (url) {
-    const defaultOptions = Object.assign({}, appSettings.getSettings().defaultManifestRequestOptions);
+    const req_options = Object.assign({url: url}, appSettings.getSettings().defaultManifestRequestOptions);
+
     return new Promise(function (resolve, reject) {
-      request.get(url, defaultOptions, function (error, response) {
-        if (!error && response.statusCode >= 400) {
-          error = response.statusMessage;
-        }
-        if (!error) {
-          resolve({response: response.body, url: url});
-        } else {
+      let req = net.request(req_options);
+      req.on('response', (response) => {
+        
+        response.on("error", function (error) {
           reject(new Error("MANIFEST LOAD FAILURE " + error));
+        });
+
+        let error;
+        if (response.statusCode >= 400) {
+            error = response.statusMessage;
+        }
+
+        if (!error) {
+          let body = [];
+          response.on('data', (chunk) => {
+            body.push(chunk);
+          }).on('end', () => {
+            body = Buffer.concat(body).toString();
+            resolve({response: body, url: url});
+          });
+        } else {
+            reject(new Error("MANIFEST LOAD FAILURE " + error));
         }
       });
+      req.end();
     });
   };
   return ManifestLoader;

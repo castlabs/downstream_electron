@@ -1,6 +1,6 @@
 const downloadFileUtil = require("./download-file-util");
 const fs = require("fs");
-const request = require("request");
+const { net } = require('electron');
 const EventEmitter = require("events").EventEmitter;
 
 /**
@@ -115,8 +115,10 @@ Chunk.prototype.isDownloaded = function () {
 
 Chunk.prototype.start = function () {
   const self = this;
+  
   let req_options = {
-    timeout: this.options.timeout
+    timeout: this.options.timeout,
+    url: this.url,
   };
 
   self.createFileStream(function (err) {
@@ -131,32 +133,41 @@ Chunk.prototype.start = function () {
       return;
     }
     req_options.headers = req_options.headers || {};
+
     if (!self.bytesRangeNotAvailable) {
       req_options.headers.range = "bytes=" + (self.startPosition + self.offsetStartPosition) + "-" + (self.endPosition);
     }
-    self._req = request(self.url, req_options);
-    self._req.on("error", function (error) {
-      if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
-        self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
-          if (!retried) {
-            self.closeStreamAndRequest(function () {
-              self.resolve(downloadFileUtil.errors.TIMEOUT, error);
-            });
-          }
-        });
-      } else {
-        self.closeStreamAndRequest(function () {
-          self.resolve(downloadFileUtil.errors.CHUNK_ERROR);
-        });
-      }
+
+    self._req = net.request(req_options);
+
+    //self._req.setTimeout(req_options.timeout);
+    
+    self._req.on('response', (response) => {
+        response.on("error", function (error) {
+            if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
+              self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
+                if (!retried) {
+                  self.closeStreamAndRequest(function () {
+                    self.resolve(downloadFileUtil.errors.TIMEOUT, error);
+                  });
+                }
+              });
+            } else {
+              self.closeStreamAndRequest(function () {
+                self.resolve(downloadFileUtil.errors.CHUNK_ERROR);
+              });
+            }
+          });
+          response.on("data", function (data) {
+            self.available += data.length;
+            self.downloaded += data.length;
+            self.events.emit("download", data.length);
+          });
+          response.pipe(self.fileStream);
     });
-    self._req.on("data", function (data) {
-      self.available += data.length;
-      self.downloaded += data.length;
-      self.events.emit("download", data.length);
-    });
-    self._req.pipe(self.fileStream);
+    self._req.end();
   });
+  
   return this._promise;
 };
 

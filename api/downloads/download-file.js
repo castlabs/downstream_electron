@@ -1,5 +1,5 @@
 const fs = require("fs");
-const request = require("request");
+const { net } = require('electron');
 const EventEmitter = require("events").EventEmitter;
 const util = require("util");
 const downloadFileUtil = require("./download-file-util");
@@ -241,16 +241,33 @@ DownloadFile.prototype._startChunks = function () {
  */
 DownloadFile.prototype.start = function () {
   const self = this;
-  request.head(this._url, downloadFileUtil.defaultOptions, function (error, response) {
+  
+  let req_options = Object.assign(
+    {
+      url: this._url,
+      method: 'HEAD'
+    }, 
+    downloadFileUtil.defaultOptions
+  ); 
+
+  let req = net.request(req_options);
+
+  req.on('response', (response) => {
     if (response && response.statusCode >= 400) {
       error = response.statusMessage;
+      if (error) {
+        self._onDownloadFailure(error, false);
+        return;
+      }
     }
 
-    if (error) {
-      // console.log("Retrying because request error: for url:", self._url);
-      self._onDownloadFailure(error, false);
-      return;
-    }
+    response.on("error", function (error) { 
+      if (error) {
+        self._onDownloadFailure(error, false);
+        return;
+      }
+    });
+
     self._headers = response.headers;
     self.file_size = Number(self._headers["content-length"]);
     self._chunksNumber = self._calculateChunksNumber(self.file_size);
@@ -280,6 +297,7 @@ DownloadFile.prototype.start = function () {
       }
     });
   });
+  req.end();
 };
 
 /**
