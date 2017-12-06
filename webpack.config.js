@@ -2,7 +2,6 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const packageJson = require("./package.json");
-const nodeExternals = require('webpack-node-externals');
 
 let externals = {};
 for (let key in packageJson.dependencies) {
@@ -90,5 +89,5 @@ module.exports = {
         })
     ],
 
-    externals: nodeExternals()
+    externals: externals
 };

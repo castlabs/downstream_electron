@@ -36,8 +36,7 @@
     "jsdoc-webpack-plugin": "0.0.2",
     "junit-viewer": "^4.11.1",
     "shaka-player": "2.2.2",
-    "webpack": "3.6.0",
-    "webpack-node-externals": "^1.6.0"
+    "webpack": "3.6.0"
   },
   "dependencies": {
     "biguint-format": "1.0.0",
