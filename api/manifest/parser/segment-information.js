@@ -163,7 +163,7 @@ const SegmentInformation = (function () {
     const segmentDuration = parseInt(this.segmentTemplate.attributes.getNamedItem("duration").nodeValue);
     const segmentTimescale = (this.segmentTemplate.attributes.getNamedItem("timescale")) ? parseInt(
         this.segmentTemplate.attributes.getNamedItem("timescale").nodeValue) : 1;
-    const numSegments = Math.floor(this.presentationDuration / (segmentDuration / segmentTimescale) / 1000);
+    const numSegments = Math.ceil(this.presentationDuration / (segmentDuration / segmentTimescale) / 1000);
     const mediaTemplateStringSegment = this.mediaTemplate.split('$');
     let templateReplaceableIndex;
     const startNumber = this.startNumber || 0;
@@ -173,7 +173,7 @@ const SegmentInformation = (function () {
       }
     }
     const paddingAmount = ZeroPadding_1.ZeroPadding.getPaddingAmount(templateReplaceableIndex);
-    for (let i = startNumber; i <= numSegments + startNumber; i++) {
+    for (let i = startNumber; i < numSegments + startNumber; i++) {
       const segmentIndex = ZeroPadding_1.ZeroPadding.addPadding(i, paddingAmount);
       let fragment;
       if (paddingAmount === 0) {
@@ -185,27 +185,16 @@ const SegmentInformation = (function () {
     }
   };
   SegmentInformation.prototype.replace$RepresentationID$ = function (fragment, id) {
-    fragment = fragment.replace(new RegExp('\\$RepresentationID\\$', 'g'), id);
-    return fragment;
+    return fragment.replace(new RegExp('\\$RepresentationID\\$', 'g'), id);
   };
   SegmentInformation.prototype.replace$Number$ = function (fragment, num) {
-    const index = num + this.startNumber;
-    fragment = fragment.replace(new RegExp('\\$Number\\$', 'g'), index.toString());
-    return fragment;
+    return fragment.replace(new RegExp('\\$Number\\$', 'g'), num.toString());
   };
   SegmentInformation.prototype.replace$Bandwidth$ = function (fragment, bandwidth) {
-    fragment = fragment.replace(new RegExp('\\$Bandwidth\\$', 'g'), bandwidth.toString());
-    return fragment;
+    return fragment.replace(new RegExp('\\$Bandwidth\\$', 'g'), bandwidth.toString());
   };
   SegmentInformation.prototype.replace$Time$ = function (fragment, currentIndex) {
-    const index = currentIndex;
-    fragment = fragment.replace(new RegExp('\\$Time\\$', 'g'), index.toString());
-    return fragment;
-  };
-  SegmentInformation.prototype.replace$Time$WithPaddedNumber = function (fragment, currentTime) {
-    fragment = fragment.replace('$Time$', currentTime);
-    fragment = fragment.replace(new RegExp('\\$Time\\$', 'g'), currentTime);
-    return fragment;
+    return fragment.replace(new RegExp('\\$Time\\$', 'g'), currentIndex.toString());
   };
   SegmentInformation.prototype.createInitSegment = function (fragment) {
     fragment = this.replace$Bandwidth$(fragment, this.bandwidth);
