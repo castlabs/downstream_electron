@@ -308,6 +308,8 @@ all methods described in (<a href="DownstreamElectronFE.downloads.html">Downstre
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -336,13 +338,11 @@ all methods described in (<a href="DownstreamElectronFE.downloads.html">Downstre
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>//somewhere in the renderer process
-// this is example based on persistent plugin from Presto Player,
+    <pre class="prettyprint"><code>// somewhere in the renderer process
+// this is example based on persistent plugin from <a href="https://castlabs.com/products/prestoplay-desktop/">PRESTOplay for Desktops</a>,
 // you can create its own too, for details click on >> <a href="Persistent.html">Persistent</a> &lt;&lt;
-const clpp = require("../../clpp/clpp.withstyles.min");
 const persistent = require('./clpp_persistent.plugin.min');
-const DownstreamElectronFE = require("./downstream-electron-fe").init(window, persistent);
-// const player = clpp.init( ....</code></pre>
+const downstreamElectron = require("downstream-electron").init(window, persistent);</code></pre>
 
 
 
@@ -362,13 +362,13 @@ const DownstreamElectronFE = require("./downstream-electron-fe").init(window, pe
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Namespaces</h3><ul><li><a href="downloadUtil.html">downloadUtil</a></li><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Namespaces</h3><ul><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li><li><a href="downloadUtil.html">downloadUtil</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="ContentRoute.html">ContentRoute</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadFileNoHead.html">DownloadFileNoHead</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineContentServer.html">OfflineContentServer</a></li><li><a href="OfflineContentServer__startServer.html">OfflineContentServer#_startServer</a></li><li><a href="OfflineContentServer_serveOfflineContent.html">OfflineContentServer#serveOfflineContent</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 19:19:27 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 12 2023 15:39:19 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -184,6 +184,8 @@
 
 
 
+
+
     
     </div>
 
@@ -203,6 +205,244 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="_stopWithStatus"><span class="type-signature"></span>_stopWithStatus<span class="signature">(manifestId, onSuccess, onFailure, status, statusDetails)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>manifestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">manifest identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when stop has been successfully</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onFailure</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when stop failed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the status</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>statusDetails</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">adds details about status (on errors for example)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
 
         
             
@@ -312,6 +552,8 @@
 
     
 </dl>
+
+
 
 
 
@@ -473,6 +715,8 @@
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -489,6 +733,202 @@
     <dd>
         
 <span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="performSeek"><span class="type-signature"></span>performSeek<span class="signature">(manifestId, localFile, callback)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Perform a seek - this changes order of fragment download for a manifest
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>manifestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">manifest identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>localFile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">local file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to get result</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
     </dd>
@@ -621,6 +1061,8 @@
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -654,7 +1096,7 @@
     
 
     
-    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">(manifestId, representations, onSuccess, onFailure, fromResumed)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="resume"><span class="type-signature"></span>resume<span class="signature">(manifestId, representations, onSuccess, onFailure)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -783,6 +1225,244 @@
         </tr>
 
     
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">(manifestId, representations, downloadFolder, onSuccess, onFailure, fromResumed, oldstatus)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>manifestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">manifest identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>representations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object containing video, audio and text representations ids</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>downloadFolder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">download folder for video. If undefined, then default download folder is used</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when start has been successfully</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onFailure</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when start failed</td>
+        </tr>
+
+    
 
         <tr>
             
@@ -803,6 +1483,29 @@
             
 
             <td class="description last">if start has been called from resume api method</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>oldstatus</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if from resumed, then indicates the old status of download</td>
         </tr>
 
     
@@ -861,6 +1564,8 @@
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -890,7 +1595,7 @@
     
 
     
-    <h4 class="name" id="startQueue"><span class="type-signature"></span>startQueue<span class="signature">(nextManifestPositionInArray<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="startQueue"><span class="type-signature"></span>startQueue<span class="signature">(nextManifestPositionInArray<span class="signature-attributes">opt</span>, forceDownload)</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
@@ -963,6 +1668,37 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>forceDownload</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">true to force next download to be queued</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1005,6 +1741,8 @@
 
     
 </dl>
+
+
 
 
 
@@ -1208,6 +1946,8 @@
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -1375,6 +2115,8 @@
 
 
 
+
+
 <h5>Returns:</h5>
 
         
@@ -1403,6 +2145,225 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="updateDownloadFolder"><span class="type-signature"></span>updateDownloadFolder<span class="signature">(manifestId, downloadFolder, onSuccess, onFailure)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Update download folder path
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>manifestId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">manifest identifier</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>downloadFolder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">new download folder</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onSuccess</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when start has been successfully</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onFailure</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to be invoked when start failed</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -1418,13 +2379,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Namespaces</h3><ul><li><a href="downloadUtil.html">downloadUtil</a></li><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Namespaces</h3><ul><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li><li><a href="downloadUtil.html">downloadUtil</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="ContentRoute.html">ContentRoute</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadFileNoHead.html">DownloadFileNoHead</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineContentServer.html">OfflineContentServer</a></li><li><a href="OfflineContentServer__startServer.html">OfflineContentServer#_startServer</a></li><li><a href="OfflineContentServer_serveOfflineContent.html">OfflineContentServer#serveOfflineContent</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 19:19:27 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 12 2023 15:39:19 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

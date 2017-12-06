@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: util/translation</title>
+    <title>JSDoc: Class: OfflineContentServer</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: util/translation</h1>
+    <h1 class="page-title">Class: OfflineContentServer</h1>
 
     
 
@@ -28,6 +28,9 @@
 
 <header>
     
+        <h2><span class="attribs"><span class="type-signature"></span></span>OfflineContentServer<span class="signature">(offlineController, downloadController, maxOfflineContentPortRange, offlineContentPort)</span><span class="type-signature"></span></h2>
+        
+    
 </header>
 
 <article>
@@ -35,14 +38,32 @@
     
         
 
-        
+    
 
-
-    <h5 class="subsection-title">Properties:</h5>
+    
+    <h4 class="name" id="OfflineContentServer"><span class="type-signature"></span>new OfflineContentServer<span class="signature">(offlineController, downloadController, maxOfflineContentPortRange, offlineContentPort)</span><span class="type-signature"></span></h4>
+    
 
     
 
-<table class="props">
+
+
+<div class="description">
+    Offline content server
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
     <thead>
     <tr>
         
@@ -64,13 +85,13 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>offlineController</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">translationErrors</span>
+<span class="param-type">object</span>
 
 
             
@@ -80,12 +101,83 @@
 
             
 
-            <td class="description last">translationErrors</td>
+            <td class="description last">: offline controller</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>downloadController</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">: download controller</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxOfflineContentPortRange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">max range for offline port to on which content can be served</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offlineContentPort</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">on which port offline content should be served, default is 3010</td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -126,7 +218,24 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -135,94 +244,15 @@
     
 
     
+        <h3 class="subsection-title">Classes</h3>
 
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
+        <dl>
+            <dt><a href="OfflineContentServer__startServer.html">_startServer</a></dt>
+            <dd></dd>
         
-            
-
-    
-
-    
-    <h4 class="name" id=".getError"><span class="type-signature">(static) </span>getError<span class="signature">(key)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">translation object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
+            <dt><a href="OfflineContentServer_serveOfflineContent.html">serveOfflineContent</a></dt>
+            <dd></dd>
+        </dl>
     
 
     
@@ -233,221 +263,6 @@
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - error object with code, msg and keys
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".getTranslation"><span class="type-signature">(static) </span>getTranslation<span class="signature">(key)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">translation object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    - return translated string with correctly applied values
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
     
 
     

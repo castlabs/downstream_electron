@@ -233,7 +233,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -264,7 +264,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -296,7 +296,7 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -320,6 +320,108 @@
   it might go to hundreds of chunks (50 files can be downloaded at the same time per manifest). Also the highger number
   doesn't mean it will downloads all movies faster. You should find here some balance.
   Seems like 2-3 manifests gives the best results, 1 manifest limitation might work better for slower computers.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>customManifestIdFolderRegex</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">regex</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">regex to use to validate custom manifest id - bear in mind that this
+need to be also a valid folder name.<br>
+By default it matches any letter or number or unicode characters (regional characters) or "-" or "_" as a first character<br>
+Then it may have any letter or number or unicode characters (regional characters) or space or any of the following characters:
+,.;'[]{}!@#$%&*()-_=+</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>openingTagForInvalidCustomManifestIdCharacter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">when customManifestId is being invalidated
+against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
+this is the opening tag to be added before invalid character</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>closingTagForInvalidCustomManifestIdCharacter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">when customManifestId is being invalidated
+against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
+this is the closing tag to be added after invalid character</td>
         </tr>
 
     
@@ -369,7 +471,7 @@
             <h3>Example</h3>
             
     <pre class="prettyprint"><code>//somewhere in the main process
-const DownstreamElectronBE = require('./api/downstream-electron-be');
+const downstreamElectron = require('downstream-electron');
 const userSettings = {
   appDir: "/Users/admin/myApp",
   settingsName: "settings",
@@ -378,7 +480,7 @@ const userSettings = {
   numberOfManifestsInParallel: 3
 };
 function createWindow() {
-  DownstreamElectronBE.init(userSettings);
+  downstreamElectron.init(userSettings);
   const win = new BrowserWindow({
     width: 1200,
     height: 700,
@@ -425,13 +527,13 @@ app.on('ready', createWindow);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Namespaces</h3><ul><li><a href="downloadUtil.html">downloadUtil</a></li><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Namespaces</h3><ul><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li><li><a href="downloadUtil.html">downloadUtil</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="ContentRoute.html">ContentRoute</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadFileNoHead.html">DownloadFileNoHead</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineContentServer.html">OfflineContentServer</a></li><li><a href="OfflineContentServer__startServer.html">OfflineContentServer#_startServer</a></li><li><a href="OfflineContentServer_serveOfflineContent.html">OfflineContentServer#serveOfflineContent</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 19:19:27 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 12 2023 15:39:19 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

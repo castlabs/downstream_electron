@@ -44,9 +44,7 @@ jspm_packages
 
 .DS_Store
 /electron-widevine-test-master/public/
-temp/
-/build/
-build
+tmp/
 
 # folder where offline settings are being kept
 .settings

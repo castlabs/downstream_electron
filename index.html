@@ -43,16 +43,24 @@
 
 
     <section>
-        <article><h2>DOWNstream For Electron <a href="https://travis-ci.org/castlabs/downstream_electron"><img src="https://travis-ci.org/castlabs/downstream_electron.svg?branch=master" alt="Build Status"></a></h2><p><a href="https://github.com/castlabs/downstream_electron">DOWNstream</a> is an open-source plugin for use with Electron allowing encrypted MPEG-DASH streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.</p>
-<h3>Main process</h3><p>  <a href="DownstreamElectronBE.html">DownstreamElectronBE</a> 
-  <a href="build/downstream-electron-be.js">download</a></p>
-<h3>Renderer process</h3><p>  <a href="DownstreamElectronFE.html">DownstreamElectronFE</a> 
-  <a href="build/downstream-electron-fe.js">download</a></p>
-<h2>castLabs Electron Release for Content Security</h2><p>To simplify the use of Widevine DRM and allow protected playback of offline content within Electron CastLabs has created a fork with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. 
+        <article><h2>DOWNstream For Electron <a href="https://travis-ci.org/castlabs/downstream_electron"><img src="https://travis-ci.org/castlabs/downstream_electron.svg?branch=master" alt="Build Status"></a></h2>
+<p><a href="https://github.com/castlabs/downstream_electron">DOWNstream</a> is an open-source plugin to use with Electron allowing encrypted MPEG-DASH and Smooth Streaming streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.</p>
+<h3>Installation</h3>
+<pre class="prettyprint source lang-bash"><code>  npm install downstream-electron --save
+</code></pre>
+<h3>Main process</h3>
+<p><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></p>
+<h3>Renderer process</h3>
+<p><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></p>
+<h3>See available configuration</h3>
+<p><a href="DownstreamElectronBE.configuration.html">Downstream Configuration</a></p>
+<h2>castLabs Electron Release for Content Security</h2>
+<p>To simplify the use of Widevine DRM and allow protected playback of offline content within Electron CastLabs has created a fork with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses.
 Such a release is installed by the default npm package scripts.</p>
 <p>More information is available here:</p>
 <p>https://github.com/castlabs/electron-releases</p>
-<h2>License</h2><p>Copyright (C) 2017 Castlabs GmbH.
+<h2>License</h2>
+<p>Copyright (C) 2017 Castlabs GmbH.
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0</p></article>
     </section>
 
@@ -64,13 +72,13 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Namespaces</h3><ul><li><a href="downloadUtil.html">downloadUtil</a></li><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-util_translation.html">util/translation</a></li></ul><h3>Namespaces</h3><ul><li><a href="DownstreamElectronBE.html">DownstreamElectronBE</a></li><li><a href="DownstreamElectronBE.configuration.html">DownstreamElectronBE.configuration</a></li><li><a href="DownstreamElectronFE.html">DownstreamElectronFE</a></li><li><a href="DownstreamElectronFE.downloads.html">DownstreamElectronFE.downloads</a></li><li><a href="downloadUtil.html">downloadUtil</a></li></ul><h3>Classes</h3><ul><li><a href="ArrayStorage.html">ArrayStorage</a></li><li><a href="ArrayStorageBridge.html">ArrayStorageBridge</a></li><li><a href="Chunk.html">Chunk</a></li><li><a href="ContentRoute.html">ContentRoute</a></li><li><a href="Download.html">Download</a></li><li><a href="DownloadFile.html">DownloadFile</a></li><li><a href="DownloadFileNoHead.html">DownloadFileNoHead</a></li><li><a href="DownloadStats.html">DownloadStats</a></li><li><a href="DownloadsController.html">DownloadsController</a></li><li><a href="DownloadsStorageController.html">DownloadsStorageController</a></li><li><a href="FlushItem.html">FlushItem</a></li><li><a href="ManifestController.html">ManifestController</a></li><li><a href="ManifestLocalLoader.html">ManifestLocalLoader</a></li><li><a href="OfflineContentServer.html">OfflineContentServer</a></li><li><a href="OfflineContentServer__startServer.html">OfflineContentServer#_startServer</a></li><li><a href="OfflineContentServer_serveOfflineContent.html">OfflineContentServer#serveOfflineContent</a></li><li><a href="OfflineController.html">OfflineController</a></li><li><a href="ReadItem.html">ReadItem</a></li><li><a href="Storage.html">Storage</a></li><li><a href="StorageBridge.html">StorageBridge</a></li><li><a href="Subscriber.html">Subscriber</a></li><li><a href="SubscribersController.html">SubscribersController</a></li></ul><h3>Interfaces</h3><ul><li><a href="Persistent.html">Persistent</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkForLocalFile">checkForLocalFile</a></li><li><a href="global.html#convertStorage">convertStorage</a></li><li><a href="global.html#createBridgeMethods">createBridgeMethods</a></li><li><a href="global.html#defaultOptions">defaultOptions</a></li><li><a href="global.html#dirList">dirList</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#filterDirItem">filterDirItem</a></li><li><a href="global.html#writeProgressUsage">writeProgressUsage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 06 2017 19:19:27 GMT+0000 (UTC)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Dec 12 2023 15:39:19 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

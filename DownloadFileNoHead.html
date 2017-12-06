@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: util/translation</title>
+    <title>JSDoc: Class: DownloadFileNoHead</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: util/translation</h1>
+    <h1 class="page-title">Class: DownloadFileNoHead</h1>
 
     
 
@@ -28,6 +28,9 @@
 
 <header>
     
+        <h2><span class="attribs"><span class="type-signature"></span></span>DownloadFileNoHead<span class="signature">(url, destFile, options)</span><span class="type-signature"></span></h2>
+        
+    
 </header>
 
 <article>
@@ -35,14 +38,28 @@
     
         
 
-        
+    
 
-
-    <h5 class="subsection-title">Properties:</h5>
+    
+    <h4 class="name" id="DownloadFileNoHead"><span class="type-signature"></span>new DownloadFileNoHead<span class="signature">(url, destFile, options)</span><span class="type-signature"></span></h4>
+    
 
     
 
-<table class="props">
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
     <thead>
     <tr>
         
@@ -64,13 +81,13 @@
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">translationErrors</span>
+<span class="param-type">string</span>
 
 
             
@@ -80,12 +97,60 @@
 
             
 
-            <td class="description last">translationErrors</td>
+            <td class="description last">remote url</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>destFile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">local url</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">options</td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -126,7 +191,24 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -153,13 +235,16 @@
     
 
     
-    <h4 class="name" id=".getError"><span class="type-signature">(static) </span>getError<span class="signature">(key)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
 
 
 
+<div class="description">
+    starts download
+</div>
 
 
 
@@ -167,54 +252,6 @@
 
 
 
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">translation object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -273,10 +310,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    - error object with code, msg and keys
-</div>
-
 
 
 <dl>
@@ -285,7 +318,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">void</span>
 
 
     </dd>
@@ -303,13 +336,16 @@
     
 
     
-    <h4 class="name" id=".getTranslation"><span class="type-signature">(static) </span>getTranslation<span class="signature">(key)</span><span class="type-signature"> &rarr; {*}</span></h4>
+    <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
     
 
     
 
 
 
+<div class="description">
+    stops download
+</div>
 
 
 
@@ -317,54 +353,6 @@
 
 
 
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">translation object</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -423,10 +411,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    - return translated string with correctly applied values
-</div>
-
 
 
 <dl>
@@ -435,7 +419,7 @@
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type">void</span>
 
 
     </dd>
