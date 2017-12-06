@@ -1,16 +1,18 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 "use strict";
-const _ = require('underscore');
+const _ = require("underscore");
 const mkdirpPromise = require("../util/mkdirp-promise");
 
-const appSettings = require('../app-settings');
-const translation = require('../translation/index');
+const appSettings = require("../app-settings");
+const translation = require("../translation/index");
 const Download = require("../downloads/download");
-const DownloadsStorageController = require('./downloads-storage-controller');
+const DownloadsStorageController = require("./downloads-storage-controller");
 const downloadUtil = require("../util/downloads");
 const DownloadStats = require("../stats/download_stats");
-const STATUSES = require('../downloads/statuses');
+const STATUSES = require("../downloads/statuses");
 const CODES = require("../downloads/codes");
+const constants = require("../constants");
+const utilUrl = require("../util/url");
 
 /**
  *
@@ -250,7 +252,7 @@ DownloadsController.prototype._onDownloadEnd = function (download) {
  */
 DownloadsController.prototype._prepareStartOptions = function (manifestId, videoLinks, audioLinks, textLinks) {
   const count = videoLinks.length + audioLinks.length + textLinks.length;
-  console.info("ADDING ->>> ", manifestId + ',', count, "fragments");
+  console.info("ADDING ->>> ", manifestId + ",", count, "fragments");
   let options = {};
   this.storage.params.setItem(manifestId, this._names.downloadInProgress, 0);
   let maxDownloadInProgress;
@@ -314,16 +316,22 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
   const manifestUrl = manifest.getManifestUrl();
   const manifestName = manifest.getManifestName();
 
-  function getManifestBaseUrl (xml) {
+  function getManifestBaseUrl (xml, manifestUrlDomain) {
     let manifestBaseUrl;
-    const MPD = xml.getElementsByTagName('MPD')[0];
+    const MPD = xml.getElementsByTagName("MPD")[0];
     if (MPD) {
       for (let i = 0, j = MPD.childNodes.length; i < j; i++) {
-        if (MPD.childNodes[i].nodeName === 'BaseURL') {
+        if (MPD.childNodes[i].nodeName === "BaseURL") {
           manifestBaseUrl = MPD.childNodes[i].textContent;
+          if (!manifestBaseUrl.match(constants.regexpProtocolRemove)) {
+            manifestBaseUrl = utilUrl.joinPath(manifestUrlDomain, manifestBaseUrl);
+          }
           break;
         }
       }
+    }
+    if (!manifestBaseUrl) {
+      manifestBaseUrl = manifestUrlDomain;
     }
     return manifestBaseUrl;
   }
@@ -361,7 +369,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
           downloadedHash[downloaded[i].localUrl] = downloaded[i];
         }
 
-        let remotePath = getManifestBaseUrl(manifest.manifestXML.xml) || manifest.url_domain;
+        let remotePath = getManifestBaseUrl(manifest.manifestXML.xml, manifest.url_domain);
         const videoLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, video, videoR, downloadedHash);
         const audioLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, audio, audioR, downloadedHash);
         const textLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, text, textR, downloadedHash);
