@@ -1,5 +1,5 @@
 const fs = require("fs");
-const request = require("request");
+const electronFetch = require('electron-fetch');
 const EventEmitter = require("events").EventEmitter;
 const util = require("util");
 const downloadFileUtil = require("./download-file-util");
@@ -241,45 +241,46 @@ DownloadFile.prototype._startChunks = function () {
  */
 DownloadFile.prototype.start = function () {
   const self = this;
-  request.head(this._url, downloadFileUtil.defaultOptions, function (error, response) {
-    if (response && response.statusCode >= 400) {
-      error = response.statusMessage;
-    }
-
-    if (error) {
-      // console.log("Retrying because request error: for url:", self._url);
-      self._onDownloadFailure(error, false);
-      return;
-    }
-    self._headers = response.headers;
-    self.file_size = Number(self._headers["content-length"]);
-    self._chunksNumber = self._calculateChunksNumber(self.file_size);
-
-    function start () {
-      for (let i = 0, j = self._chunksNumber; i < j; i++) {
-        self._initChunk(i)
+  let defaultOptions = Object.assign({}, downloadFileUtil.defaultOptions);
+  defaultOptions.method = 'HEAD';
+  electronFetch(this._url, defaultOptions)
+    .then((res) =>  {
+      if (res.status >= 400 ) {
+        self._onDownloadFailure({message: res.statusText}, false);
+        return;
       }
-      self._startChunks();
-    }
 
-    downloadFileUtil.checkForLocalFile(self._destFile, function (exists, fileSize) {
-      if (exists) {
-        if (fileSize === self.file_size) {
-          self.emit("end");
-        } else if (fileSize > self.file_size) {
-          fs.unlink(self._destFile);
-          start();
-        } else if (fileSize < self.file_size && self._chunksNumber > 1) {
-          fs.unlink(self._destFile);
-          start();
+      self.file_size = Number(res.headers.get('content-length'));
+      self._chunksNumber = self._calculateChunksNumber(self.file_size);
+
+      function start () {
+        for (let i = 0, j = self._chunksNumber; i < j; i++) {
+          self._initChunk(i)
+        }
+        self._startChunks();
+      }
+
+      downloadFileUtil.checkForLocalFile(self._destFile, function (exists, fileSize) {
+        if (exists) {
+          if (fileSize === self.file_size) {
+            self.emit("end");
+          } else if (fileSize > self.file_size) {
+            fs.unlink(self._destFile);
+            start();
+          } else if (fileSize < self.file_size && self._chunksNumber > 1) {
+            fs.unlink(self._destFile);
+            start();
+          } else {
+            start();
+          }
         } else {
           start();
         }
-      } else {
-        start();
-      }
+      });
+    })
+    .catch((err) => {
+      self._onDownloadFailure(err, false);
     });
-  });
 };
 
 /**

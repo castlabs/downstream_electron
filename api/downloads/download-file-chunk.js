@@ -1,6 +1,6 @@
 const downloadFileUtil = require("./download-file-util");
 const fs = require("fs");
-const request = require("request");
+const electronFetch = require('electron-fetch');
 const EventEmitter = require("events").EventEmitter;
 
 /**
@@ -134,8 +134,22 @@ Chunk.prototype.start = function () {
     if (!self.bytesRangeNotAvailable) {
       req_options.headers.range = "bytes=" + (self.startPosition + self.offsetStartPosition) + "-" + (self.endPosition);
     }
-    self._req = request(self.url, req_options);
-    self._req.on("error", function (error) {
+
+    electronFetch(self.url, req_options)
+      .then((res) => {
+        if (res.status >= 400) {
+          return Promise.reject(new Error(res.status))
+        }
+
+        res.body.pipe(self.fileStream)
+        return res.buffer()
+       })
+      .then((body) => {
+        self.available += body.length;
+        self.downloaded += body.length;
+        self.events.emit("download", body.length);
+    })
+    .catch((error) => {
       if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
         self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
           if (!retried) {
@@ -150,12 +164,6 @@ Chunk.prototype.start = function () {
         });
       }
     });
-    self._req.on("data", function (data) {
-      self.available += data.length;
-      self.downloaded += data.length;
-      self.events.emit("download", data.length);
-    });
-    self._req.pipe(self.fileStream);
   });
   return this._promise;
 };
@@ -171,22 +179,11 @@ Chunk.prototype.closeStreamAndRequest = function (callback) {
       self.fileStream.destroy();
       delete self.fileStream;
     }
-    delete(self._req);
     callback();
   }
 
-  if (this._req) {
-    this._req.removeAllListeners();
-  }
   if (this.fileStream) {
     this.fileStream.removeAllListeners();
-  }
-  if (this._req) {
-    this._req.abort();
-    if (this._req.timeoutTimer) {
-      clearTimeout(this._req.timeoutTimer);
-      this._req.timeoutTimer = null;
-    }
   }
 
   if (this.fileStream) {
@@ -196,7 +193,6 @@ Chunk.prototype.closeStreamAndRequest = function (callback) {
     this.fileStream.end();
     this.fileStream.close(onClose);
   } else {
-    delete this._req;
     callback();
   }
 };
