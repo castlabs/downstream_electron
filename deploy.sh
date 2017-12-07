@@ -16,7 +16,7 @@ fi
 master_rev=`git rev-parse origin/master`
 local_master_rev=`git rev-parse HEAD`
 if [ "$master_rev" != "$local_master_rev" ]; then
-  echo "Please pull latest from master"
+  echo "Please sync your local repo with remote master"
   exit 0
 fi
 npm run eslint || { echo "Build Failed, exiting" ; exit 0 ; }
@@ -29,4 +29,8 @@ if [ "$version" != "patch" ] && [ "$version" != "minor" ] && [ "$version" != "ma
     exit 0
 fi
 npm version "$version"
-#npm publish
+npm publish || { echo "Publishing failed" ; exit 0 ; }
+
+echo "Publish to npm DONE with $version ";
+
+sh ./push-jsdoc-to-hg-pages.sh
