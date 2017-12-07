@@ -1,4 +1,3 @@
-/*jshint node: true */
 "use strict";
 const {net} = require('electron');
 const appSettings = require('../../app-settings');

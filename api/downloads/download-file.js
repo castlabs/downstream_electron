@@ -245,9 +245,9 @@ DownloadFile.prototype.start = function () {
     {
       url: this._url,
       method: 'HEAD'
-    }, 
+    },
     downloadFileUtil.defaultOptions
-  ); 
+  );
   let req = net.request(req_options);
 
   req.on('response', (response) => {
@@ -258,7 +258,7 @@ DownloadFile.prototype.start = function () {
         return;
       }
     }
-    response.on("error", function (error) { 
+    response.on("error", function (error) {
       if (error) {
         self._onDownloadFailure(error, false);
       }
