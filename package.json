@@ -2,7 +2,7 @@
   "name": "downstream-electron",
   "version": "0.1.1",
   "description": "DOWNstream For Electron",
-  "main": "index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
