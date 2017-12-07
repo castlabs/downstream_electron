@@ -4,11 +4,9 @@
 
 ### Main process
   [DownstreamElectronBE](DownstreamElectronBE.html) 
-  [download](build/downstream-electron-be.js)
 
 ### Renderer process
   [DownstreamElectronFE](DownstreamElectronFE.html) 
-  [download](build/downstream-electron-fe.js)
 
 
 ## castLabs Electron Release for Content Security

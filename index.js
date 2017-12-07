@@ -1,9 +1,7 @@
 const { BrowserWindow, app } = require('electron');
 
 //DEV
-const downstreamElectronBE = require('./api/downstream-electron-be');
-//BUILD
-// const downstreamElectronBE = require('./build/downstream-electron-be');
+const downstreamElectron = require('./api/index');
 
 const exampleFile = `file://${__dirname}/examples/main/index.html`;
 const path = require("path");
@@ -12,7 +10,7 @@ function createWindow () {
   // eslint-disable-next-line no-process-env
   let appDir = path.dirname(process.mainModule.filename) + "/";
 
-  downstreamElectronBE.init({
+  downstreamElectron.init({
     appDir: appDir,
     numberOfManifestsInParallel: 2
   });
