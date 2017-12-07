@@ -8,8 +8,9 @@ for (let key in packageJson.dependencies) {
   if (key === "moment") {
     key = key + "/" + key;
   }
-  externals[key] = key;
+  externals[key] = true;
 }
+externals["electron"] = true;
 
 const PATHS = {
   api: path.join(__dirname, "api"),

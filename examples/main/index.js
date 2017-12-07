@@ -4,6 +4,8 @@ const { remote } = require('electron');
 
 // DEV
 const downstreamElectron = require('../../api/index').init(window);
+// TESTING PRODUCTION
+// const downstreamElectron = require('../../dist/index').init(window);
 
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 

@@ -2,6 +2,8 @@ const { BrowserWindow, app } = require('electron');
 
 //DEV
 const downstreamElectron = require('./api/index');
+// TESTING PRODUCTION
+// const downstreamElectron = require('./dist/index');
 
 const exampleFile = `file://${__dirname}/examples/main/index.html`;
 const path = require("path");

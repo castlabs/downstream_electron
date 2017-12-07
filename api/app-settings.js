@@ -21,7 +21,7 @@
  * During initialization you can configure your app
  * @example
  * //somewhere in the main process
- * const DownstreamElectronBE = require('./api/downstream-electron-be');
+ * const downstreamElectron = require('downstream-electron');
  * const userSettings = {
  *   appDir: "/Users/admin/myApp",
  *   settingsName: "settings",
@@ -30,7 +30,7 @@
  *   numberOfManifestsInParallel: 3
  * };
  * function createWindow() {
- *   DownstreamElectronBE.init(userSettings);
+ *   downstreamElectron.init(userSettings);
  *   const win = new BrowserWindow({
  *     width: 1200,
  *     height: 700,
