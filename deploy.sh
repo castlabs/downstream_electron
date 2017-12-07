@@ -35,6 +35,8 @@ if [ "$version" != "patch" ] && [ "$version" != "minor" ] && [ "$version" != "ma
     exit 0
 fi
 npm version "$version"
+# build again so that it will have correct version inside
+npm run travis-build
 npm publish || { echo "Publishing failed" ; exit 0 ; }
 git push origin master
 git push origin --tags

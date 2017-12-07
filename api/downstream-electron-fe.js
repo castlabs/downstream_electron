@@ -476,8 +476,8 @@ module.exports = {
    * initialize the api in render process
    * @returns {DownstreamElectronFE} DownstreamElectronFE
    * @example
-   * //somewhere in the renderer process
-   * // this is example based on persistent plugin from Presto Player,
+   * // somewhere in the renderer process
+   * // this is example based on persistent plugin from {@link https://castlabs.com/products/prestoplay-desktop/|PRESTOplay for Desktops},
    * // you can create its own too, for details click on >> {@link Persistent} <<
    * const persistent = require('./clpp_persistent.plugin.min');
    * const downstreamElectron = require("downstream-electron").init(window, persistent);
