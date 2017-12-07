@@ -18,4 +18,4 @@ git add -f .
 git commit --amend -m "Latest documentation for version $PACKAGE_VERSION"
 git push -fq origin gh-pages > /dev/null
 
-echo -e "Published jsdoc to gh-pages. for version $PACKAGE_VERSION\n"
+echo -e "Published jsdoc to gh-pages for version $PACKAGE_VERSION\n"
