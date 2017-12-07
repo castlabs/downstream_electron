@@ -30,6 +30,7 @@ if [ "$version" != "patch" ] && [ "$version" != "minor" ] && [ "$version" != "ma
 fi
 npm version "$version"
 npm publish || { echo "Publishing failed" ; exit 0 ; }
+git push
 
 echo "Publish to npm DONE with $version ";
 
