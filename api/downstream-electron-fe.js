@@ -479,10 +479,8 @@ module.exports = {
    * //somewhere in the renderer process
    * // this is example based on persistent plugin from Presto Player,
    * // you can create its own too, for details click on >> {@link Persistent} <<
-   * const clpp = require("../../clpp/clpp.withstyles.min");
    * const persistent = require('./clpp_persistent.plugin.min');
-   * const DownstreamElectronFE = require("./downstream-electron-fe").init(window, persistent);
-   * // const player = clpp.init( ....
+   * const downstreamElectron = require("downstream-electron").init(window, persistent);
    */
   init: function (window, persistent) {
     if (!downstreamElectronFE) {
