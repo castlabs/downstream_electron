@@ -1,5 +1,8 @@
 "use strict";
 
+const constants = require("../constants");
+const utilUrl = require("./url");
+
 /**
  * @module
  * @namespace downloadUtil
@@ -19,13 +22,14 @@ let downloadUtil = {};
  * @param {string} manifestId - manifest identifier
  * @param {string} localPath - local path
  * @param {string} remotePath - remote path
- * @param {array} userRepresentations - representations chosen by a user
- * @param {array} manifestRepresentations - all manifest representations
- * @param {string} downloadedHash - download unique identifier
+ * @param {Array} userRepresentations - representations chosen by a user
+ * @param {Array} manifestRepresentations - all manifest representations
+ * @param {object} downloadedHash - download unique identifier
  * @returns {Link[]} array of {@link Link}
  */
 downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath, remotePath, userRepresentations,
-                                                           manifestRepresentations, downloadedHash) {
+                                                           manifestRepresentations, downloadedHash
+) {
   let chosenRepresentations = downloadUtil.getChosenRepresentations(userRepresentations, manifestRepresentations);
   let bandwidth, contentType, localUrl, i, id, j, k, l, links;
   let mediaFile, mediaBaseUrl, mediaUrls, remoteUrl, segmentInformation;
@@ -50,16 +54,19 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
       mediaBaseUrl = mediaUrls[k].baseURL;
       mediaBaseUrl = mediaBaseUrl.replace(/\.\.\//g, "");
       mediaBaseUrl = mediaBaseUrl.replace(/\.\./g, "");
-      if (mediaFile === mediaBaseUrl) {
+      if (mediaFile === mediaBaseUrl || remotePath === mediaBaseUrl) {
         mediaBaseUrl = "";
-      } else if (mediaBaseUrl && mediaBaseUrl[mediaBaseUrl.length - 1] !== "/") {
-        mediaBaseUrl += "/";
       }
-      if (remotePath === mediaBaseUrl) {
-        mediaBaseUrl = '';
+      // remove http and https from mediaBaseUrl, this way it will create a correct folder structure
+      if (mediaBaseUrl.match(constants.regexpProtocolRemove)) {
+        remoteUrl = utilUrl.joinPathWithFile(mediaBaseUrl, mediaFile);
+        localUrl = utilUrl.joinPathWithFile(localPath, mediaBaseUrl.replace(constants.regexpProtocolRemove, ""),
+          mediaFile);
+      } else {
+        remoteUrl = utilUrl.joinPathWithFile(remotePath, mediaBaseUrl, mediaFile);
+        localUrl = utilUrl.joinPathWithFile(localPath, mediaBaseUrl, mediaFile);
       }
-      remoteUrl = remotePath + mediaBaseUrl + mediaFile;
-      localUrl = localPath + mediaBaseUrl + mediaFile;
+
       if ((!downloadedHash[localUrl]) || (!downloadedHash[localUrl] && downloadedHash[localUrl].remoteUrl !== remoteUrl)) {
         links.push({
           id: id,

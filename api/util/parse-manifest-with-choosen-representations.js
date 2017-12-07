@@ -1,8 +1,10 @@
 "use strict";
+const constants = require("../constants");
+
 const Manifest = require("../manifest/loader/manifest").Manifest;
 const ManifestXML = require("../manifest/parser/manifest-xml").ManifestXML;
 
-const XMLSerializer = require('xmldom').XMLSerializer;
+const XMLSerializer = require("xmldom").XMLSerializer;
 
 function getMimeType (value) {
   if (value.indexOf("video") !== -1) {
@@ -53,9 +55,24 @@ function parseManifestWithChoosenRepresentations (manifest, representations) {
     }
   }
 
+  // fix the baseURL by removing http and https the same is done when saving a file
+  // see api/util/downloads.js -> getDownloadLinks
+  function fixBaseURL (repr) {
+    for (let i = 0, j = repr.length; i < j; i++) {
+      let baseURL = repr[i].currentNode.getElementsByTagName("BaseURL")[0];
+      if (baseURL && baseURL.textContent.match(constants.regexpProtocolRemove)) {
+        baseURL.textContent = baseURL.textContent.replace(constants.regexpProtocolRemove, "");
+      }
+    }
+  }
+
   markNodeForDownload(manifest.getVideoRepresentations());
   markNodeForDownload(manifest.getAudioRepresentations());
   markNodeForDownload(manifest.getTextRepresentations());
+
+  fixBaseURL(manifest.getVideoRepresentations());
+  fixBaseURL(manifest.getAudioRepresentations());
+  fixBaseURL(manifest.getTextRepresentations());
 
   let manifestXML = ManifestXML.removeNode(manifest.getManifestXML());
 

@@ -1,7 +1,15 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
+const packageJson = require("./package.json");
+
+let externals = {};
+for (let key in packageJson.dependencies) {
+  if (key === 'moment') {
+    key = key + '/' + key;
+  }
+  externals[key] = key;
+}
 
 const PATHS = {
     api: path.join(__dirname, 'api'),
@@ -81,5 +89,5 @@ module.exports = {
         })
     ],
 
-    externals: nodeExternals()
+    externals: externals
 };

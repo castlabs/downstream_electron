@@ -49,6 +49,7 @@ jspm_packages
 .DS_Store
 /electron-widevine-test-master/public/
 temp/
+tmp/
 /build/
 build
 
