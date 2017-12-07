@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { net } = require('electron');
+const {net} = require('electron');
 const EventEmitter = require("events").EventEmitter;
 const util = require("util");
 const downloadFileUtil = require("./download-file-util");
@@ -241,7 +241,6 @@ DownloadFile.prototype._startChunks = function () {
  */
 DownloadFile.prototype.start = function () {
   const self = this;
-  
   let req_options = Object.assign(
     {
       url: this._url,
@@ -249,22 +248,19 @@ DownloadFile.prototype.start = function () {
     }, 
     downloadFileUtil.defaultOptions
   ); 
-
   let req = net.request(req_options);
 
   req.on('response', (response) => {
     if (response && response.statusCode >= 400) {
-      error = response.statusMessage;
+      let error = response.statusMessage;
       if (error) {
         self._onDownloadFailure(error, false);
         return;
       }
     }
-
     response.on("error", function (error) { 
       if (error) {
         self._onDownloadFailure(error, false);
-        return;
       }
     });
 

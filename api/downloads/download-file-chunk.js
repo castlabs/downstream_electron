@@ -1,6 +1,6 @@
 const downloadFileUtil = require("./download-file-util");
 const fs = require("fs");
-const { net } = require('electron');
+const {net} = require('electron');
 const EventEmitter = require("events").EventEmitter;
 
 /**
@@ -115,7 +115,7 @@ Chunk.prototype.isDownloaded = function () {
 
 Chunk.prototype.start = function () {
   const self = this;
-  
+
   let req_options = {
     timeout: this.options.timeout,
     url: this.url,
@@ -140,8 +140,6 @@ Chunk.prototype.start = function () {
 
     self._req = net.request(req_options);
 
-    //self._req.setTimeout(req_options.timeout);
-    
     self._req.on('response', (response) => {
         response.on("error", function (error) {
             if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
@@ -167,7 +165,6 @@ Chunk.prototype.start = function () {
     });
     self._req.end();
   });
-  
   return this._promise;
 };
 

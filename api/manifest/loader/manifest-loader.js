@@ -1,5 +1,6 @@
+/*jshint node: true */
 "use strict";
-const { net } = require('electron');
+const {net} = require('electron');
 const appSettings = require('../../app-settings');
 
 const ManifestLoader = (function () {
@@ -14,7 +15,7 @@ const ManifestLoader = (function () {
     return new Promise(function (resolve, reject) {
       let req = net.request(req_options);
       req.on('response', (response) => {
-        
+
         response.on("error", function (error) {
           reject(new Error("MANIFEST LOAD FAILURE " + error));
         });
