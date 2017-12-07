@@ -21,7 +21,7 @@
  * During initialization you can configure your app
  * @example
  * //somewhere in the main process
- * const DownstreamElectronBE = require('./api/downstream-electron-be');
+ * const downstreamElectron = require('downstream-electron');
  * const userSettings = {
  *   appDir: "/Users/admin/myApp",
  *   settingsName: "settings",
@@ -30,7 +30,7 @@
  *   numberOfManifestsInParallel: 3
  * };
  * function createWindow() {
- *   DownstreamElectronBE.init(userSettings);
+ *   downstreamElectron.init(userSettings);
  *   const win = new BrowserWindow({
  *     width: 1200,
  *     height: 700,
@@ -45,7 +45,7 @@
  * app.on('ready', createWindow);
  */
 
-const electronApp = require('electron').app;
+const electronApp = require("electron").app;
 const path = require("path");
 let settings = {
   downloadingThreadsRules: {
@@ -59,7 +59,7 @@ let settings = {
       {size: 10, number: 1},
       {size: 100, number: 3},
       {size: 1000, number: 4},
-      {size: 100000, number: 5},
+      {size: 100000, number: 5}
     ]
   },
   MAX_ERRORS_DOWNLOAD_RETRY: 5,
@@ -74,7 +74,7 @@ let settings = {
       "LEFT": "left",
       "DOWNLOADING": "downloading",
       "DOWNLOADED": "downloaded",
-      "ERRORS": "errors",
+      "ERRORS": "errors"
     },
     STATUS: "status",
     PARAMS: "params",
@@ -89,20 +89,20 @@ let settings = {
   },
   defaultManifestRequestOptions: {
     headers: {
-      'Accept': '*/*',
+      "Accept": "*/*",
       // 'Accept-Encoding': 'gzip, deflate, br', // gzip doesn't work
       // 'Accept-Language': 'en-US,en;q=0.8,pl;q=0.6',
       // 'Cache-Control': 'no-cache',
       // 'Connection': 'keep-alive', // @TODO investigate it
       // 'Pragma': 'no-cache',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
     },
     timeout: 5000
   }
 };
 
 function loadUserSettings (jsonSettings) {
-  let appDir = electronApp.getPath('userData');
+  let appDir = electronApp.getPath("userData");
 
   let settingsName = "settings";
   let publicName = "public";

@@ -3,9 +3,9 @@ window.$ = window.jQuery = require('jquery');
 const { remote } = require('electron');
 
 // DEV
-const downstreamElectronFE = require('../../api/downstream-electron-fe').init(window);
-// BUILD
-// const downstreamElectronFE = require('../../build/downstream-electron-fe').init(window);
+const downstreamElectron = require('../../api/index').init(window);
+// TESTING PRODUCTION
+// const downstreamElectron = require('../../dist/index').init(window);
 
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 
@@ -99,7 +99,7 @@ function addStartActions(manifestId) {
     let representations = getSelectedRepresentations();
     let count = representations.video.length + representations.audio.length + representations.text.length;
     if (count > 0) {
-      downstreamElectronFE.downloads.start(manifestId, representations).then(function () {
+      downstreamElectron.downloads.start(manifestId, representations).then(function () {
         clearContent();
         showStatusOK('start');
         addItemActions(manifestId, '#contentActions', '#contentHeader', '#contentMain', '#contentSubscribe',
@@ -142,7 +142,7 @@ function addStartActions(manifestId) {
 
 function checkForMissingSubscribers(contentSubscribe, manifestId) {
   if (!$(contentSubscribe).parents().length) {
-    downstreamElectronFE.downloads.unsubscribe(manifestId).then(function () {
+    downstreamElectron.downloads.unsubscribe(manifestId).then(function () {
       showStatusOK('removing previous subscribers -> ' + manifestId);
     }, function (err) {
       showStatusError('removing previous subscribers -> ' + manifestId, err);
@@ -194,7 +194,7 @@ function addItemActions(manifestId,
       }
     }
 
-    downstreamElectronFE.downloads.subscribe(manifestId, 1000, onProgress, onFinish).then(function () {
+    downstreamElectron.downloads.subscribe(manifestId, 1000, onProgress, onFinish).then(function () {
       showStatusOK('subscribe', contentStatus);
     }, function (err) {
       showStatusError('subscribe', err, contentStatus);
@@ -202,7 +202,7 @@ function addItemActions(manifestId,
   }));
   //UNSUBSCRIBE
   $(contentActions).append($('<input type="button" value="Unsubscribe">').on('click', function () {
-    downstreamElectronFE.downloads.unsubscribe(manifestId).then(function (result) {
+    downstreamElectron.downloads.unsubscribe(manifestId).then(function (result) {
       showStatusOK('unsubscribe', contentStatus);
     }, function (err) {
       showStatusError('unsubscribe', err, contentStatus);
@@ -210,7 +210,7 @@ function addItemActions(manifestId,
   }));
   //STOP
   $(contentActions).append($('<input type="button" value="Stop">').on('click', function () {
-    downstreamElectronFE.downloads.stop(manifestId).then(function () {
+    downstreamElectron.downloads.stop(manifestId).then(function () {
       showStatusOK('stop', contentStatus);
     }, function (err) {
       showStatusError('stop', err, contentStatus);
@@ -218,7 +218,7 @@ function addItemActions(manifestId,
   }));
   //RESUME
   $(contentActions).append($('<input type="button" value="Resume">').on('click', function () {
-    downstreamElectronFE.downloads.resume(manifestId).then(function () {
+    downstreamElectron.downloads.resume(manifestId).then(function () {
       showStatusOK('resume', contentStatus);
     }, function (err) {
       showStatusError('resume', err, contentStatus);
@@ -226,7 +226,7 @@ function addItemActions(manifestId,
   }));
   //INFO
   $(contentActions).append($('<input type="button" value="Info">').on('click', function () {
-    downstreamElectronFE.downloads.info(manifestId).then(function (result) {
+    downstreamElectron.downloads.info(manifestId).then(function (result) {
       clearContent(getContentName(contentMain));
       showInfo(result, contentMain);
       addItemActions(manifestId, contentActions, contentHeader, contentMain, contentSubscribe, contentStatus,
@@ -238,7 +238,7 @@ function addItemActions(manifestId,
   }));
   //PLAY
   $(contentActions).append($('<input type="button" value="PLAY">').on('click', function () {
-    downstreamElectronFE.downloads.getOfflineLink(manifestId).then(function (result) {
+    downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
       playVideo(result.offlineLink, result.persistent, playerUrl);
       showStatusOK('play', contentStatus);
     }, function (err) {
@@ -248,7 +248,7 @@ function addItemActions(manifestId,
   //REMOVE
   $(contentActions).append($('<input type="button" value="Remove">').on('click', function () {
     if (confirm('Do you really want to delete this download? - this cannot be undone')) {
-      downstreamElectronFE.downloads.remove(manifestId).then(function () {
+      downstreamElectron.downloads.remove(manifestId).then(function () {
         showStatusOK('remove -> ', contentStatus);
         if (getContentName(contentMain) === '#' + manifestId) {
           removeFadeOut(contentMain);
@@ -264,7 +264,7 @@ function addItemActions(manifestId,
 
   //Create Persistent Session
   $(contentActions).append($('<input type="button" value="Create Persistent Session">').on('click', function () {
-    downstreamElectronFE.downloads.createPersistent(manifestId, persistentConfig).then(function (persistentSessionId) {
+    downstreamElectron.downloads.createPersistent(manifestId, persistentConfig).then(function (persistentSessionId) {
       showStatusOK('Create Persistent Session: ' + persistentSessionId, contentStatus);
     }, function (err) {
       showStatusError('Create Persistent Session', err, contentStatus);
@@ -273,7 +273,7 @@ function addItemActions(manifestId,
 
   //Remove Persistent Session
   $(contentActions).append($('<input type="button" value="Remove Persistent Session">').on('click', function () {
-    downstreamElectronFE.downloads.removePersistent(manifestId).then(function (result) {
+    downstreamElectron.downloads.removePersistent(manifestId).then(function (result) {
       showStatusOK('Remove Persistent Session', contentStatus);
     }, function (err) {
       showStatusError('Remove Persistent Session', err, contentStatus);
@@ -404,7 +404,7 @@ function addMainActions() {
   //GET ALL
   $('#mainActions').append($('<input type="button" value="getList">').on('click', function () {
     clearContent();
-    downstreamElectronFE.downloads.getListWithInfo().then(function (results) {
+    downstreamElectron.downloads.getListWithInfo().then(function (results) {
       clearContent();
       showStatusOK('getListWithInfo');
       updateListHeader(results.length);
@@ -417,7 +417,7 @@ function addMainActions() {
   //STOP ALL
   $('#mainActions').append($('<input type="button" value="stopAll">').on('click', function () {
     if (confirm('Do you really want to stop all unfinished downloads?')) {
-      downstreamElectronFE.downloads.stopAll().then(function (results) {
+      downstreamElectron.downloads.stopAll().then(function (results) {
         showStatusOK('stopAll');
       }, function (err) {
         showStatusError('stopAll', err);
@@ -428,7 +428,7 @@ function addMainActions() {
   $('#mainActions').append($('<input type="button" value="removeAll">').on('click', function () {
     if (confirm('Do you really want to remove all downloads? - this cannot be undone')) {
       clearContent();
-      downstreamElectronFE.downloads.removeAll().then(function () {
+      downstreamElectron.downloads.removeAll().then(function () {
         clearContent();
         showStatusOK('removeAll');
       }, function (err) {
@@ -440,7 +440,7 @@ function addMainActions() {
   //REMOVE ALL UNFINISHED
   $('#mainActions').append($('<input type="button" value="removeAllUnfinished">').on('click', function () {
     if (confirm('Do you really want to remove all unfinished downloads? - this cannot be undone')) {
-      downstreamElectronFE.downloads.removeAllUnfinished().then(function (results) {
+      downstreamElectron.downloads.removeAllUnfinished().then(function (results) {
         showStatusOK('removeAllUnfinished');
         onRemoveAllUnfinished(results);
       }, function (err) {
@@ -492,7 +492,7 @@ function addStressTest() {
       }
     }
 
-    downstreamElectronFE.downloads.subscribe(manifestId, 1000, onProgress, onFinish).then(function () {
+    downstreamElectron.downloads.subscribe(manifestId, 1000, onProgress, onFinish).then(function () {
       showStatusOK('subscribe', itemContainer);
     }, function (err) {
       showStatusError('subscribe', err, itemContainer);
@@ -504,7 +504,7 @@ function addStressTest() {
     container.append(itemContainer);
     return new Promise(function (resolve, reject) {
 
-      downstreamElectronFE.downloads.create(url).then(function (result) {
+      downstreamElectron.downloads.create(url).then(function (result) {
         let manifestId = result.id;
         result.video.sort(function (item1, item2) {
           let val1 = parseInt(item1.bandwidth, 10);
@@ -524,7 +524,7 @@ function addStressTest() {
         // leave only one representation
         video.splice(1);
 
-        downstreamElectronFE.downloads.start(manifestId, { video: video, audio: audio, text: text }).then(function () {
+        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }).then(function () {
           onStart(manifestId, itemContainer);
           resolve(manifestId);
         }, function (err) {
@@ -550,7 +550,7 @@ function addStressTest() {
       console.log('finished', infos);
     }
 
-    downstreamElectronFE.downloads.subscribe(manifestIds, 1000, onProgress, onFinish);
+    downstreamElectron.downloads.subscribe(manifestIds, 1000, onProgress, onFinish);
   }
 
   $('#mainActions').append($('<input type="button" value="stress start">').on('click', function () {
@@ -564,7 +564,7 @@ function addStressTest() {
   }));
 
   $('#mainActions').append($('<input type="button" value="stress stop">').on('click', function () {
-    downstreamElectronFE.downloads.stopAll().then(function () {
+    downstreamElectron.downloads.stopAll().then(function () {
       container.append('stopped');
     }, function () {
       container.append('already stopped');
@@ -572,7 +572,7 @@ function addStressTest() {
   }));
 
   $('#mainActions').append($('<input type="button" value="stress resume all">').on('click', function () {
-    downstreamElectronFE.downloads.getListWithInfo().then(function (results) {
+    downstreamElectron.downloads.getListWithInfo().then(function (results) {
       results = results.filter(function (result) {
         return result.status !== 'FINISHED';
       });
@@ -583,7 +583,7 @@ function addStressTest() {
 
       function resume(manifestId) {
         return new Promise(function (resolve, reject) {
-          downstreamElectronFE.downloads.resume(manifestId).then(function () {
+          downstreamElectron.downloads.resume(manifestId).then(function () {
             let itemContainer = $('<div></div>');
             container.append(itemContainer);
             onStart(manifestId, itemContainer);
@@ -640,7 +640,7 @@ function onSubmit(e) {
   e.preventDefault();
   let value = document.getElementById('manifestUrl').value;
   clearContent();
-  downstreamElectronFE.downloads.create(value).then(function (result) {
+  downstreamElectron.downloads.create(value).then(function (result) {
     showStatusOK('create');
     $('#contentHeader').html(result.id);
     createCheckBoxes(result.video, 'video');

@@ -1,4 +1,4 @@
-# DOWNstream For Electron
+# DOWNstream For Electron [![Build Status](https://travis-ci.org/castlabs/downstream_electron.svg?branch=master)](https://travis-ci.org/castlabs/downstream_electron)
 
 ## Summary
 
@@ -18,12 +18,15 @@ https://github.com/castlabs/electron-releases
 
 ## Build
 1. `npm install`
-2. edit `index.js` and change line to use `downstream-electron-be` from `build` folder
-3. edit `examples/main/index.js` and change line to use `downstream-electron-fe` from `build` folder
+2. edit `index.js` and change line to use `downstream-electron` from `dist` folder
+3. edit `examples/main/index.js` and change line to use `downstream-electron` from `dist` folder
 4. `npm run build`
 5. `npm start`
 
 ## Documentation 
+Documentation is available publicly at 
+https://castlabs.github.io/downstream_electron/
+
 1. `npm run jsdoc`
 2. Open `jsdoc/index.html` in any browser
 3. If you want to generate docs with private methods run `npm run jsdoc_prv`
