@@ -18,8 +18,8 @@ https://github.com/castlabs/electron-releases
 
 ## Build
 1. `npm install`
-2. edit `index.js` and change line to use `downstream-electron-be` from `build` folder
-3. edit `examples/main/index.js` and change line to use `downstream-electron-fe` from `build` folder
+2. edit `index.js` and change line to use `downstream-electron` from `dist` folder
+3. edit `examples/main/index.js` and change line to use `downstream-electron` from `dist` folder
 4. `npm run build`
 5. `npm start`
 
@@ -38,6 +38,9 @@ https://castlabs.github.io/downstream_electron/
 1. Create new node.js configuration
 2. Node interpreter: `/node_modules/.bin/electron`
 3. Javascript file: `index.js`
+
+## More information
+https://castlabs.com/open-source/downstream/
 
 ## License
 Copyright (C) 2017 Castlabs GmbH.

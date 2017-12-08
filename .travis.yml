@@ -9,5 +9,6 @@ env:
 install:
   - npm install --only=dev
 script: npm run travis-build
-after_success:
-  - ./push-jsdoc-to-hg-pages.sh
+#publish doc only after deploy to npm
+#after_success:
+#  - ./push-jsdoc-to-hg-pages-travis.sh
