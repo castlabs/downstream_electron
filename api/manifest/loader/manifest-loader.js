@@ -29,7 +29,7 @@ const ManifestLoader = (function () {
           response.on('data', (chunk) => {
             body.push(chunk);
           }).on('end', () => {
-            body = Buffer.concat(body).toString();
+            body = Buffer.concat(body);
             resolve({response: body, url: url});
           });
         } else {
