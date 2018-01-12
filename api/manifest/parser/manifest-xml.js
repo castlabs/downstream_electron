@@ -43,7 +43,7 @@ const ManifestXML = (function () {
     const adaptations = this.adaptationSetColl.map(function (item) {
       return item;
     }).filter(function (item) {
-      if (item.isMimeType(which)) {
+      if (item.isMimeType(which) || item.isContentType(which)) {
         return true;
       }
     });
