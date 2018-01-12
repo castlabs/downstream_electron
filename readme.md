@@ -39,6 +39,9 @@ https://castlabs.github.io/downstream_electron/
 2. Node interpreter: `/node_modules/.bin/electron`
 3. Javascript file: `index.js`
 
+## More information
+https://castlabs.com/open-source/downstream/
+
 ## License
 Copyright (C) 2017 Castlabs GmbH.
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
