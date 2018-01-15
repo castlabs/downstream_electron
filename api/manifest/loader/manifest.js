@@ -17,7 +17,7 @@ const Manifest = (function () {
     }
   }
 
-  Manifest.prototype.isUTF16 = function(data) {
+  Manifest.prototype.isUTF16 = function (data) {
     var i = 0;
     var len = data && data.length;
     var pos = null;
