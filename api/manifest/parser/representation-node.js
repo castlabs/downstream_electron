@@ -75,10 +75,10 @@ const RepresentationNode = (function (_super) {
     _super.prototype.writeAttributesToList.call(this, node, list);
   };
   RepresentationNode.prototype.getMimeType = function () {
-    return this.attributeList['mimeType'];
+    return this.attributeList['mimeType'] || this.attributeList['contentType'];
   };
   RepresentationNode.prototype.hasMimeType = function () {
-    return this.attributeList['mimeType'] ? true : false;
+    return this.attributeList['mimeType'] || this.attributeList['contentType'] ? true : false;
   };
   RepresentationNode.prototype.getMediaUrlList = function () {
     return this.segmentInformation.getMediaUrlList();
