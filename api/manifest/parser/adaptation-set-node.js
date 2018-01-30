@@ -61,63 +61,6 @@ const AdaptationSetNode = (function (_super) {
   AdaptationSetNode.prototype.isContentType = function (str) {
     return this.attributeList['contentType'] && this.attributeList['contentType'].indexOf(str) != -1 ? true : false;
   };
-
-  AdaptationSetNode.prototype.getRepresentations = function () {
-    const coll = this.representationColl.map(function (item) {
-      return item;
-    }).sort(function (objA, objB) {
-      if (objA.bandwidth >= objB.bandwidth) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return coll;
-  };
-  AdaptationSetNode.prototype.getVideoRepresentations = function () {
-    const coll = this.representationColl.map(function (item) {
-          return item;
-        })
-        .filter(function () {
-          if (this.isMimeType('video')) {
-            return true;
-          } else {
-            return false;
-          }
-        })
-        .sort(function (objA, objB) {
-          if (objA.bandwidth >= objB.bandwidth) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-    return coll;
-  };
-  AdaptationSetNode.prototype.getAudioRepresentations = function () {
-    const coll = this.representationColl.map(function (item) {
-      return item;
-    }).sort(function (objA, objB) {
-      if (objA.bandwidth >= objB.bandwidth) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return coll;
-  };
-  AdaptationSetNode.prototype.getTextRepresentations = function () {
-    const coll = this.representationColl.map(function (item) {
-      return item;
-    }).sort(function (objA, objB) {
-      if (objA.bandwidth >= objB.bandwidth) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return coll;
-  };
   return AdaptationSetNode;
 }(ManifestNode_1.ManifestNode));
 exports.AdaptationSetNode = AdaptationSetNode;
