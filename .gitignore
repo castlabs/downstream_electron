@@ -7,6 +7,10 @@
 *.iml
 out
 gen### Node template
+
+# VScode
+.vscode
+
 # Logs
 logs
 *.log
