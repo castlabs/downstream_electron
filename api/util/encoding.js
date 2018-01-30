@@ -1,6 +1,6 @@
 "use strict";
 
-function isUTF16(data) {
+function isUTF16 (data) {
   var i = 0;
   var len = data && data.length;
   var pos = null;
@@ -47,7 +47,7 @@ function isUTF16(data) {
   }
 
   return false;
-};
+}
 
 module.exports = {
   isUTF16: isUTF16
