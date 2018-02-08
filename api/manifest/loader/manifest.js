@@ -8,6 +8,8 @@ const jsonRepresentation = require("../parser/json-representation");
 const jsonRepresentationWithProtection = require("../parser/json-representation-with-protection");
 const manifestLoader = new ManifestLoader.ManifestLoader();
 const urlParse = require("url-parse");
+const encoding = require("../../util/encoding");
+
 const Manifest = (function () {
   function Manifest (id) {
     if (!id) {
@@ -26,6 +28,8 @@ const Manifest = (function () {
       _this.manifest_name = pathName.substring(pathName.lastIndexOf('/') + 1, pathName.length);
       const p = manifestLoader.load(url);
       p.then(function (v) {
+        var isEncodingUTF16 = encoding.isUTF16(v.response);
+        v.response = v.response.toString(isEncodingUTF16 ? 'utf16le' : 'utf-8');
         const xml = v.response;
         _this.manifestXML = new ManifestXML_1.ManifestXML(xml, function () {
           resolve();
