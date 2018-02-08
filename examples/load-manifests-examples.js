@@ -9,7 +9,9 @@ function addExamples () {
   const examples = [
     '-',
     'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
-    'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd'
+    'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+    'https://dash.edgesuite.net/akamai/bbb_30fps/bbb_30fps.mpd',
+    'https://vm2.dashif.org/dash/vod/testpic_2s/multi_subs.mpd'
   ];
   for (let i = 0, j = examples.length; i < j; i++) {
     addExample(examples[i]);
