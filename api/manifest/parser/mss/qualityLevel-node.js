@@ -12,7 +12,7 @@ const __extends = (this && this.__extends) || function (d, b) {
   d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 
-const RepresentationNode_1 = require("../representation-node");
+const ManifestNode_1 = require("../manifest-node");
 const IsoDurationParser_1 = require("../../../util/Iso-duration-parser");
 const FragmentInformation_1 = require("./fragment-information");
 const TIME_SCALE_100_NANOSECOND_UNIT = 10000000.0;
@@ -176,5 +176,5 @@ const QualityLevelNode = (function (_super) {
     return this.attributeList['contentType'] ? true : false;
   };
   return QualityLevelNode;
-}(RepresentationNode_1.RepresentationNode));
+}(ManifestNode_1.ManifestNode));
 exports.QualityLevelNode = QualityLevelNode;
