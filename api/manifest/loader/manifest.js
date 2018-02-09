@@ -109,6 +109,9 @@ const Manifest = (function () {
   Manifest.prototype.getManifestXML = function () {
     return this.manifestXML.getManifestXML();
   };
+  Manifest.prototype.removeNode = function () {
+    this.manifestXML.removeNode();
+  };
   Manifest.prototype.getJsonInfo = function () {
     let json = {};
     json.id = this.id;

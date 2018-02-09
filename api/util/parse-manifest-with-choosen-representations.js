@@ -74,9 +74,9 @@ function parseManifestWithChoosenRepresentations (manifest, representations) {
   fixBaseURL(manifest.getAudioRepresentations());
   fixBaseURL(manifest.getTextRepresentations());
 
-  let manifestXML = ManifestXML.removeNode(manifest.getManifestXML());
+  manifest.removeNode();
 
-  return xmlSerializer.serializeToString(manifestXML);
+  return xmlSerializer.serializeToString(manifest.getManifestXML());
 }
 
 module.exports = parseManifestWithChoosenRepresentations;
