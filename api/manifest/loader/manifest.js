@@ -19,6 +19,10 @@ const Manifest = (function () {
     }
   }
 
+  Manifest.prototype.createManifestXML = function (url) {
+      return new ManifestXML_1.ManifestXML();
+  };
+
   Manifest.prototype.load = function (url) {
     const _this = this;
     return new Promise(function (resolve, reject) {
@@ -31,7 +35,8 @@ const Manifest = (function () {
         var isEncodingUTF16 = encoding.isUTF16(v.response);
         v.response = v.response.toString(isEncodingUTF16 ? 'utf16le' : 'utf-8');
         const xml = v.response;
-        _this.manifestXML = new ManifestXML_1.ManifestXML(xml, function () {
+        _this.manifestXML = _this.createManifestXML();
+        _this.manifestXML.parse(xml, function () {
           resolve();
         }, function (e) {
           reject(e);
@@ -49,7 +54,8 @@ const Manifest = (function () {
       ManifestLocalLoader(localPath).then(function (str) {
         _this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
         _this.manifest_name = url.substring(url.lastIndexOf('/') + 1, url.length);
-        _this.manifestXML = new ManifestXML_1.ManifestXML(str, function () {
+        _this.manifestXML = new ManifestXML_1.ManifestXML();
+        _this.manifestXML.parse(str, function () {
           resolve();
         }, function (e) {
           reject(e);
@@ -64,7 +70,8 @@ const Manifest = (function () {
   Manifest.prototype.loadFromStr = function (str, url) {
     this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
     this.manifest_name = url.substring(url.lastIndexOf('/') + 1, url.length);
-    this.manifestXML = new ManifestXML_1.ManifestXML(str);
+    this.manifestXML = new ManifestXML_1.ManifestXML();
+    this.manifestXML.parse(str);
   };
 
   Manifest.prototype.getAdaptationSets = function () {

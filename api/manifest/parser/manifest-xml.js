@@ -2,7 +2,9 @@
 const AdaptationSetNode_1 = require("./adaptation-set-node");
 const DOMParser = require('xmldom').DOMParser;
 const ManifestXML = (function () {
-  function ManifestXML (str, onSuccess, onError) {
+  function ManifestXML () {
+  }
+  ManifestXML.prototype.parse = function (str, onSuccess, onError) {
     let parser;
     if (typeof onSuccess === "function" && typeof onError === "function") {
       parser = new DOMParser({
@@ -17,16 +19,26 @@ const ManifestXML = (function () {
     }
     this.adaptationSetColl = [];
     this.xml = parser.parseFromString(str, "application/xml");
+
+    this.parseAdaptations();
+
+    if (typeof onSuccess === "function") {
+      onSuccess();
+    }
+  };
+  ManifestXML.prototype.getAdaptationSetNodeName = function () {
+    return 'AdaptationSet';
+  };
+  ManifestXML.prototype.getRepresentationNodeName = function () {
+    return 'Representation';
+  };
+  ManifestXML.prototype.parseAdaptations = function () {
     const adaptations = this.xml.getElementsByTagName('AdaptationSet');
     for (let i = 0; i < adaptations.length; i++) {
       const adaptNode = new AdaptationSetNode_1.AdaptationSetNode(adaptations[i], this.xml);
       this.adaptationSetColl[i] = adaptNode;
     }
-    if (typeof onSuccess === "function") {
-      onSuccess();
-    }
-  }
-
+  };
   ManifestXML.prototype.getVideoAdaptation = function () {
     return this.getAdaptations('video');
   };
@@ -55,9 +67,12 @@ const ManifestXML = (function () {
     newDocument.appendChild(newNode);
     return newDocument;
   };
-  ManifestXML.removeNode = function (clone) {
-    const representationCollection = clone.documentElement.getElementsByTagName('Representation');
-    const adaptationCollection = clone.documentElement.getElementsByTagName('AdaptationSet');
+  ManifestXML.prototype.removeNode = function () {
+    let adaptationSetName = this.getAdaptationSetNodeName();
+    let representationName = this.getRepresentationNodeName();
+        
+    let representationCollection = this.xml.documentElement.getElementsByTagName(representationName);
+    let adaptationCollection = this.xml.documentElement.getElementsByTagName(adaptationSetName);
     let repArray = [];
     let adaptationArray = [];
     for (let i = 0; i < representationCollection.length; i++) {
@@ -80,7 +95,6 @@ const ManifestXML = (function () {
         item.parentNode.removeChild(item);
       }
     });
-    return clone;
   };
   return ManifestXML;
 }());
