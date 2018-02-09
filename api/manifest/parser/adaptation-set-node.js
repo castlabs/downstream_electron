@@ -19,7 +19,11 @@ const AdaptationSetNode = (function (_super) {
     _super.call(this, node, xml);
     this.representationColl = [];
     this.contentProtections = [];
-    const rep = node.getElementsByTagName('Representation');
+    this.parse();
+  }
+
+  AdaptationSetNode.prototype.parse = function() {
+    const rep = this.currentNode.getElementsByTagName('Representation');
     for (let i = 0; i < rep.length; i++) {
       const repNode = new RepresentationNode_1.RepresentationNode(rep[i], this.xml);
       this.representationColl[i] = repNode;
@@ -30,7 +34,7 @@ const AdaptationSetNode = (function (_super) {
       }
     }
 
-    const contentProtections = node.getElementsByTagName('ContentProtection');
+    const contentProtections = this.currentNode.getElementsByTagName('ContentProtection');
     for (let i = 0; i < contentProtections.length; i++) {
       const attrs = contentProtections[i].attributes;
       const cenc = contentProtections[i].getElementsByTagName("cenc:pssh");
@@ -42,7 +46,7 @@ const AdaptationSetNode = (function (_super) {
         this.contentProtections.push(contentProtection);
       }
     }
-  }
+  };
 
   AdaptationSetNode.prototype.getContentProtections = function () {
     return this.contentProtections;
