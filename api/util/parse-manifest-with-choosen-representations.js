@@ -2,7 +2,6 @@
 const constants = require("../constants");
 
 const Manifest = require("../manifest/loader/manifest").Manifest;
-const ManifestXML = require("../manifest/parser/manifest-xml").ManifestXML;
 
 const XMLSerializer = require("xmldom").XMLSerializer;
 

@@ -22,7 +22,7 @@ const AdaptationSetNode = (function (_super) {
     this.parse();
   }
 
-  AdaptationSetNode.prototype.parse = function() {
+  AdaptationSetNode.prototype.parse = function () {
     const rep = this.currentNode.getElementsByTagName('Representation');
     for (let i = 0; i < rep.length; i++) {
       const repNode = new RepresentationNode_1.RepresentationNode(rep[i], this.xml);

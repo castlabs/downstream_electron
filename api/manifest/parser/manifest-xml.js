@@ -70,7 +70,7 @@ const ManifestXML = (function () {
   ManifestXML.prototype.removeNode = function () {
     let adaptationSetName = this.getAdaptationSetNodeName();
     let representationName = this.getRepresentationNodeName();
-        
+
     let representationCollection = this.xml.documentElement.getElementsByTagName(representationName);
     let adaptationCollection = this.xml.documentElement.getElementsByTagName(adaptationSetName);
     let repArray = [];

@@ -23,7 +23,7 @@ const QualityLevelNode = (function (_super) {
   }
 
   QualityLevelNode.prototype.createSegmentInformation = function () {
-    const presentationDuration = IsoDurationParser_1.IsoDurationParser.getDuration(parseFloat(this.attributeList['Duration']/TIME_SCALE_100_NANOSECOND_UNIT));
+    const presentationDuration = IsoDurationParser_1.IsoDurationParser.getDuration(parseFloat(this.attributeList['Duration'] / TIME_SCALE_100_NANOSECOND_UNIT));
     const representationID = this.attributeList['id'];
 
     this.bandwidth = (this.attributeList['bandwidth']) ? parseInt(this.attributeList['bandwidth']) : -1;
@@ -32,7 +32,7 @@ const QualityLevelNode = (function (_super) {
     this.segmentInformation = new FragmentInformation_1.FragmentInformation(presentationDuration, this.bandwidth, this.baseURL, representationID, this.attributeList['mimeType'], this.segmentTemplate);
   };
 
-  QualityLevelNode.prototype.mapMssSegmentTemplate = function() {
+  QualityLevelNode.prototype.mapMssSegmentTemplate = function () {
     let segmentTemplate = {};
     let mediaUrl;
 
@@ -47,7 +47,7 @@ const QualityLevelNode = (function (_super) {
     return segmentTemplate;
   };
 
-  QualityLevelNode.prototype.mapMssSegmentTimeline = function() {
+  QualityLevelNode.prototype.mapMssSegmentTimeline = function () {
     let segmentTimeline = {};
     let chunks = this.currentNode.parentNode.getElementsByTagName('c');
     let segments = [];
@@ -137,7 +137,7 @@ const QualityLevelNode = (function (_super) {
       }
     }
 
-    if (list['Type'] !== undefined){
+    if (list['Type'] !== undefined) {
       list['contentType'] = list['Type'];
       list['mimeType'] = mimeTypeMap[list['contentType']];
       list['bandwidth'] = list['Bitrate'];
@@ -149,7 +149,7 @@ const QualityLevelNode = (function (_super) {
       // build id
       list['id'] = indexId + '_' + list['Index'];
 
-      if(list['Type'] === 'audio' ) {
+      if (list['Type'] === 'audio' ) {
         list.audioSamplingRate = list['SamplingRate'];
       }
     }

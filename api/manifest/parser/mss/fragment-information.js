@@ -22,7 +22,7 @@ const FragmentInformation = (function (_super) {
       this.mediaTemplate = this.segmentTemplate.media;
       this.mediaTemplate = this.replace$Bandwidth$(this.mediaTemplate, this.bandwidth);
     }
-    if(this.segmentTemplate.media) {
+    if (this.segmentTemplate.media) {
       this.timelineItemList = this.segmentTemplate.SegmentTimeline;
     }
     this.createFragmentUrlsFromTimeline(this.timelineItemList);

@@ -23,8 +23,8 @@ const StreamIndexNode = (function (_super) {
     _super.call(this, node, xml);
   }
 
-  StreamIndexNode.prototype.parse = function() {
-  
+  StreamIndexNode.prototype.parse = function () {
+
     let qualityLevels = this.currentNode.getElementsByTagName('QualityLevel');
 
     for (let i = 0; i < qualityLevels.length; i++) {
@@ -37,7 +37,7 @@ const StreamIndexNode = (function (_super) {
         this.attributeList['mimeType'] = this.representationColl[0].getContentType();
       }
     }
-    
+
     const protection = this.xml.getElementsByTagName('Protection')[0];
 
     if (protection !== undefined) {
@@ -45,28 +45,28 @@ const StreamIndexNode = (function (_super) {
       // Some packagers put newlines into the ProtectionHeader base64 string, which is not good
       // because this cannot be correctly parsed. Let's just filter out any newlines found in there.
       const psshPR = protectionHeader.firstChild.data.replace(/\n|\r/g, '');
-  
+
       // Get KID (in CENC format) from protection header
       const KID = this.getKIDFromProtectionHeader(protectionHeader);
-  
+
       // Create ContentProtection for PlayReady
       const cpPR = {
         schemeIdUri: "urn:uuid:9a04f079-9840-4286-ab92-e65be0885f95",
         cencPSSH: psshPR
-      };     
+      };
       this.contentProtections.push(cpPR);
-  
+
       // Create ContentProtection for Widevine (as a CENC protection)
       const psshWV = this.createWidevinePssh(KID);
       const cpWV = {
         schemeIdUri: "urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed",
         cencPSSH: psshWV
-      };      
-      this.contentProtections.push(cpWV);  
+      };
+      this.contentProtections.push(cpWV);
     }
   }
 
-  StreamIndexNode.prototype.getKIDFromProtectionHeader = function(protectionHeader) {
+  StreamIndexNode.prototype.getKIDFromProtectionHeader = function (protectionHeader) {
       let prHeader,
           wrmHeader,
           xmlReader,
@@ -97,23 +97,21 @@ const StreamIndexNode = (function (_super) {
       return KID;
   };
 
-  StreamIndexNode.prototype.convertUuidEndianness = function(uuid) {
+  StreamIndexNode.prototype.convertUuidEndianness = function (uuid) {
       this.swapBytes(uuid, 0, 3);
       this.swapBytes(uuid, 1, 2);
       this.swapBytes(uuid, 4, 5);
       this.swapBytes(uuid, 6, 7);
   };
 
-  StreamIndexNode.prototype.swapBytes = function(bytes, pos1, pos2) {
+  StreamIndexNode.prototype.swapBytes = function (bytes, pos1, pos2) {
       let temp = bytes[pos1];
       bytes[pos1] = bytes[pos2];
       bytes[pos2] = temp;
   };
 
-  StreamIndexNode.prototype.getWRMHeaderFromPRHeader = function getWRMHeaderFromPRHeader(prHeader) {
-    let length,
-        recordCount,
-        recordType,
+  StreamIndexNode.prototype.getWRMHeaderFromPRHeader = function getWRMHeaderFromPRHeader (prHeader) {
+    let recordType,
         recordLength,
         recordValue;
     let i = 0;
@@ -121,24 +119,24 @@ const StreamIndexNode = (function (_super) {
     // Parse PlayReady header
 
     // Length - 32 bits (LE format)
-    length = (prHeader[i + 3] << 24) + (prHeader[i + 2] << 16) + (prHeader[i + 1] << 8) + prHeader[i];
+    // var length = (prHeader[i + 3] << 24) + (prHeader[i + 2] << 16) + (prHeader[i + 1] << 8) + prHeader[i];
     i += 4;
 
     // Record count - 16 bits (LE format)
-    recordCount = (prHeader[i + 1] << 8) + prHeader[i];
+    // var recordCount = (prHeader[i + 1] << 8) + prHeader[i];
     i += 2;
 
     // Parse records
     while (i < prHeader.length) {
         // Record type - 16 bits (LE format)
-        recordType = (prHeader[i + 1] << 8) + prHeader[i];
+        recordType = (prHeader[i + 1] * 256) + prHeader[i];
         i += 2;
 
         // Check if Rights Management header (record type = 0x01)
         if (recordType === 0x01) {
 
             // Record length - 16 bits (LE format)
-            recordLength = (prHeader[i + 1] << 8) + prHeader[i];
+            recordLength = (prHeader[i + 1] * 256) + prHeader[i];
             i += 2;
 
             // Record value => contains <WRMHEADER>
@@ -149,7 +147,8 @@ const StreamIndexNode = (function (_super) {
     }
     return null;
   };
-  StreamIndexNode.prototype.createWidevinePssh = function(KID) {
+
+  StreamIndexNode.prototype.createWidevinePssh = function (KID) {
     // Create Widevine CENC header (Protocol Buffer) with KID value
     var wvCencHeader = new Uint8Array(2 + KID.length);
     wvCencHeader[0] = 0x12;
@@ -161,11 +160,11 @@ const StreamIndexNode = (function (_super) {
         pssh = new Uint8Array(length),
         i = 0;
 
-    // Set box length value
-    pssh[i++] = (length & 0xFF000000) >> 24;
-    pssh[i++] = (length & 0x00FF0000) >> 16;
-    pssh[i++] = (length & 0x0000FF00) >> 8;
-    pssh[i++] = (length & 0x000000FF);
+    // Set box length value (4 bytes)
+    pssh[i++] = 0;
+    pssh[i++] = 0;
+    pssh[i++] = 0;
+    pssh[i++] = length;
 
     // Set type ('pssh'), version (0) and flags (0)
     pssh.set([0x70, 0x73, 0x73, 0x68, 0x00, 0x00, 0x00, 0x00], i);
@@ -176,18 +175,18 @@ const StreamIndexNode = (function (_super) {
     i += 16;
 
     // Set data length value
-    pssh[i++] = (wvCencHeader.length & 0xFF000000) >> 24;
-    pssh[i++] = (wvCencHeader.length & 0x00FF0000) >> 16;
-    pssh[i++] = (wvCencHeader.length & 0x0000FF00) >> 8;
-    pssh[i++] = (wvCencHeader.length & 0x000000FF);
+    pssh[i++] = 0;
+    pssh[i++] = 0;
+    pssh[i++] = 0;
+    pssh[i++] = wvCencHeader.length;
 
     // Copy Widevine CENC header
     pssh.set(wvCencHeader, i);
 
     // Convert to BASE64 string
-    pssh = BASE64.fromByteArray (pssh);
+    pssh = BASE64.fromByteArray(pssh);
     return pssh;
-  };  
+  };
   return StreamIndexNode;
 }(AdaptationSetNode_1.AdaptationSetNode));
 exports.StreamIndexNode = StreamIndexNode;

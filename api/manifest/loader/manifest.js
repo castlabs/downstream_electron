@@ -20,7 +20,7 @@ const Manifest = (function () {
     }
   }
 
-  Manifest.prototype.createManifestXML = function (url) {
+  Manifest.prototype.createManifestXML = function () {
     if (typeof ManifestXML_MSS === 'object') {
       return new ManifestXML_MSS.ManifestXML();
     } else {

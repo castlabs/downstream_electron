@@ -24,7 +24,7 @@ ManifestXML_1.ManifestXML.prototype._parseAdaptations = ManifestXML_1.ManifestXM
 ManifestXML_1.ManifestXML.prototype.parseAdaptations = function () {
   // Manifest type detection
   this.manifestType = this.getManifestType(this.xml);
-    
+
   if (this.manifestType === 'MSS') {
     return this.parseStreams();
   } else {
