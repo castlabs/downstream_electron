@@ -68,11 +68,8 @@ const ManifestXML = (function () {
     return newDocument;
   };
   ManifestXML.prototype.removeNode = function () {
-    let adaptationSetName = this.getAdaptationSetNodeName();
-    let representationName = this.getRepresentationNodeName();
-
-    let representationCollection = this.xml.documentElement.getElementsByTagName(representationName);
-    let adaptationCollection = this.xml.documentElement.getElementsByTagName(adaptationSetName);
+    let representationCollection = this.xml.documentElement.getElementsByTagName(this.getRepresentationNodeName());
+    let adaptationCollection = this.xml.documentElement.getElementsByTagName(this.getAdaptationSetNodeName());
     let repArray = [];
     let adaptationArray = [];
     for (let i = 0; i < representationCollection.length; i++) {
