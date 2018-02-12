@@ -1,8 +1,8 @@
 "use strict";
 const ManifestLoader = require("./manifest-loader");
 const ManifestLocalLoader = require("./manifest-local-loader");
-const ManifestXML_1 = require("./../parser/manifest-xml");
-const ManifestXML_MSS = require("./../parser/mss/manifest-xml");
+// const ManifestXML_1 = require("./../parser/manifest-xml");
+const ManifestXML_1 = require("./../parser/mss/manifest-xml");
 const AllAdaptationSets_1 = require("../parser/all-adaptation-sets");
 const SnowflakeId_1 = require("../../util/snowflake-id");
 const jsonRepresentation = require("../parser/json-representation");
@@ -20,14 +20,6 @@ const Manifest = (function () {
     }
   }
 
-  Manifest.prototype.createManifestXML = function () {
-    if (typeof ManifestXML_MSS === 'object') {
-      return new ManifestXML_MSS.ManifestXML();
-    } else {
-      return new ManifestXML_1.ManifestXML();
-    }
-  };
-
   Manifest.prototype.load = function (url) {
     const _this = this;
     return new Promise(function (resolve, reject) {
@@ -40,7 +32,7 @@ const Manifest = (function () {
         var isEncodingUTF16 = encoding.isUTF16(v.response);
         v.response = v.response.toString(isEncodingUTF16 ? 'utf16le' : 'utf-8');
         const xml = v.response;
-        _this.manifestXML = _this.createManifestXML();
+        _this.manifestXML = new ManifestXML_1.ManifestXML();
         _this.manifestXML.parse(xml, function () {
           resolve();
         }, function (e) {
