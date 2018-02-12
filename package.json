@@ -42,6 +42,7 @@
     "webpack": "3.6.0"
   },
   "dependencies": {
+    "base64-js": "^1.2.1",
     "biguint-format": "1.0.0",
     "cors": "2.8.4",
     "express": "4.16.2",
