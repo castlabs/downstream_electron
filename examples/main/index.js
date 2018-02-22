@@ -137,6 +137,23 @@ function addStartActions(manifestId) {
       this.checked = !this.checked;
     });
   }));
+  //Create Persistent Session
+  $(contentActions).append($('<input type="button" value="Create Persistent Session">').on('click', function () {
+    downstreamElectron.downloads.createPersistent(manifestId, persistentConfig).then(function (persistentSessionId) {
+      showStatusOK('Create Persistent Session: ' + persistentSessionId, contentStatus);
+    }, function (err) {
+      showStatusError('Create Persistent Session', err, contentStatus);
+    });
+  }));
+
+  //Remove Persistent Session
+  $(contentActions).append($('<input type="button" value="Remove Persistent Session">').on('click', function () {
+    downstreamElectron.downloads.removePersistent(manifestId).then(function (result) {
+      showStatusOK('Remove Persistent Session', contentStatus);
+    }, function (err) {
+      showStatusError('Remove Persistent Session', err, contentStatus);
+    });
+  }));
   $('#contentActions').clone(true).appendTo($('#contentActions2'));
 }
 
