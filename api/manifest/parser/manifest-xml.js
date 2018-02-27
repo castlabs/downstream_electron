@@ -68,6 +68,7 @@ const ManifestXML = (function () {
     return newDocument;
   };
   ManifestXML.prototype.removeNode = function () {
+    const self = this;
     let representationCollection = this.xml.documentElement.getElementsByTagName(this.getRepresentationNodeName());
     let adaptationCollection = this.xml.documentElement.getElementsByTagName(this.getAdaptationSetNodeName());
     let repArray = [];
@@ -88,7 +89,7 @@ const ManifestXML = (function () {
       adaptationArray[i] = adaptationCollection[i];
     }
     adaptationArray.forEach(function (item) {
-      if (!item.getElementsByTagName('Representation').length) {
+      if (!item.getElementsByTagName(self.getRepresentationNodeName()).length) {
         item.parentNode.removeChild(item);
       }
     });
