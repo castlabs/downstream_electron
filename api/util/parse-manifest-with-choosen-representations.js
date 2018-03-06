@@ -2,7 +2,6 @@
 const constants = require("../constants");
 
 const Manifest = require("../manifest/loader/manifest").Manifest;
-const ManifestXML = require("../manifest/parser/manifest-xml").ManifestXML;
 
 const XMLSerializer = require("xmldom").XMLSerializer;
 
@@ -74,9 +73,9 @@ function parseManifestWithChoosenRepresentations (manifest, representations) {
   fixBaseURL(manifest.getAudioRepresentations());
   fixBaseURL(manifest.getTextRepresentations());
 
-  let manifestXML = ManifestXML.removeNode(manifest.getManifestXML());
+  manifest.removeNode();
 
-  return xmlSerializer.serializeToString(manifestXML);
+  return xmlSerializer.serializeToString(manifest.getManifestXML());
 }
 
 module.exports = parseManifestWithChoosenRepresentations;
