@@ -1,7 +1,8 @@
 "use strict";
 const ManifestLoader = require("./manifest-loader");
 const ManifestLocalLoader = require("./manifest-local-loader");
-const ManifestXML_1 = require("./../parser/manifest-xml");
+// const ManifestXML_1 = require("./../parser/manifest-xml");
+const ManifestXML_1 = require("./../parser/mss/manifest-xml");
 const AllAdaptationSets_1 = require("../parser/all-adaptation-sets");
 const SnowflakeId_1 = require("../../util/snowflake-id");
 const jsonRepresentation = require("../parser/json-representation");
@@ -31,7 +32,8 @@ const Manifest = (function () {
         var isEncodingUTF16 = encoding.isUTF16(v.response);
         v.response = v.response.toString(isEncodingUTF16 ? 'utf16le' : 'utf-8');
         const xml = v.response;
-        _this.manifestXML = new ManifestXML_1.ManifestXML(xml, function () {
+        _this.manifestXML = new ManifestXML_1.ManifestXML();
+        _this.manifestXML.parse(xml, function () {
           resolve();
         }, function (e) {
           reject(e);
@@ -49,7 +51,8 @@ const Manifest = (function () {
       ManifestLocalLoader(localPath).then(function (str) {
         _this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
         _this.manifest_name = url.substring(url.lastIndexOf('/') + 1, url.length);
-        _this.manifestXML = new ManifestXML_1.ManifestXML(str, function () {
+        _this.manifestXML = new ManifestXML_1.ManifestXML();
+        _this.manifestXML.parse(str, function () {
           resolve();
         }, function (e) {
           reject(e);
@@ -64,7 +67,8 @@ const Manifest = (function () {
   Manifest.prototype.loadFromStr = function (str, url) {
     this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
     this.manifest_name = url.substring(url.lastIndexOf('/') + 1, url.length);
-    this.manifestXML = new ManifestXML_1.ManifestXML(str);
+    this.manifestXML = new ManifestXML_1.ManifestXML();
+    this.manifestXML.parse(str);
   };
 
   Manifest.prototype.getAdaptationSets = function () {
@@ -101,6 +105,9 @@ const Manifest = (function () {
   };
   Manifest.prototype.getManifestXML = function () {
     return this.manifestXML.getManifestXML();
+  };
+  Manifest.prototype.removeNode = function () {
+    this.manifestXML.removeNode();
   };
   Manifest.prototype.getJsonInfo = function () {
     let json = {};
