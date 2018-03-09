@@ -504,7 +504,7 @@ function addStressTest() {
     container.append(itemContainer);
     return new Promise(function (resolve, reject) {
 
-      downstreamElectron.downloads.create(url).then(function (result) {
+      downstreamElectron.downloads.create(url, "sss").then(function (result) {
         let manifestId = result.id;
         result.video.sort(function (item1, item2) {
           let val1 = parseInt(item1.bandwidth, 10);
