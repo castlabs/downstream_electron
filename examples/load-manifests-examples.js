@@ -9,7 +9,9 @@ function addExamples () {
   const examples = [
     '-',
     'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
-    'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd'
+    'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+    'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
+    'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest'
   ];
   for (let i = 0, j = examples.length; i < j; i++) {
     addExample(examples[i]);
