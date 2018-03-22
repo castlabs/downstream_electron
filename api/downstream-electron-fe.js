@@ -9,7 +9,7 @@ let downstreamElectronFE;
 function getWidevinePSSH (info) {
   const manifestProtections = info.manifestInfo.protections;
   let videoRepresentation = manifestProtections.video[0] || {};
-  if (manifestProtections.video) {
+  if (manifestProtections.video && info.manifest.video) {
     videoRepresentation = manifestProtections.video.filter(function (manifestProtection) {
       return info.manifest.video.indexOf(manifestProtection.id) >= 0;
     });
