@@ -149,7 +149,7 @@ DownstreamElectronFE.prototype.downloads.removePersistent = function (args, reso
  */
 DownstreamElectronFE.prototype.downloads.remove = function (args, resolve, reject, manifest) {
   const scope = this;
-  if (this._persistent && manifest.persistent) {
+  if (this._persistent && manifest && manifest.persistent) {
     scope._persistent.removePersistentSession(manifest.persistent).then(resolve, reject);
   } else {
     resolve();
