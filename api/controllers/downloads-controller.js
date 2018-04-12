@@ -450,8 +450,6 @@ DownloadsController.prototype.stop = function (manifestId, onSuccess, onFailure)
         let promises = [];
         for (let i = 0, j = itemsToStop.length; i < j; i++) {
           itemToStop = self.storage.downloading.getItem(manifestId, itemsToStop[i]);
-          itemToStop.events.removeListener("end", self._onDownloadEnd);
-          itemToStop.events.removeListener("error", self._onDownloadError);
           promises.push(itemToStop.stopPromise());
         }
 

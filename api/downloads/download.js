@@ -5,7 +5,6 @@ const DownloadFile = require("./download-file");
 const mkdirp = require("mkdirp");
 
 const appSettings = require("../app-settings");
-const EventEmitter = require("events").EventEmitter;
 const STATUSES = require("./statuses");
 
 
@@ -35,21 +34,8 @@ function Download (params, options, cb) {
     file_size: 0,
     writeProgress: 0
   };
-  _.bindAll(this, "_onError", "_onEnd", "_onData", "_updateStats", "_attachEvents", "_removeEvents",
-      "_removeEventsOnStop");
-
-  this.events = new EventEmitter();
+  _.bindAll(this, "_onError", "_onEnd", "_onData", "_updateStats");
 }
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._attachEvents = function () {
-  this._dl.on('error', this._onError);
-  this._dl.on('end', this._onEnd);
-  this._dl.on('data', this._onData);
-};
 
 /**
  *
@@ -80,7 +66,6 @@ Download.prototype._onData = function () {
 Download.prototype._onEnd = function () {
   this.status = STATUSES.FINISHED;
   this._updateStats();
-  this._removeEvents();
   if (this._cb && this._cb.end) {
     this._cb.end(this);
   }
@@ -98,33 +83,9 @@ Download.prototype._onError = function (data) {
   data = data || {};
   const message = data.message || "";
 
-  self._removeEvents();
   self._updateStats();
   if (this._cb && this._cb.error) {
     this._cb.error(self, message);
-  }
-};
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._removeEvents = function () {
-  if (typeof this._dl.removeListener === "function") {
-    this._dl.removeListener('error', this._onError);
-    this._dl.removeListener('end', this._onEnd);
-    this._dl.removeListener('data', this._onData);
-  }
-};
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._removeEventsOnStop = function () {
-  if (this._dl && typeof this._dl.removeListener === "function") {
-    this._dl.removeListener('error', this._onError);
-    this._dl.removeListener('end', this._onEnd);
   }
 };
 
@@ -186,7 +147,6 @@ Download.prototype.start = function () {
 Download.prototype.stop = function (resolve) {
   const self = this;
   this.status = STATUSES.STOPPED;
-  this._removeEventsOnStop();
   if (typeof resolve !== "function") {
     resolve = function () {
     };

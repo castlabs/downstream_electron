@@ -152,7 +152,6 @@ DownloadFile.prototype._initChunk = function (chunkNumber) {
     options.endPosition = size - 1;
   }
   const chunk = new DownloadFileChunk(this._url, options, this._onChunkDownload);
-  // chunk.events.on("download", this._onChunkDownload.bind(this));
   this._chunks.push(chunk);
 };
 
