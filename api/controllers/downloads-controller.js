@@ -174,9 +174,6 @@ DownloadsController.prototype._markDownloadItem = function (download) {
   let syncStorageKeys = [];
   let lastItem;
 
-  download.events.removeListener("end", self._onDownloadEnd);
-  download.events.removeListener("error", self._onDownloadError);
-
   //refreshing stats for last time - to have correct stats for subscribers progress before it is removed
   if (self.storage.downloading.count(manifestId) === 1 && self.storage.left.count(manifestId) === 0) {
     this.downloadStats.refresh();
@@ -533,13 +530,15 @@ DownloadsController.prototype.removePromise = function (manifestId) {
 DownloadsController.prototype._addLinkToDownload = function (manifestId, link) {
   const self = this;
   const params = Object.assign({}, link);
-  const download = new Download(params, self.storage.params.getItem(manifestId, self._names.options));
+  const cb = {
+    error: self._onDownloadError,
+    end: self._onDownloadEnd
+  }
+  const download = new Download(params, self.storage.params.getItem(manifestId, self._names.options), cb);
   const downloadHash = self._getDownloadHash(link);
   self.storage.downloading.setItem(manifestId, downloadHash, download);
   self.storage.status.setItem(manifestId, "left", self.storage.left.count(manifestId) + self.storage.errors.count(manifestId));
   self.storage.sync(manifestId, self.storage.stores.STATUS);
-  download.events.on("end", self._onDownloadEnd);
-  download.events.on("error", self._onDownloadError);
   download.start();
 };
 

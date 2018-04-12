@@ -1,16 +1,16 @@
 const downloadFileUtil = require("./download-file-util");
 const fs = require("fs");
 const {net} = require('electron');
-const EventEmitter = require("events").EventEmitter;
 
 /**
  *
  * @param {string} url - url
  * @param {object} options - options
+ * @param {function} downloadCb - downloadcb
  * @returns {Chunk} - chunk object
  * @constructor
  */
-function Chunk (url, options) {
+function Chunk (url, options, downloadCb) {
   const self = this;
   this.url = url;
   this.options = options;
@@ -18,11 +18,11 @@ function Chunk (url, options) {
   this.startPosition = options.startPosition;
   this.bytesRangeNotAvailable = options.bytesRangeNotAvailable;
   this.reset();
-  this.events = new EventEmitter();
   this._promise = new Promise(function (resolve, reject) {
     self.resolve = resolve;
     self.reject = reject;
   });
+  this._downloadCb = downloadCb;
   return this;
 }
 
@@ -159,7 +159,9 @@ Chunk.prototype.start = function () {
           response.on("data", function (data) {
             self.available += data.length;
             self.downloaded += data.length;
-            self.events.emit("download", data.length);
+            if (self._downloadCb) {
+              self._downloadCb(data.length);
+            }
           });
           response.pipe(self.fileStream);
     });

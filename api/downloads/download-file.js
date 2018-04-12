@@ -1,25 +1,26 @@
 const fs = require("fs");
 const {net} = require('electron');
-const EventEmitter = require("events").EventEmitter;
-const util = require("util");
 const downloadFileUtil = require("./download-file-util");
 const DownloadFileChunk = require("./download-file-chunk");
+const _ = require("underscore");
 
 /**
  *
  * @param {string} url - remote url
  * @param {string} destFile - local url
  * @param {object} options - options
+ * @param {object} cb - callbacks
  * @constructor
  */
-function DownloadFile (url, destFile, options) {
+function DownloadFile (url, destFile, options, cb) {
   this._url = url;
   this._destFile = destFile;
   this._options = options;
+  this._cb = cb;
   this._resetValues();
-}
 
-util.inherits(DownloadFile, EventEmitter);
+  _.bindAll(this, "_onChunkDownload");
+}
 
 /**
  *
@@ -49,7 +50,9 @@ DownloadFile.prototype._concatChunks = function () {
     self.writeProgress = self._chunks.reduce(function (a, b) {
         return a + b.writeProgress;
       }, 0) / self._chunksNumber;
-    self.emit("data");
+    if (self._cb && self._cb.data) {
+      self._cb.data();
+    }
   }
   function getWriteStream () {
     return fs.createWriteStream(self._chunks[0].destFile, {flags: "a"});
@@ -81,7 +84,9 @@ DownloadFile.prototype._concatChunks = function () {
         readStream.destroy();
         fs.unlink(chunk.destFile, function (err) {
           if (err) {
-            self.emit("error", err);
+            if (self._cb && self._cb.error) {
+              self._cb.error(err);
+            }
           } else {
             writeStream.destroy();
             pipeStream(getWriteStream(), nextStreamNumber + 1)
@@ -95,9 +100,13 @@ DownloadFile.prototype._concatChunks = function () {
 
       fs.rename(self._chunks[0].destFile, self._destFile, function (err) {
         if (err) {
-          self.emit("error", err);
+          if (self._cb && self._cb.error) {
+            self._cb.error(err);
+          }
         } else {
-          self.emit("end");
+          if (self._cb && self._cb.error) {
+            self._cb.error(err);
+          }
         }
       });
     }
@@ -107,7 +116,9 @@ DownloadFile.prototype._concatChunks = function () {
     pipeStream(getWriteStream(), 1);
   } else {
     countWriteProgress();
-    self.emit("end");
+    if (self._cb && self._cb.end) {
+      self._cb.end();
+    }
   }
 };
 
@@ -140,8 +151,8 @@ DownloadFile.prototype._initChunk = function (chunkNumber) {
     options.startPosition = 0;
     options.endPosition = size - 1;
   }
-  const chunk = new DownloadFileChunk(this._url, options);
-  chunk.events.on("download", this._onChunkDownload.bind(this));
+  const chunk = new DownloadFileChunk(this._url, options, this._onChunkDownload);
+  // chunk.events.on("download", this._onChunkDownload.bind(this));
   this._chunks.push(chunk);
 };
 
@@ -160,10 +171,14 @@ DownloadFile.prototype._onDownloadFailure = function (err, aborted) {
     if (this._errors <= this._options.maxDownloadRetry) {
       this._retryDownload();
     } else {
-      this.emit("error", err);
+      if (this._cb && this._cb.error) {
+        this._cb.error(err);
+      }
     }
   } else {
-    this.emit("error", err);
+    if (this._cb && this._cb.error) {
+      this._cb.error(err);
+    }
   }
 
 };
@@ -204,7 +219,9 @@ DownloadFile.prototype._onChunkDownload = function (downloaded) {
   this.available = this._chunks.reduce(function (a, b) {
     return a + b.available;
   }, 0);
-  this.emit("data");
+  if (this._cb && this._cb.data) {
+    this._cb.data();
+  }
 };
 
 DownloadFile.prototype._retryDownload = function () {
@@ -278,7 +295,9 @@ DownloadFile.prototype.start = function () {
     downloadFileUtil.checkForLocalFile(self._destFile, function (exists, fileSize) {
       if (exists) {
         if (fileSize === self.file_size) {
-          self.emit("end");
+          if (self._cb && self._cb.end) {
+            self._cb.end();
+          }
         } else if (fileSize > self.file_size) {
           fs.unlink(self._destFile);
           start();
@@ -309,7 +328,9 @@ DownloadFile.prototype.stop = function () {
     }
   }
   function onStopped () {
-    this.emit("end", '');
+    if (this._cb && this._cb.end) {
+      this._cb.end();
+    }
   }
   if (!this._promises) {
     Promise.all(promises).then(onStopped.bind(this), onStopped.bind(this));
