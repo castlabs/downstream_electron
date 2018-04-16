@@ -5,7 +5,6 @@ const DownloadFile = require("./download-file");
 const mkdirp = require("mkdirp");
 
 const appSettings = require("../app-settings");
-const EventEmitter = require("events").EventEmitter;
 const STATUSES = require("./statuses");
 
 
@@ -14,9 +13,10 @@ const STATUSES = require("./statuses");
  * @param {object} params - parameters connected with download like id, bandwidth, contentType, remoteUrl, localUrl
  * see util class {@link downloadUtil.getDownloadLinks}
  * @param {object} options - options chosen for whole manifest, like number of chunks, retry,
+ * @param {object} cb - callback
  * @constructor
  */
-function Download (params, options) {
+function Download (params, options, cb) {
   this._defaults = {};
   this._defaults.threads = appSettings.getSettings().downloadingThreadsRules.threads;
   this.status = STATUSES.CREATED;
@@ -27,27 +27,15 @@ function Download (params, options) {
   this._options.maxDownloadChunkInternetRetry = appSettings.getSettings().MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY;
   this._options.timeout = appSettings.getSettings().times.DOWNLOAD_TIMEOUT;
   this._options.retryTimeout = appSettings.getSettings().times.RETRY_TIMEOUT;
+  this._cb = cb;
   this.stats = {
     available: 0,
     downloaded: 0,
     file_size: 0,
     writeProgress: 0
   };
-  _.bindAll(this, "_onError", "_onEnd", "_onData", "_updateStats", "_attachEvents", "_removeEvents",
-      "_removeEventsOnStop");
-
-  this.events = new EventEmitter();
+  _.bindAll(this, "_onError", "_onEnd", "_onData", "_updateStats");
 }
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._attachEvents = function () {
-  this._dl.on('error', this._onError);
-  this._dl.on('end', this._onEnd);
-  this._dl.on('data', this._onData);
-};
 
 /**
  *
@@ -78,8 +66,9 @@ Download.prototype._onData = function () {
 Download.prototype._onEnd = function () {
   this.status = STATUSES.FINISHED;
   this._updateStats();
-  this._removeEvents();
-  this.events.emit("end", this);
+  if (this._cb && this._cb.end) {
+    this._cb.end(this);
+  }
 };
 
 /**
@@ -94,31 +83,9 @@ Download.prototype._onError = function (data) {
   data = data || {};
   const message = data.message || "";
 
-  self._removeEvents();
   self._updateStats();
-  self.events.emit("error", self, message);
-};
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._removeEvents = function () {
-  if (typeof this._dl.removeListener === "function") {
-    this._dl.removeListener('error', this._onError);
-    this._dl.removeListener('end', this._onEnd);
-    this._dl.removeListener('data', this._onData);
-  }
-};
-
-/**
- * @private
- * @returns {void}
- */
-Download.prototype._removeEventsOnStop = function () {
-  if (this._dl && typeof this._dl.removeListener === "function") {
-    this._dl.removeListener('error', this._onError);
-    this._dl.removeListener('end', this._onEnd);
+  if (this._cb && this._cb.error) {
+    this._cb.error(self, message);
   }
 };
 
@@ -162,8 +129,12 @@ Download.prototype.start = function () {
       });
     });
     d.run(function () {
-      self._dl = new DownloadFile(self.remoteUrl, self.localUrl, self._options);
-      self._attachEvents();
+      var cb = {
+        error: self._onError,
+        end: self._onEnd,
+        data: self._onData
+      };
+      self._dl = new DownloadFile(self.remoteUrl, self.localUrl, self._options, cb);
       self._dl.start();
     });
   });
@@ -176,7 +147,6 @@ Download.prototype.start = function () {
 Download.prototype.stop = function (resolve) {
   const self = this;
   this.status = STATUSES.STOPPED;
-  this._removeEventsOnStop();
   if (typeof resolve !== "function") {
     resolve = function () {
     };
@@ -186,13 +156,13 @@ Download.prototype.stop = function (resolve) {
     d.on('error', function () {
       resolve();
     });
+    self._dl._cb.error = function () {
+      resolve();
+    };
+    self._dl._cb.end = function () {
+      resolve();
+    };
     d.run(function () {
-      self._dl.on('error', function () {
-        resolve();
-      });
-      self._dl.on('end', function () {
-        resolve();
-      });
       self._dl.stop();
     });
   } else {
