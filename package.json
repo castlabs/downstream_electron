@@ -1,6 +1,6 @@
 {
   "name": "downstream-electron",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "DOWNstream For Electron",
   "main": "dist/index.js",
   "files": [
