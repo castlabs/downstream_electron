@@ -22,7 +22,8 @@ let downloads = {};
  * @param {string} manifestUrl - manifest url
  * @example
  * var url = "http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd";
- * DownstreamElectronFE.downloads.create(url)
+ * var id = "pre-determined-manifestid"; // nullable
+ * DownstreamElectronFE.downloads.create(url, id)
  *    .then(
  *      function onSuccess(result) {console.log("success", result);},
  *      function onError(err) {console.log("error", err);

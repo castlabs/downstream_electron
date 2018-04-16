@@ -516,12 +516,12 @@ function addStressTest() {
     });
   }
 
-  function start(url) {
+  function start(url, customManifestId) {
     let itemContainer = $('<div></div>');
     container.append(itemContainer);
     return new Promise(function (resolve, reject) {
 
-      downstreamElectron.downloads.create(url).then(function (result) {
+      downstreamElectron.downloads.create(url, customManifestId).then(function (result) {
         let manifestId = result.id;
         result.video.sort(function (item1, item2) {
           let val1 = parseInt(item1.bandwidth, 10);
@@ -573,7 +573,8 @@ function addStressTest() {
   $('#mainActions').append($('<input type="button" value="stress start">').on('click', function () {
     let i, j, items = [];
     for (i = 0, j = manifests.length; i < j; i++) {
-      items.push(start(manifests[i]));
+		let customManifestId = "custom-manifest-id-" + i.toString();
+      items.push(start(manifests[i], customManifestId));
     }
     Promise.all(items).then(function (manifestIds) {
       subscribeAll(manifestIds);
