@@ -88,7 +88,15 @@ const translationErrors = {
     LIST_LOADING_FAILED: {
       code: CODES.ERRORS.LOADING,
       msg: "Could not load list of manifests."
-    }
+    },
+    FOLDER_ALREADY_EXISTS: {
+      code: CODES.ERRORS.EXISTS,
+      msg: "Folder for manifest with id ='%manifestId%' already exists."
+    },
+    INVALID_ID: {
+      code: CODES.ERRORS.BROKEN,
+      msg: "Provided custom id for manifest is not valid: ('%invalid%')"
+    },
   }
 };
 

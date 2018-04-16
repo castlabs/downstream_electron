@@ -13,6 +13,9 @@
 ### Renderer process
   [DownstreamElectronFE](DownstreamElectronFE.html) 
 
+### See available configuration
+  [Downstream Configuration](DownstreamElectronBE.configuration.html) 
+
 
 ## castLabs Electron Release for Content Security
 

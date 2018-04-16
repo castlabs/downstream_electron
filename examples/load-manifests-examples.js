@@ -27,6 +27,10 @@ function addExamples () {
 
 function addForm () {
   $("<form id='form'></form>").insertAfter($("#header"));
+  $("#form").append($("<span>Custom manifest id (leave empty for auto)</span>"));
+  $("#form").append($("<input type='text' style='width: 200px' id='customManifestId'>"));
+  $("#form").append($("<br/>"));
+  $("#form").append($("<span>Manifest Url</span>"));
   $("#form").append($("<input type='text' style='width: 500px' id='manifestUrl'>"));
   $("#form").append($("<input type='submit' value='Submit'>"));
   $("#form").append($("<select type='text' style='width: 500px' id='manifestUrlList'></select>"));

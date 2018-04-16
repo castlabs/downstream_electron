@@ -139,7 +139,7 @@ function _getUniqueKeys (groups) {
  * @private
  */
 function _parseValues (translation, values) {
-  values = values || {};
+  values = values || '';
   if (values instanceof Array) {
     const groups = _getUniqueKeys(translation.match(REGEXP_KEYS));
     for (let i = 0, j = Math.min(groups.length, values.length); i < j; i++) {

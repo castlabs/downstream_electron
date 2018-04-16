@@ -13,6 +13,11 @@ const ManifestLoader = (function () {
 
     return new Promise(function (resolve, reject) {
       let req = net.request(req_options);
+
+      req.on('error', (err) => {
+        reject(err);
+      });
+
       req.on('response', (response) => {
 
         response.on("error", function (error) {

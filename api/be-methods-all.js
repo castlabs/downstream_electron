@@ -20,9 +20,20 @@ let downloads = {};
  * @method create
  * @memberOf DownstreamElectronFE.downloads
  * @param {string} manifestUrl - manifest url
+ * @param {string} customManifestId - custom manifest id, if empty, null or ''
+ * the id will be generated automatically.<br>
+ * The manifestId is used to also store information about movie under the same folder so if you overwrite it,
+ * it will be also used as a name for folder where movie content will be stored
+ * customManifestId will be validated against default regex
+ * {@link DownstreamElectronBE.configuration|customManifestIdFolderRegex}
  * @example
  * var url = "http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd";
  * DownstreamElectronFE.downloads.create(url)
+ *    .then(
+ *      function onSuccess(result) {console.log("success", result);},
+ *      function onError(err) {console.log("error", err);
+ *    })
+ * DownstreamElectronFE.downloads.create(url, '<myCustomId>')
  *    .then(
  *      function onSuccess(result) {console.log("success", result);},
  *      function onError(err) {console.log("error", err);
