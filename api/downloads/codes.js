@@ -14,6 +14,7 @@ const codes = {
     LOADING: 19,
     REMOVED: 20,
     INFO: 21,
+    EXISTS: 22,
     NOT_FOUND: 100,
   }
 };

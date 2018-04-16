@@ -656,8 +656,9 @@ function clearContent(name) {
 function onSubmit(e) {
   e.preventDefault();
   let value = document.getElementById('manifestUrl').value;
+  let customManifestId = document.getElementById('customManifestId').value;
   clearContent();
-  downstreamElectron.downloads.create(value).then(function (result) {
+  downstreamElectron.downloads.create(value, customManifestId).then(function (result) {
     showStatusOK('create');
     $('#contentHeader').html(result.id);
     createCheckBoxes(result.video, 'video');

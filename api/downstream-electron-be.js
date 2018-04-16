@@ -163,13 +163,13 @@ DownstreamElectronBE.prototype._getMethod = function (methodName) {
  */
 DownstreamElectronBE.prototype._onApiRequest = function (evt, data, target) {
   const promiseId = data.promiseId;
-  const argsObj = data.args;
+  const argsObj = data.args || {};
   const method = data.method;
   const windowId = data.windowId;
   target = windowId;
   let args = [];
   let i = 0;
-  while (argsObj[i]) {
+  while (argsObj.hasOwnProperty(i)) {
     args.push(argsObj[i]);
     i++;
   }
@@ -241,7 +241,7 @@ DownstreamElectronBE.prototype.getOfflinePath = function (manifestId) {
   if (offlineContentPort) {
     offlinePath += ":" + offlineContentPort;
   }
-  offlinePath += "/" + appSettings.getSettings().downloadsName + "/" + manifestId + "/";
+  offlinePath += "/" + encodeURIComponent(appSettings.getSettings().downloadsName) + "/" + encodeURIComponent(manifestId) + "/";
   return offlinePath;
 };
 

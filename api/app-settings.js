@@ -16,6 +16,20 @@
  *   it might go to hundreds of chunks (50 files can be downloaded at the same time per manifest). Also the highger number
  *   doesn't mean it will downloads all movies faster. You should find here some balance.
  *   Seems like 2-3 manifests gives the best results, 1 manifest limitation might work better for slower computers.
+ * @property {string=} customManifestIdFolderRegex - regex to use to validate custom manifest id - bear in mind that this
+ * need to be also a valid folder name.<br>
+ * By default it matches any letter or number or unicode characters (regional characters) or "-" or "_" as a first character<br>
+ * Then it may have any letter or number or unicode characters (regional characters) or space or any of the following characters:
+ * ,.;'[]{}!@#$%&*()-_=+
+ *
+ * @property {string=} openingTagForInvalidCustomManifestIdCharacter - when customManifestId is being invalidated
+ * against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
+ * this is the opening tag to be added before invalid character
+ *
+ * @property {regex=} closingTagForInvalidCustomManifestIdCharacter - when customManifestId is being invalidated
+ * against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
+ * this is the closing tag to be added after invalid character
+ *
  * @namespace DownstreamElectronBE.configuration
  * @description
  * During initialization you can configure your app
@@ -98,7 +112,14 @@ let settings = {
       "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
     },
     timeout: 5000
-  }
+  },
+  // matches any letter or number or unicode characters (regional characters) or "-" or "_" as a start
+  // then it may have any letter or number or unicode characters (regional characters) or space or any of the following characters
+  // ,.;'[]{}!@#$%&*()-_=+
+  // and is all case insensitive
+  customManifestIdFolderRegex: /^([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\-|\_){1,1}([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\ |\,|\.|\;|\'|\[|\]|\{|\}|\!|\@|\#|\$|\%|\&|\*|\(|\)|\-|\_|\=|\+?){0,49}$/i,
+  openingTagForInvalidCustomManifestIdCharacter: '<span style=\'color:blue;\'>',
+  closingTagForInvalidCustomManifestIdCharacter: '</span>'
 };
 
 function loadUserSettings (jsonSettings) {
@@ -132,6 +153,15 @@ function loadUserSettings (jsonSettings) {
     }
     if (jsonSettings.numberOfManifestsInParallel) {
       settings.numberOfManifestsInParallel = jsonSettings.numberOfManifestsInParallel;
+    }
+    if (jsonSettings.customManifestIdFolderRegex) {
+      settings.customManifestIdFolderRegex = jsonSettings.customManifestIdFolderRegex;
+    }
+    if (jsonSettings.openingTagForInvalidCustomManifestIdCharacter) {
+      settings.openingTagForInvalidCustomManifestIdCharacter = jsonSettings.openingTagForInvalidCustomManifestIdCharacter;
+    }
+    if (jsonSettings.closingTagForInvalidCustomManifestIdCharacter) {
+      settings.closingTagForInvalidCustomManifestIdCharacter = jsonSettings.closingTagForInvalidCustomManifestIdCharacter;
     }
   }
 
