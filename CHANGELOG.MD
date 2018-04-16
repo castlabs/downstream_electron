@@ -1,3 +1,6 @@
+# 0.2.3
+ * updated keywords and readme 
+ 
 # 0.2.2
  * unhandled error exception for EventEmitter for Download
  

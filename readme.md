@@ -2,7 +2,7 @@
 
 ## Summary
 
-DOWNstream is an open-source plugin for use with Electron allowing encrypted MPEG-DASH streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.
+DOWNstream is an open-source plugin to use with Electron allowing encrypted MPEG-DASH and Smooth Streaming streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.
 
 ## castLabs Electron Release for Content Security
 
