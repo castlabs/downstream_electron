@@ -96,7 +96,12 @@ Download.prototype._onError = function (data) {
 
   self._removeEvents();
   self._updateStats();
-  self.events.emit("error", self, message);
+
+  // notify only if there exists any error listener (from downloads controller)
+  // otherwise EventEmitter throws an error
+  if (self.events.listeners('error').length) {
+    self.events.emit("error", self, message);
+  }
 };
 
 /**
@@ -153,9 +158,9 @@ Download.prototype.start = function () {
     d.on('error', function (err) {
       let message = '';
       if (err) {
-        message = err.code;
+        message = err.code || err.message || "";
       }
-      // this needs to be disposed otherwise it might complain about unhandled error. magic :)
+      // this needs to be disposed otherwise it might complain about unhandled error.
       d.dispose();
       self._onError({
         message: message

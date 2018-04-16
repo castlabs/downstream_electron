@@ -1,3 +1,6 @@
+# 0.2.2
+ * unhandled error exception for EventEmitter for Download
+ 
 # 0.2.1
  * Added support for custom manifest id with error handling and ability to define own validation regex 
  * Minor fixes and improvements 
