@@ -10,20 +10,16 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
     return;
   }
 
-  canCreateManifest(manifestId).then(function () {
-    api.downloadsController.storage.getItem(manifestId).then(function (result) {
-      if (result) {
-        onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
-      } else {
-        api.downloadsController.start(manifestId, representations, onSuccess, function (err) {
-          onFailure(translation.getError(translation.e.downloads._GENERAL), err);
-        });
-      }
-    }, function (err) {
-      onFailure(translation.getError(translation.e.downloads._GENERAL), err);
-    });
+  api.downloadsController.storage.getItem(manifestId).then(function (result) {
+    if (result) {
+      onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
+    } else {
+      api.downloadsController.start(manifestId, representations, onSuccess, function (err) {
+        onFailure(translation.getError(translation.e.downloads._GENERAL), err);
+      });
+    }
   }, function (err) {
-    onFailure(translation.getError(translation.e.manifests.FOLDER_ALREADY_EXISTS, manifestId), err);
+    onFailure(translation.getError(translation.e.downloads._GENERAL), err);
   });
 
 };
