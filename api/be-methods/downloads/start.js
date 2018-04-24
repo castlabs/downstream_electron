@@ -10,7 +10,7 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
     return;
   }
 
-  canCreateManifest(manifestId).then(function () {
+  function start () {
     api.downloadsController.storage.getItem(manifestId).then(function (result) {
       if (result) {
         onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
@@ -22,8 +22,30 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
     }, function (err) {
       onFailure(translation.getError(translation.e.downloads._GENERAL), err);
     });
-  }, function (err) {
-    onFailure(translation.getError(translation.e.manifests.FOLDER_ALREADY_EXISTS, manifestId), err);
+  }
+
+  canCreateManifest(manifestId).then(function () {
+    start();
+  }, function (errors) {
+    errors = errors || [];
+    var movieFolderError = errors[1];
+    if (errors.length) {
+      if (movieFolderError) {
+        // if movie folder has been already created the we can't start as it might be either different folder
+        // or simply the resume should be used
+        onFailure(translation.getError(translation.e.manifests.FOLDER_ALREADY_EXISTS, manifestId));
+        return;
+      }
+    }
+    // if manifest exists physically on drive that means something is wrong and can't start the manifest
+    // the manifest is saved in method start so this cannot be overwritten here
+    api.offlineController.getManifestDataFile(manifestId, function (data) {
+      if (data) {
+        onFailure(translation.getError(translation.e.manifests.FOLDER_ALREADY_EXISTS, manifestId));
+      } else {
+        start();
+      }
+    });
   });
 
 };
