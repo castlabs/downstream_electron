@@ -1,4 +1,5 @@
 # 0.2.4
+ * Added fake Persistent Plugin for easier testing
  * Allowing to create persistent session before calling api "start"
  * Fix an exception if there is no manifest using removePersistent 
  
