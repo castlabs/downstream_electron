@@ -21,7 +21,7 @@ const translationErrors = {
     },
     ALREADY_STOPPED: {
       code: CODES.ERRORS.STOPPED,
-      msg: "This download '%manifestId%' has been already stopped.",
+      msg: "This download '%manifestId%' has been already stopped or has been already downloaded.",
     },
     ALREADY_STOPPED_ALL: {
       code: CODES.ERRORS.STOPPED,

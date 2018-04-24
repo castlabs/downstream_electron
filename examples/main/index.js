@@ -2,8 +2,33 @@
 window.$ = window.jQuery = require('jquery');
 const { remote } = require('electron');
 
+const fakePersistentSessionId = 'fake_';
+
+// fake persistent plugin - needed for easier testing
+function FakePersistentPlugin () {
+  this.createPersistentSession = function (persistentConfig) {
+    console.log('create - call of fake persistent plugin, persistentConfig', persistentConfig);
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        const sessionId = fakePersistentSessionId + Math.random();
+        console.log('create - call of fake persistent plugin resolved', sessionId);
+        resolve(sessionId);
+      }, 1000);
+    });
+  };
+  this.removePersistentSession = function (sessionId) {
+    console.log('remove - call of fake persistent plugin, sessionId', sessionId);
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        console.log('remove - call of fake persistent plugin resolved', sessionId);
+        resolve();
+      }, 1000);
+    });
+  };
+}
+
 // DEV
-const downstreamElectron = require('../../api/index').init(window);
+const downstreamElectron = require('../../api/index').init(window, new FakePersistentPlugin());
 // TESTING PRODUCTION
 // const downstreamElectron = require('../../dist/index').init(window);
 
@@ -55,6 +80,7 @@ function getItemInfo(result) {
   function getChosenRepresentations(userR, manifestR) {
     let hash = {};
     let chosenRepresentations = [];
+    userR = userR || [];
     for (let i = 0, j = userR.length; i < j; i++) {
       hash[userR[i]] = true;
     }

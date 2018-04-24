@@ -161,6 +161,20 @@ OfflineController.prototype.getManifestInfoPromise = function (manifestId, full)
 /**
  *
  * @param {string} manifestId - manifest identifier
+ * @param {Function} callback - callback with resolved info data about manifest - if such exists
+ * @returns {void}
+ */
+OfflineController.prototype.getManifestDataFile = function (manifestId, callback) {
+  new ReadItem(manifestId, appSettings.getSettings().stores.MANIFEST).then(function (data) {
+    callback(data);
+  }, function () {
+    callback();
+  })
+};
+
+/**
+ *
+ * @param {string} manifestId - manifest identifier
  * @param {Function} onSuccess - callback to be invoked when remove has been successfully
  * @param {Function} onFailure - callback to be invoked when remove failed
  * @returns {void}

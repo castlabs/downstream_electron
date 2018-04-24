@@ -1,3 +1,7 @@
+# 0.2.4
+ * Allowing to create persistent session before calling api "start"
+ * Fix an exception if there is no manifest using removePersistent 
+ 
 # 0.2.3
  * updated keywords and readme 
  

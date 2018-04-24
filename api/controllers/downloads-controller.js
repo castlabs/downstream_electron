@@ -304,6 +304,10 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
   const self = this;
   this.downloadStats.start();
   const manifest = this._manifestController.getManifestById(manifestId);
+  if (!manifest) {
+    onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
+    return;
+  }
   representations = representations || {};
   let video = representations.video || [];
   let audio = representations.audio || [];

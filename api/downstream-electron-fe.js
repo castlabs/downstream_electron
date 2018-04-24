@@ -4,6 +4,9 @@ const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 
 const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
+
+const translation = require("./translation/index");
+
 let downstreamElectronFE;
 
 function getWidevinePSSH (info) {
@@ -100,6 +103,10 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
   const scope = this;
   if (this._persistent) {
     this.downloads.info(manifestId).then(function (info) {
+      if (!info) {
+        reject(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
+        return;
+      }
       if (info.persistent) {
         reject('persistent session already exists:' + JSON.stringify(info.persistent));
       } else {
@@ -109,7 +116,6 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         scope._persistent.createPersistentSession(config).then(function (persistentSessionId) {
           scope.downloads.savePersistent(manifestId, persistentSessionId).then(resolve, reject);
           resolve(persistentSessionId);
-          // success
         }, reject);
       }
     }, reject);
