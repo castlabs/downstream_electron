@@ -1,7 +1,6 @@
 "use strict";
 
 const translation = require("../../translation/index");
-const canCreateManifest = require("../../util/can-create-manifest");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId, representations) {
   const manifest = api.manifestController.getManifestById(manifestId);
