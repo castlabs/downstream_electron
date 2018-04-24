@@ -128,10 +128,10 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
  */
 DownstreamElectronFE.prototype.downloads.removePersistent = function (args, resolve, reject, manifest) {
   if (this._persistent) {
-    if (!manifest.persistent) {
-      reject('persistent session doesn\'t exist:');
-    } else {
+    if (manifest && manifest.persistent) {
       this._persistent.removePersistentSession(manifest.persistent).then(resolve, reject);
+    } else {
+      resolve();
     }
   } else {
     reject('No persistent plugin initialized');
@@ -489,4 +489,3 @@ module.exports = {
     return downstreamElectronFE;
   }
 };
-
