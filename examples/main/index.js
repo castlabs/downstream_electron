@@ -2,8 +2,21 @@
 window.$ = window.jQuery = require('jquery');
 const { remote } = require('electron');
 
+let persistentPlugin = {
+  createPersistentSession : function () {
+    return new Promise ((resolve, reject ) => {
+      resolve('PERSISTENTID');
+    })
+  },
+  removePersistentSession : function () {
+    return new Promise ((resolve, reject ) => {
+      resolve();
+    });
+  }
+}
+
 // DEV
-const downstreamElectron = require('../../api/index').init(window);
+const downstreamElectron = require('../../api/index').init(window, persistentPlugin);
 // TESTING PRODUCTION
 // const downstreamElectron = require('../../dist/index').init(window);
 
