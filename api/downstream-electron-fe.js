@@ -83,8 +83,7 @@ function DownstreamElectronFE (window, persistent) {
     'stop',
     'stopAll',
     'subscribe',
-    'unsubscribe',
-    'updatePersistent'
+    'unsubscribe'
   ]);
   this._attachEvents();
 }
@@ -101,6 +100,7 @@ DownstreamElectronFE.prototype.downloads = {};
 DownstreamElectronFE.prototype.downloads.createPersistent = function (args, resolve, reject) {
   const manifestId = args[0];
   const config = args[1];
+  const forced = args[2];
   const scope = this;
   if (this._persistent) {
     this.downloads.info(manifestId).then(function (info) {
@@ -108,7 +108,7 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         reject(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
         return;
       }
-      if (info.persistent) {
+      if (info.persistent && !forced) {
         reject('persistent session already exists:' + JSON.stringify(info.persistent));
       } else {
         if (!config.pssh) {
@@ -120,33 +120,6 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         }, reject);
       }
     }, reject);
-  } else {
-    reject('No persistent plugin initialized');
-  }
-};
-
-/**
- * Creates or updates a persistent session in renderer process using external plugin defined as {@link Persistent}
- * @param {array} args - arguments
- * @param {function} resolve - should called on success
- * @param {function} reject - should called on failure
- * @returns {void}
- */
-DownstreamElectronFE.prototype.downloads.updatePersistent = function (args, resolve, reject) {
-  const manifestId = args[0];
-  const config = args[1];
-  const scope = this;
-  if (this._persistent) {
-    this.downloads.info(manifestId).then(function (info) {
-      if (!config.pssh) {
-        config.pssh = getWidevinePSSH(info);
-      }
-      scope._persistent.createPersistentSession(config).then(function (persistentSessionId) {
-        scope.downloads.savePersistent(manifestId, persistentSessionId).then(resolve, reject);
-        resolve(persistentSessionId);
-        // success
-      }, reject);
-    });
   } else {
     reject('No persistent plugin initialized');
   }

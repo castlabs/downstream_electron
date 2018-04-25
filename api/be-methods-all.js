@@ -48,6 +48,7 @@ downloads.create = require('./be-methods/downloads/create');
  * @memberOf DownstreamElectronFE.downloads
  * @param {string} manifestId - manifest identifier
  * @param {PersistentConfig} config - persistent configuration
+ * @param {boolean} [forced=false] - replace existing persistent session, if true
  * @example
  * var config = {
  *   licenseUrl: 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/',
@@ -66,31 +67,6 @@ downloads.create = require('./be-methods/downloads/create');
  * @returns {Promise} - promise
  */
 downloads.createPersistent = require('./be-methods/downloads/createPersistent');
-
-/**
- * update a persistent session
- * @method updatePersistent
- * @memberOf DownstreamElectronFE.downloads
- * @param {string} manifestId - manifest identifier
- * @param {PersistentConfig} config - persistent configuration
- * @example
- * var config = {
- *   licenseUrl: 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/',
- *   serverCertificate: new Uint8Array(<server_certificate>),
- *   customData: {
- *     userId: '<user_id>',
- *     sessionId: '<session_id>',
- *     merchant: '<merchant>'
- *   }
- * };
- * DownstreamElectronFE.downloads.updatePersistent(manifestId, config)
- *    .then(
- *      function onSuccess(result) {console.log("success", result);},
- *      function onError(err) {console.log("error", err);
- *    })
- * @returns {Promise} - promise
- */
-downloads.updatePersistent = require('./be-methods/downloads/updatePersistent');
 
 /**
  * get ids of all downloads
