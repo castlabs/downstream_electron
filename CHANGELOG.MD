@@ -1,3 +1,6 @@
+# 0.2.5
+ * Updating dependencies to the latest 2018-04-30
+ 
 # 0.2.4
  * Added fake Persistent Plugin for easier testing
  * Allowing to create persistent session before calling api "start"
