@@ -1,3 +1,6 @@
+# 0.2.6
+ * Add support for fetching a new persistent license when one already exists
+ 
 # 0.2.5
  * Updating dependencies to the latest 2018-04-30
  
