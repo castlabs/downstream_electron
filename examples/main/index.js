@@ -30,7 +30,7 @@ function FakePersistentPlugin () {
 // DEV
 const downstreamElectron = require('../../api/index').init(window, new FakePersistentPlugin());
 // TESTING PRODUCTION
-// const downstreamElectron = require('../../dist/index').init(window);
+// const downstreamElectron = require('../../dist/index').init(window, new FakePersistentPlugin());
 
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 
