@@ -48,6 +48,7 @@ downloads.create = require('./be-methods/downloads/create');
  * @memberOf DownstreamElectronFE.downloads
  * @param {string} manifestId - manifest identifier
  * @param {PersistentConfig} config - persistent configuration
+ * @param {boolean} [forced=false] - replace existing persistent session, if true
  * @example
  * var config = {
  *   licenseUrl: 'https://lic.staging.drmtoday.com/license-proxy-widevine/cenc/',

@@ -172,6 +172,15 @@ function addStartActions(manifestId) {
     });
   }));
 
+  //Create Persistent Session - forced
+  $('#contentActions').append($('<input type="button" value="Create Persistent Session - forced">').on('click', function () {
+    downstreamElectron.downloads.createPersistent(manifestId, persistentConfig, true).then(function (persistentSessionId) {
+      showStatusOK('Create Persistent Session - forced: ' + persistentSessionId, contentStatus);
+    }, function (err) {
+      showStatusError('Create Persistent Session - forced', err, contentStatus);
+    });
+  }));
+
   //Remove Persistent Session
   $('#contentActions').append($('<input type="button" value="Remove Persistent Session">').on('click', function () {
     downstreamElectron.downloads.removePersistent(manifestId).then(function (result) {
@@ -311,6 +320,15 @@ function addItemActions(manifestId,
       showStatusOK('Create Persistent Session: ' + persistentSessionId, contentStatus);
     }, function (err) {
       showStatusError('Create Persistent Session', err, contentStatus);
+    });
+  }));
+
+  //Create Persistent Session - forced
+  $(contentActions).append($('<input type="button" value="Create Persistent Session - forced">').on('click', function () {
+    downstreamElectron.downloads.createPersistent(manifestId, persistentConfig, true).then(function (persistentSessionId) {
+      showStatusOK('Create Persistent Session - forced: ' + persistentSessionId, contentStatus);
+    }, function (err) {
+      showStatusError('Create Persistent Session - forced', err, contentStatus);
     });
   }));
 

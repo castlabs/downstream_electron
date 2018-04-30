@@ -100,6 +100,7 @@ DownstreamElectronFE.prototype.downloads = {};
 DownstreamElectronFE.prototype.downloads.createPersistent = function (args, resolve, reject) {
   const manifestId = args[0];
   const config = args[1];
+  const forced = args[2];
   const scope = this;
   if (this._persistent) {
     this.downloads.info(manifestId).then(function (info) {
@@ -107,15 +108,23 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         reject(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
         return;
       }
-      if (info.persistent) {
-        reject('persistent session already exists:' + JSON.stringify(info.persistent));
+      const existingPersistentSessionId = info.persistent;
+      if (existingPersistentSessionId && !forced) {
+        reject('persistent session already exists:' + JSON.stringify(existingPersistentSessionId));
       } else {
         if (!config.pssh) {
           config.pssh = getWidevinePSSH(info);
         }
         scope._persistent.createPersistentSession(config).then(function (persistentSessionId) {
-          scope.downloads.savePersistent(manifestId, persistentSessionId).then(resolve, reject);
-          resolve(persistentSessionId);
+          scope.downloads.savePersistent(manifestId, persistentSessionId).then(function () {
+            if (existingPersistentSessionId) {
+              scope._persistent.removePersistentSession(existingPersistentSessionId).then(function () {
+                resolve(persistentSessionId);
+              }, reject);
+            } else {
+              resolve(persistentSessionId);
+            }
+          }, reject);
         }, reject);
       }
     }, reject);
