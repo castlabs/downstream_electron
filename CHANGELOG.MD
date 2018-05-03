@@ -1,3 +1,6 @@
+# 0.2.7
+ * Fixing manifest url to be the exact link passed by the user
+
 # 0.2.6
  * Add support for fetching a new persistent license when one already exists
  
