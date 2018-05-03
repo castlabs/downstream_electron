@@ -101,7 +101,7 @@ const Manifest = (function () {
     return this.manifest_name;
   };
   Manifest.prototype.getManifestUrl = function () {
-    return this.url_domain + this.manifest_name;
+    return this.url;
   };
   Manifest.prototype.getManifestXML = function () {
     return this.manifestXML.getManifestXML();
