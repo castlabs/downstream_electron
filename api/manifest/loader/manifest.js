@@ -20,13 +20,17 @@ const Manifest = (function () {
     }
   }
 
+  Manifest.prototype._setUpUrl = function (url) {
+    const pathName = urlParse(url).pathname;
+    this.url = url;
+    this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
+    this.manifest_name = pathName.substring(pathName.lastIndexOf('/') + 1, pathName.length);
+  };
+
   Manifest.prototype.load = function (url) {
     const _this = this;
     return new Promise(function (resolve, reject) {
-      const pathName = urlParse(url).pathname;
-      _this.url = url;
-      _this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
-      _this.manifest_name = pathName.substring(pathName.lastIndexOf('/') + 1, pathName.length);
+      _this._setUpUrl(url);
       const p = manifestLoader.load(url);
       p.then(function (v) {
         var isEncodingUTF16 = encoding.isUTF16(v.response);
@@ -48,9 +52,12 @@ const Manifest = (function () {
   Manifest.prototype.loadFromLocal = function (localPath, url) {
     const _this = this;
     return new Promise(function (resolve, reject) {
+      if (!url || !localPath) {
+        reject();
+        return;
+      }
       ManifestLocalLoader(localPath).then(function (str) {
-        _this.url_domain = url.substring(0, url.lastIndexOf('/') + 1);
-        _this.manifest_name = url.substring(url.lastIndexOf('/') + 1, url.length);
+        _this._setUpUrl(url);
         _this.manifestXML = new ManifestXML_1.ManifestXML();
         _this.manifestXML.parse(str, function () {
           resolve();

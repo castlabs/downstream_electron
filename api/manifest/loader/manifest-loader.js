@@ -9,10 +9,14 @@ const ManifestLoader = (function () {
     return this.sendXMLHttpRequest(url);
   };
   ManifestLoader.prototype.sendXMLHttpRequest = function (url) {
-    const req_options = Object.assign({url: url}, appSettings.getSettings().defaultManifestRequestOptions);
+    const req_options = Object.assign({
+      url: url,
+      method: 'GET'
+    }, appSettings.getSettings().defaultManifestRequestOptions);
 
     return new Promise(function (resolve, reject) {
       let req = net.request(req_options);
+      req.chunkedEncoding = true;
 
       req.on('error', (err) => {
         reject(err);
