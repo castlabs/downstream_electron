@@ -101,7 +101,7 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
         info.manifestInfo = manifest.getJsonInfo();
         callback(null, info);
       }, function (err) {
-        if (err.code === "ENOENT") {
+        if (err && err.code === "ENOENT") {
           callback();
         } else {
           callback(err);

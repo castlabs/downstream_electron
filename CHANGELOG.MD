@@ -1,3 +1,7 @@
+# 0.2.8
+ * Fixed: some servers doesn't work correctly with default electron net class when "chunkedEncoding" has default value
+ * Updating dependencies to latest 2018-05-09
+ 
 # 0.2.7
  * Fixing manifest url to be the exact link passed by the user
 

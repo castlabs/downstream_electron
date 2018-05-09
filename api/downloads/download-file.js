@@ -235,6 +235,13 @@ DownloadFile.prototype._startChunks = function () {
   Promise.all(this._promises).then(this._onDownloadSuccess.bind(this), this._onDownloadFailure.bind(this));
 };
 
+DownloadFile.prototype._startAllChunks = function () {
+  for (let i = 0, j = this._chunksNumber; i < j; i++) {
+    this._initChunk(i)
+  }
+  this._startChunks();
+};
+
 /**
  * starts download
  * @returns {void}
@@ -249,6 +256,7 @@ DownloadFile.prototype.start = function () {
     downloadFileUtil.defaultOptions
   );
   let req = net.request(req_options);
+  req.chunkedEncoding = true;
 
   req.on('response', (response) => {
     if (response && response.statusCode >= 400) {
@@ -268,28 +276,21 @@ DownloadFile.prototype.start = function () {
     self.file_size = Number(self._headers["content-length"]);
     self._chunksNumber = self._calculateChunksNumber(self.file_size);
 
-    function start () {
-      for (let i = 0, j = self._chunksNumber; i < j; i++) {
-        self._initChunk(i)
-      }
-      self._startChunks();
-    }
-
     downloadFileUtil.checkForLocalFile(self._destFile, function (exists, fileSize) {
       if (exists) {
         if (fileSize === self.file_size) {
           self.emit("end");
         } else if (fileSize > self.file_size) {
           fs.unlink(self._destFile);
-          start();
+          self._startAllChunks();
         } else if (fileSize < self.file_size && self._chunksNumber > 1) {
           fs.unlink(self._destFile);
-          start();
+          self._startAllChunks();
         } else {
-          start();
+          self._startAllChunks();
         }
       } else {
-        start();
+        self._startAllChunks();
       }
     });
   });
