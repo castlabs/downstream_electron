@@ -23,7 +23,7 @@
   "//": "TESTING PRODUCTION",
   "//": "dist/index.js",
   "files": [
-    "dist"
+    "api"
   ],
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {
