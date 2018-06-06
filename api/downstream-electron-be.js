@@ -1,16 +1,15 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 "use strict";
 const _ = require('underscore');
-const express = require('express');
 const Snowflake = require("./util/snowflake-id");
 
 const appSettings = require('./app-settings');
 const beMethods = require('./be-methods-all');
 const DownloadsController = require('./controllers/downloads-controller');
-const isPortTaken = require('./util/is-port-taken');
 const ManifestController = require('./controllers/manifest-controller');
 const OfflineController = require('./controllers/offline-controller');
 const SubscribersController = require('./controllers/subscribers-controller');
+const Server = require('./server/server.js');
 
 let DownstreamElectronBE;
 
@@ -202,32 +201,13 @@ DownstreamElectronBE.prototype._send = function (response, target) {
  */
 DownstreamElectronBE.prototype._serveOfflineContent = function () {
   const self = this;
-  const cors = require('cors');
-  const server = express();
   const maxOfflineContentPortRange = appSettings.getSettings().maxOfflineContentPortRange;
-  const publicFolderPath = appSettings.getSettings().publicFolderPath;
-  server.use(cors());
 
-  server.use(express.static(publicFolderPath));
+  const server = new Server(this.offlineController, maxOfflineContentPortRange, this._offlineContentPort);
+  server.serveOfflineContent( function (offlinePort) {
+    self._offlineContentPort = offlinePort;
+  })
 
-  function startOnPort (port) {
-    if (port > maxOfflineContentPortRange) {
-      return;
-    }
-    isPortTaken(port, function (err) {
-      if (err) {
-        port++;
-        startOnPort(port);
-      } else {
-        server.listen(port, function () {
-          self._offlineContentPort = port;
-          console.info('Offline content served on port ' + port);
-        });
-      }
-    });
-  }
-
-  startOnPort(this._offlineContentPort);
 };
 
 /**
