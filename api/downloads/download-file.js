@@ -256,7 +256,6 @@ DownloadFile.prototype.start = function () {
     downloadFileUtil.defaultOptions
   );
   let req = net.request(req_options);
-  req.chunkedEncoding = true;
 
   req.on('response', (response) => {
     if (response && response.statusCode >= 400) {
