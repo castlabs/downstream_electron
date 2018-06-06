@@ -13,6 +13,7 @@ const STATUSES = require("../downloads/statuses");
 const CODES = require("../downloads/codes");
 const constants = require("../constants");
 const utilUrl = require("../util/url");
+const path = require("path");
 
 /**
  *
@@ -295,12 +296,13 @@ DownloadsController.prototype.isDownloadFinishedAndSynced = function (manifestId
  *
  * @param {string} manifestId - manifest identifier
  * @param {object} representations - object containing video, audio and text representations ids
+ * @param {string} downloadFolder - download folder for video. If undefined, then default download folder is used
  * @param {function} onSuccess - callback to be invoked when start has been successfully
  * @param {function} onFailure - callback to be invoked when start failed
  * @param {boolean} fromResumed - if start has been called from resume api method
  * @returns {void}
  */
-DownloadsController.prototype.start = function (manifestId, representations, onSuccess, onFailure, fromResumed) {
+DownloadsController.prototype.start = function (manifestId, representations, downloadFolder,  onSuccess, onFailure, fromResumed) {
   const self = this;
   this.downloadStats.start();
   const manifest = this._manifestController.getManifestById(manifestId);
@@ -316,7 +318,11 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
   const audioR = manifest.getAudioRepresentations();
   const textR = manifest.getTextRepresentations();
 
-  const localPath = appSettings.getSettings().downloadsFolderPath + manifestId + "/";
+  let localDownloadFolder = path.resolve(appSettings.getSettings().downloadsFolderPath)
+  if (downloadFolder) {
+    localDownloadFolder = path.resolve(downloadFolder);
+  }
+  const localPath = path.resolve(localDownloadFolder + "/" + manifestId + "/");
   const manifestUrl = manifest.getManifestUrl();
   const manifestName = manifest.getManifestName();
 
@@ -395,6 +401,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
               self.storage.manifest.setItem(manifestId, "audio", audio);
               self.storage.manifest.setItem(manifestId, "text", text);
               self.storage.manifest.setItem(manifestId, "files", allFiles);
+              self.storage.manifest.setItem(manifestId, "folder", localDownloadFolder);
 
               self.storage.downloaded.clear(manifestId);
               self.storage.downloaded.concat(manifestId, downloaded);
@@ -412,7 +419,8 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
                       video: video,
                       audio: audio,
                       text: text,
-                    })
+                    },
+                    localPath)
                   ])
                   .then(function () {
                     self._addDownloads(manifestId, videoLinks, audioLinks, textLinks);
@@ -439,6 +447,26 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
                   }, onFailure);
             }, onFailure);
       });
+};
+
+/**
+ *
+ * @param {string} manifestId - manifest identifier
+ * @param {object} representations - object containing video, audio and text representations ids
+ * @param {function} onSuccess - callback to be invoked when start has been successfully
+ * @param {function} onFailure - callback to be invoked when start failed
+ * @returns {void}
+ */
+DownloadsController.prototype.resume = function (manifestId, representations,  onSuccess, onFailure) {
+  const self = this;
+  this._offlineController.getManifestInfo(manifestId, function (err, info) {
+    if (err) {
+      onFailure(translation.getError(translation.e.downloads.RESUMING_FAILED, manifestId), err);
+    } else {
+      let folder = info.manifest.folder;
+      self.start(manifestId, representations, folder, onSuccess, onFailure, true);
+    }
+  });
 };
 
 /**

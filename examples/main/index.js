@@ -126,7 +126,8 @@ function addStartActions(manifestId) {
     let representations = getSelectedRepresentations();
     let count = representations.video.length + representations.audio.length + representations.text.length;
     if (count > 0) {
-      downstreamElectron.downloads.start(manifestId, representations).then(function () {
+      let customFolder = document.getElementById('customDownloadFolder').value;
+      downstreamElectron.downloads.start(manifestId, representations, customFolder).then(function () {
         clearContent();
         showStatusOK('start');
         addItemActions(manifestId, '#contentActions', '#contentHeader', '#contentMain', '#contentSubscribe',
@@ -586,7 +587,8 @@ function addStressTest() {
         // leave only one representation
         video.splice(1);
 
-        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }).then(function () {
+        let customFolder = document.getElementById('customDownloadFolder').value;
+        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }, customFolder).then(function () {
           onStart(manifestId, itemContainer);
           resolve(manifestId);
         }, function (err) {
