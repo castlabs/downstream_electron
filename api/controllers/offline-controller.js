@@ -184,7 +184,12 @@ OfflineController.prototype.getManifestDataFile = function (manifestId, callback
 OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure) {
   const settingsFolder = appSettings.getSettings().settingsFolder + manifestId;
   this.getManifestDataFile( manifestId, function (info) {
-    const downloadsFolder = info.folder + '/' + manifestId;
+    let folder = info.folder;
+    if (!folder) {
+      // use default download folder path
+      folder =  path.resolve(appSettings.getSettings().downloadsFolderPath);
+    }
+    const downloadsFolder = folder + '/' + manifestId;
     rmdir(downloadsFolder, function (err) {
       if (err && err.code !== "ENOENT") {
         onFailure(err);

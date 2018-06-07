@@ -464,6 +464,10 @@ DownloadsController.prototype.resume = function (manifestId, representations,  o
       onFailure(translation.getError(translation.e.downloads.RESUMING_FAILED, manifestId), err);
     } else {
       let folder = info.manifest.folder;
+      if (!folder) {
+        // use default download folder path
+        folder =  path.resolve(appSettings.getSettings().downloadsFolderPath)
+      }
       self.start(manifestId, representations, folder, onSuccess, onFailure, true);
     }
   });
