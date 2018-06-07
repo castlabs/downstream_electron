@@ -73,11 +73,14 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
           bandwidth: bandwidth,
           contentType: contentType,
           remoteUrl: remoteUrl,
-          localUrl: localUrl
+          localUrl: localUrl,
+          index: k
         });
       }
     }
   }
+  // sort links in order to allow playback before all links are downloaded (for ex: to switch from audio tracks) 
+  links.sort((a,b) => { return a.index - b.index });
   return links;
 };
 
