@@ -56,7 +56,7 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
 ) {
   let chosenRepresentations = downloadUtil.getChosenRepresentations(userRepresentations, manifestRepresentations);
   let bandwidth, contentType, localUrl, i, id, j, k, l, links;
-  let mediaFile, mediaBaseUrl, mediaUrls, remoteUrl, segmentInformation;
+  let mediaFile, mediaBaseUrl, mediaUrls, remoteUrl, segmentInformation, index;
 
   links = [];
   downloadedHash = downloadedHash || {};
@@ -76,6 +76,7 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
     for (k = 0, l = mediaUrls.length; k < l; k++) {
       mediaFile = mediaUrls[k].mediaFile;
       mediaBaseUrl = mediaUrls[k].baseURL;
+      index = k;
       mediaBaseUrl = mediaBaseUrl.replace(/\.\.\//g, "");
       mediaBaseUrl = mediaBaseUrl.replace(/\.\./g, "");
       if (mediaFile === mediaBaseUrl || remotePath === mediaBaseUrl) {
@@ -101,7 +102,8 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
           bandwidth: bandwidth,
           contentType: contentType,
           remoteUrl: remoteUrl,
-          localUrl: localUrl
+          localUrl: localUrl,
+          index: index
         });
       }
     }
