@@ -184,25 +184,36 @@ OfflineController.prototype.getManifestDataFile = function (manifestId, callback
 OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure) {
   const settingsFolder = appSettings.getSettings().settingsFolder + manifestId;
   this.getManifestDataFile( manifestId, function (info) {
-    let folder = info.folder;
-    if (!folder) {
-      // use default download folder path
-      folder =  path.resolve(appSettings.getSettings().downloadsFolderPath);
-    }
-    const downloadsFolder = folder + '/' + manifestId;
-    rmdir(downloadsFolder, function (err) {
-      if (err && err.code !== "ENOENT") {
-        onFailure(err);
-      } else {
-        rmdir(settingsFolder, function (err) {
-          if (err && err.code !== "ENOENT") {
-            onFailure(err);
-          } else {
-            onSuccess();
-          }
-        })
+    if (!info) {
+      // no manifest data found for manifest, the download has not been started => just remove settings
+      rmdir(settingsFolder, function (err) {
+        if (err && err.code !== "ENOENT") {
+          onFailure(err);
+        } else {
+          onSuccess();
+        }
+      })
+    } else {
+      let folder = info.folder;
+      if (!folder) {
+        // use default download folder path
+        folder =  path.resolve(appSettings.getSettings().downloadsFolderPath);
       }
-    });
+      const downloadsFolder = folder + '/' + manifestId;
+      rmdir(downloadsFolder, function (err) {
+        if (err && err.code !== "ENOENT") {
+          onFailure(err);
+        } else {
+          rmdir(settingsFolder, function (err) {
+            if (err && err.code !== "ENOENT") {
+              onFailure(err);
+            } else {
+              onSuccess();
+            }
+          })
+        }
+      });
+    }
   })
 };
 
