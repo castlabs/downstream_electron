@@ -76,7 +76,6 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
     for (k = 0, l = mediaUrls.length; k < l; k++) {
       mediaFile = mediaUrls[k].mediaFile;
       mediaBaseUrl = mediaUrls[k].baseURL;
-      index = k;
       mediaBaseUrl = mediaBaseUrl.replace(/\.\.\//g, "");
       mediaBaseUrl = mediaBaseUrl.replace(/\.\./g, "");
       if (mediaFile === mediaBaseUrl || remotePath === mediaBaseUrl) {
