@@ -40,7 +40,7 @@ function ContentRoute (app, offlineController) {
 
       let file = downloadFolder + '/' + manifestId + '/' + req.params[0];
       res.sendFile(file, options, function (err) {
-        if (err) {
+        if (err && err.status) {
           res.status(err.status).end();
         }
       });
