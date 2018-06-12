@@ -60,7 +60,7 @@ function showStats(contentSubscribe, stats) {
     if (stats.hasOwnProperty(key)) {
       $(contentSubscribe).append($('<span class="progressItem">' +
         '<span class="key">' + key + ': </span>' +
-        '<span class="stats">' + stats[key] + '</span><' +
+        '<span class="stats">' + JSON.stringify(stats[key]) + '</span><' +
         '/span>'));
     }
   }

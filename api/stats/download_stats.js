@@ -124,6 +124,17 @@ DownloadStats.prototype._generate = function (refresh) {
     return parts;
   }
 
+  function toArray(obj) {
+    let arr = [];
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        let item = obj[key];
+        arr.push(item);
+      }
+    }
+    return arr;
+  }
+
   const stats = {
     downloading: 0,
     downloaded: 0,
@@ -214,6 +225,55 @@ DownloadStats.prototype._generate = function (refresh) {
     allStats[manifestId].downloadedBytesTotal = Math.round(allStats[manifestId].progress * 10000) / 100;
     allStats[manifestId].downloadedBytesTotal += "%";
 
+    // progress of each represention
+    let reduceFunc = function(map, obj) {
+      if ( !map[obj.id] )  {
+        map[obj.id] = []
+      }
+      map[obj.id].push (obj);
+      return map;
+    }
+    let downloadedById = allStats[manifestId].downloadedI.reduce(reduceFunc, {});
+    let downloadingArray =toArray(allStats[manifestId].downloadingI);
+    let downloadingById = downloadingArray.reduce(reduceFunc, {});
+    let leftById = allStats[manifestId].leftI.reduce(reduceFunc, {});
+    let errorArray = toArray(allStats[manifestId].errorsI);
+    let errorsById = errorArray.reduce(reduceFunc, {});
+
+    function extend(obj, src) {
+      for (var key in src) {
+        if (src.hasOwnProperty(key)) {
+          if (!obj[key]) {
+            obj[key] = [];
+          }
+          obj[key] = obj[key].concat(src[key]);
+        }
+      }
+      return obj;
+    }
+    let allPartsById = {};
+    extend(allPartsById, downloadedById);
+    extend(allPartsById, downloadingById);
+    extend(allPartsById, leftById);
+    extend(allPartsById, errorsById);
+
+    // compute progres for each id
+    let progressById = {};
+    for (var key in allPartsById) {
+      if (allPartsById.hasOwnProperty(key)) {
+        progressById[key] = (countPartsObj(downloadedById[key]) + countPartsObj(downloadingById[key])) / (countPartsObj(allPartsById[key]) || 1);
+        progressById[key] = progressById[key] * (1 - writeProgressUsage);
+        progressById[key]+= allStats[manifestId].writeProgress * writeProgressUsage;
+      }
+    }
+    let progressByIdPercent = {};
+    for (var key in progressById) {
+      if (progressById.hasOwnProperty(key)) {
+        progressByIdPercent[key] = Math.round(progressById[key] * 10000) / 100 + "%";
+      }
+    }
+    allStats[manifestId].progressById = progressById;
+    allStats[manifestId].progressByIdPercent = progressByIdPercent;
   }
   let showStats = {};
   for (let i = 0, j = manifests.length; i < j; i++) {
@@ -222,6 +282,8 @@ DownloadStats.prototype._generate = function (refresh) {
     let downloadedBytesTotal = allStats[manifestId].downloadedBytes + allStats[manifestId].downloadingAvailableBytes;
     showStats[manifestId].progress = allStats[manifestId].progress;
     showStats[manifestId].progressPercentage = allStats[manifestId].downloadedBytesTotal;
+    showStats[manifestId].progressById = allStats[manifestId].progressById;
+    showStats[manifestId].progressByIdPercent = allStats[manifestId].progressByIdPercent;
     showStats[manifestId].downloadedBytesTotal = this._convertToBytes(downloadedBytesTotal, 1, 2, 2);
     showStats[manifestId].downloaded = allStats[manifestId].downloaded;
     showStats[manifestId].left = allStats[manifestId].left;
