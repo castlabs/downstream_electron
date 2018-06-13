@@ -101,6 +101,7 @@ function getItemInfo(result) {
   info.video = getChosenRepresentations(result.manifest.video, result.manifestInfo.video);
   info.audio = getChosenRepresentations(result.manifest.audio, result.manifestInfo.audio);
   info.text = getChosenRepresentations(result.manifest.text, result.manifestInfo.text);
+  info.files = result.manifest.totalFiles;
   let html = $('<ul type="disc"></ul>');
   for (let key in info) {
     if (info.hasOwnProperty(key)) {

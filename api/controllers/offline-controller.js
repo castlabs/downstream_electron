@@ -50,7 +50,7 @@ OfflineController.prototype.getManifestsList = function (callback) {
  * @param {Function} callback - function to be called when list with info is ready
  * @returns {void}
  */
-OfflineController.prototype.getManifestsListWithInfo = function (callback) {
+OfflineController.prototype.getManifestsListWithInfo = function (callback, full) {
   const self = this;
   this.getManifestsList(function (err, list) {
     if (err) {
@@ -58,7 +58,7 @@ OfflineController.prototype.getManifestsListWithInfo = function (callback) {
     } else {
       let infoP = [];
       for (let i = 0, j = list.length; i < j; i++) {
-        infoP.push(self.getManifestInfoPromise(list[i]))
+        infoP.push(self.getManifestInfoPromise(list[i], full))
       }
       Promise.all(infoP).then(function (results) {
         let newResults = [];
@@ -130,9 +130,20 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
       info.status = STATUSES.BROKEN;
     }
     info.manifest = manifestSettings;
+    if (info.manifest.files) {
+      info.manifest.totalFiles = info.manifest.files.length;
+      if (full) {
+        info.manifest.files = info.manifest.files;
+      } else {
+        delete info.manifest.files;
+      }
+    }
     info.left = status.left || 0;
     info.persistent = persistent;
-    info.downloaded = full ? downloaded : downloaded.length;
+    info.downloaded = downloaded.length;
+    if (full) {
+      info.downloadedFiles = downloaded;
+    }
     info.data = data;
 
     addManifestInfoAndContinue(info);
