@@ -124,7 +124,7 @@ DownloadStats.prototype._generate = function (refresh) {
     return parts;
   }
 
-  function toArray(obj) {
+  function toArray (obj) {
     let arr = [];
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -226,21 +226,21 @@ DownloadStats.prototype._generate = function (refresh) {
     allStats[manifestId].downloadedBytesTotal += "%";
 
     // progress of each represention
-    let reduceFunc = function(map, obj) {
+    let reduceFunc = function (map, obj) {
       if ( !map[obj.id] )  {
         map[obj.id] = []
       }
-      map[obj.id].push (obj);
+      map[obj.id].push(obj);
       return map;
     }
     let downloadedById = allStats[manifestId].downloadedI.reduce(reduceFunc, {});
-    let downloadingArray =toArray(allStats[manifestId].downloadingI);
+    let downloadingArray = toArray(allStats[manifestId].downloadingI);
     let downloadingById = downloadingArray.reduce(reduceFunc, {});
     let leftById = allStats[manifestId].leftI.reduce(reduceFunc, {});
     let errorArray = toArray(allStats[manifestId].errorsI);
     let errorsById = errorArray.reduce(reduceFunc, {});
 
-    function extend(obj, src) {
+    let extend = function (obj, src) {
       for (var key in src) {
         if (src.hasOwnProperty(key)) {
           if (!obj[key]) {
@@ -259,13 +259,14 @@ DownloadStats.prototype._generate = function (refresh) {
 
     // compute progres for each id
     let progressById = {};
-    for (var key in allPartsById) {
+    let key;
+    for (key in allPartsById) {
       if (allPartsById.hasOwnProperty(key)) {
         progressById[key] = (countPartsObj(downloadedById[key])) / (countPartsObj(allPartsById[key]) || 1);
       }
     }
     let progressByIdPercent = {};
-    for (var key in progressById) {
+    for (key in progressById) {
       if (progressById.hasOwnProperty(key)) {
         progressByIdPercent[key] = Math.round(progressById[key] * 10000) / 100 + "%";
       }

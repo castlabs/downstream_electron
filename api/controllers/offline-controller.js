@@ -48,6 +48,7 @@ OfflineController.prototype.getManifestsList = function (callback) {
 /**
  *
  * @param {Function} callback - function to be called when list with info is ready
+ * @param {Boolean} full - if downloaded info should contain all items or only the length
  * @returns {void}
  */
 OfflineController.prototype.getManifestsListWithInfo = function (callback, full) {
