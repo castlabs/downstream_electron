@@ -261,9 +261,7 @@ DownloadStats.prototype._generate = function (refresh) {
     let progressById = {};
     for (var key in allPartsById) {
       if (allPartsById.hasOwnProperty(key)) {
-        progressById[key] = (countPartsObj(downloadedById[key]) + countPartsObj(downloadingById[key])) / (countPartsObj(allPartsById[key]) || 1);
-        progressById[key] = progressById[key] * (1 - writeProgressUsage);
-        progressById[key]+= allStats[manifestId].writeProgress * writeProgressUsage;
+        progressById[key] = (countPartsObj(downloadedById[key])) / (countPartsObj(allPartsById[key]) || 1);
       }
     }
     let progressByIdPercent = {};
