@@ -50,9 +50,11 @@ DownloadsController.prototype._addDownloads = function (manifestId, videoLinks, 
   let working = true;
   this._prepareStartOptions(manifestId, videoLinks, audioLinks, textLinks);
   while (working) {
-    this._addNextItemToQueue(manifestId, textLinks);
+    let ratioAudioVideo = videoLinks.length ? Math.round(audioLinks.length / videoLinks.length) : 1;
+    let ratioTextVideo = videoLinks.length ? Math.round(textLinks.length / videoLinks.length) : 1;
+    this._addNextItemToQueue(manifestId, textLinks, ratioTextVideo);
+    this._addNextItemToQueue(manifestId, audioLinks, ratioAudioVideo);
     this._addNextItemToQueue(manifestId, videoLinks);
-    this._addNextItemToQueue(manifestId, audioLinks);
     working = !!(textLinks.length || videoLinks.length || audioLinks.length);
   }
 };
@@ -61,15 +63,22 @@ DownloadsController.prototype._addDownloads = function (manifestId, videoLinks, 
  *
  * @param {string} manifestId - manifest identifier
  * @param {Array} links - array of links to be downloaded
+ * @param {number} nbItems - the rnumber of items to add to the queue
  * @private
  * @returns {void}
  */
-DownloadsController.prototype._addNextItemToQueue = function (manifestId, links) {
+DownloadsController.prototype._addNextItemToQueue = function (manifestId, links, nbItems) {
   let link;
+  if (!nbItems) {
+    nbItems = 1;
+  }
   if (links.length) {
-    link = links.shift();
-    link.manifestId = manifestId;
-    this.storage.left.push(manifestId, link);
+    while (nbItems > 0) {
+      link = links.shift();
+      link.manifestId = manifestId;
+      this.storage.left.push(manifestId, link);
+      nbItems--;
+    }
   }
 };
 
