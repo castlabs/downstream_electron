@@ -65,6 +65,11 @@ const RepresentationNode = (function (_super) {
         list[attrList[attr].nodeName] = attrList[attr].nodeValue;
       }
     }
+    if (list['mediaPresentationDuration'] !== undefined) {
+      list['durationInS'] = IsoDurationParser_1.IsoDurationParser.getDurationAsS(
+        this.attributeList['mediaPresentationDuration']);
+    }
+
     if (node.parentNode !== null) {
       this.buildAttributeList(node.parentNode, list);
     } else {

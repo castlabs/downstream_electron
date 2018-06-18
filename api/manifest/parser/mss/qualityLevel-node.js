@@ -154,6 +154,10 @@ const QualityLevelNode = (function (_super) {
       }
     }
 
+    if (list['Duration'] !== undefined) {
+      list['durationInS'] = this.attributeList['Duration'] / TIME_SCALE_100_NANOSECOND_UNIT;
+    }
+
     if (node.parentNode !== null) {
       this.buildAttributeList(node.parentNode, list);
     } else {
