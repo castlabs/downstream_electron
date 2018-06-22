@@ -45,16 +45,16 @@
   "devDependencies": {
     "babel-core": "6.26.3",
     "babel-loader": "7.1.4",
-    "babel-preset-env": "1.6.1",
+    "babel-preset-env": "1.7.0",
     "clean-webpack-plugin": "0.1.19",
-    "electron": "https://github.com/castlabs/electron-releases#v1.8.6-vmp1010",
+    "electron": "https://github.com/castlabs/electron-releases#v1.8.7-vmp1010",
     "eslint": "4.19.1",
     "jasmine-node": "1.14.5",
     "jquery": "3.3.1",
     "jsdoc": "3.5.5",
     "jsdoc-webpack-plugin": "0.0.2",
     "junit-viewer": "4.11.1",
-    "shaka-player": "2.3.7",
+    "shaka-player": "2.4.0",
     "webpack": "3.11.0"
   },
   "dependencies": {
@@ -63,12 +63,12 @@
     "cors": "2.8.4",
     "express": "4.16.3",
     "flake-idgen": "1.1.0",
-    "fs-extra": "5.0.0",
+    "fs-extra": "6.0.1",
     "jsonfile": "4.0.0",
     "mkdirp": "0.5.1",
-    "moment": "2.22.1",
-    "underscore": "1.9.0",
-    "url-parse": "1.4.0",
+    "moment": "2.22.2",
+    "underscore": "1.9.1",
+    "url-parse": "1.4.1",
     "xmldom": "0.1.27"
   }
 }
