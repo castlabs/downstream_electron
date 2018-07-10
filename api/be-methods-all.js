@@ -324,6 +324,23 @@ downloads.subscribe = require('./be-methods/downloads/subscribe');
 downloads.unsubscribe = require('./be-methods/downloads/unsubscribe');
 
 /**
+ * update download folder info for manifest id
+ * this can be usefule when user has copied download folder
+ * @method updateDownloadFolder
+ * @memberOf DownstreamElectronFE.downloads
+ * @param {string} manifestId - manifest identifier
+ * @param {string} downloadFolder - new download folder path
+ * @example
+ * DownstreamElectronFE.downloads.updateDownloadFolder(manifestId, downloadFolder)
+ *    .then(
+ *      function onSuccess(result) {console.log("success", result);},
+ *      function onError(err) {console.log("error", err);
+ *    })
+ * @returns {Promise} - promise
+ */
+downloads.updateDownloadFolder = require('./be-methods/downloads/update-download-folder');
+
+/**
  * remove all subscribers
  * @private
  * @method removeSubscribers

@@ -191,6 +191,22 @@ function addStartActions(manifestId) {
       showStatusError('Remove Persistent Session', err, contentStatus);
     });
   }));
+
+  //Update download folder
+  $('#contentActions').append($('<input type="button" value="Update Download Folder">').on('click', function () {
+    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    let path = pathArray ? pathArray[0] : undefined;
+    if (path) {
+      downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
+        showStatusOK('Update Download Folder', contentStatus);
+      }, function (err) {
+        showStatusError('Update Download Folder', err, contentStatus);
+      });
+    } else {
+      showStatusError('Update Download Folder', 'Choose a folder');
+    }
+  }));
+
   $('#contentActions').clone(true).appendTo($('#contentActions2'));
 }
 
@@ -341,6 +357,21 @@ function addItemActions(manifestId,
     }, function (err) {
       showStatusError('Remove Persistent Session', err, contentStatus);
     });
+  }));
+
+  //Update download folder
+  $(contentActions).append($('<input type="button" value="Update Download Folder">').on('click', function () {
+    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    let path = pathArray ? pathArray[0] : undefined;
+    if (path) {
+      downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
+        showStatusOK('Update Download Folder', contentStatus);
+      }, function (err) {
+        showStatusError('Update Download Folder', err, contentStatus);
+      });
+    } else {
+      showStatusError('Update Download Folder', 'Choose a folder');
+    }
   }));
 
 }

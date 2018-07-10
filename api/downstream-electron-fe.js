@@ -83,7 +83,8 @@ function DownstreamElectronFE (window, persistent) {
     'stop',
     'stopAll',
     'subscribe',
-    'unsubscribe'
+    'unsubscribe',
+    'updateDownloadFolder'
   ]);
   this._attachEvents();
 }

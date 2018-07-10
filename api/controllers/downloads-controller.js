@@ -14,6 +14,8 @@ const CODES = require("../downloads/codes");
 const constants = require("../constants");
 const utilUrl = require("../util/url");
 const path = require("path");
+const ReadItem = require("../downloads/read-item");
+const FlushItem = require("../downloads/flush-item");
 
 /**
  *
@@ -471,6 +473,38 @@ DownloadsController.prototype.resume = function (manifestId, representations,  o
       self.start(manifestId, representations, folder, onSuccess, onFailure, true);
     }
   });
+};
+
+/**
+ * Update download folder path
+ * @param {string} manifestId - manifest identifier
+ * @param {string} downloadFolder - new download folder
+ * @param {function} onSuccess - callback to be invoked when start has been successfully
+ * @param {function} onFailure - callback to be invoked when start failed
+ * @returns {void}
+ */
+DownloadsController.prototype.updateDownloadFolder = function (manifestId, downloadFolder, onSuccess, onFailure) {
+  Promise.all([
+    new ReadItem(manifestId, appSettings.getSettings().stores.MANIFEST),
+    ])
+    .then(function (results) {
+    const manifestSettings = results[0]
+    if (!manifestSettings) {
+      onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
+      return;
+    }
+
+    manifestSettings.folder = downloadFolder
+    const flushItem = new FlushItem(manifestId, appSettings.getSettings().stores.MANIFEST, manifestSettings);
+    flushItem.save()
+      .then(function () {
+      onSuccess();
+    }, function (err) {
+      onFailure(translation.getError(translation.e.downloads.SAVING_DATA_FAILED, manifestId), err);
+    });
+  }, function (err) {
+    onFailure(translation.getError(translation.e.downloads.UPDATE_DOWNLOAD_FOLDER_FAILED, manifestId), err);
+  })
 };
 
 /**
