@@ -6,6 +6,7 @@ const STATUSES = {
   "STOPPED": "STOPPED",
   "FINISHED": "FINISHED",
   "BROKEN": "BROKEN",
+  "WAITING": "WAITING"
 };
 
 module.exports = STATUSES;

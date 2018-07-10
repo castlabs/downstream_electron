@@ -554,15 +554,22 @@ DownloadsController.prototype._addLinkToDownload = function (manifestId, link) {
  * @returns {void}
  */
 DownloadsController.prototype.startQueue = function (nextManifestPositionInArray) {
+  const self = this;
   let count, downloadsInProgress, link, manifestId, maxDownloads;
   if (typeof nextManifestPositionInArray === "undefined") {
     nextManifestPositionInArray = 0;
   }
 
-  if (nextManifestPositionInArray >= appSettings.getSettings().numberOfManifestsInParallel) {
-    return;
-  }
   manifestId = this._downloadOrderGetManifestId(nextManifestPositionInArray);
+  if (nextManifestPositionInArray >= appSettings.getSettings().numberOfManifestsInParallel) {
+    if (manifestId) {
+      this.storage.status.setItem(manifestId, "status", STATUSES.WAITING);
+    }
+    return;
+  } else {
+    this.storage.status.setItem(manifestId, "status", STATUSES.CREATED);
+  }
+
   if (!manifestId) {
     count = 0;
     let i, j, items;
