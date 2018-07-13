@@ -554,7 +554,6 @@ DownloadsController.prototype._addLinkToDownload = function (manifestId, link) {
  * @returns {void}
  */
 DownloadsController.prototype.startQueue = function (nextManifestPositionInArray) {
-  const self = this;
   let count, downloadsInProgress, link, manifestId, maxDownloads;
   if (typeof nextManifestPositionInArray === "undefined") {
     nextManifestPositionInArray = 0;
