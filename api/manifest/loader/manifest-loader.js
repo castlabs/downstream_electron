@@ -16,7 +16,7 @@ const ManifestLoader = (function () {
 
     return new Promise(function (resolve, reject) {
       let req = net.request(req_options);
-      req.chunkedEncoding = true;
+      req.chunkedEncoding = appSettings.getSettings().useChunkedEncoding;
 
       req.on('error', (err) => {
         reject(err);
