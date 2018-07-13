@@ -566,7 +566,7 @@ DownloadsController.prototype.startQueue = function (nextManifestPositionInArray
     }
     return;
   } else {
-    this.storage.status.setItem(manifestId, "status", STATUSES.CREATED);
+    this.storage.status.setItem(manifestId, "status", STATUSES.STARTED);
   }
 
   if (!manifestId) {
