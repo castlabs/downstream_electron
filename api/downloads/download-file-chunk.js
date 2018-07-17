@@ -84,9 +84,8 @@ Chunk.prototype.createFileStream = function (callback) {
         this.on("error", function (error) {
           if (error.code === "ENOSPC") {
             // no space left on disk, do not retry downloading
-            self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
-          }
-           else {
+            self.resolve(downloadFileUtil.errors.NO_SPACE_LEFT_ERROR, error);
+          } else {
              self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
                if (!retried) {
                  self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);

@@ -164,6 +164,21 @@ DownloadFile.prototype._onDownloadFailure = function (err, aborted) {
       this.emit("error", err);
     }
   } else {
+    let noSpaceLeft = false;
+    for (let i = 0, j = err.length; i < j; i++) {
+      if (err[i]) {
+        if (err[i] === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
+          noSpaceLeft = true;
+          break;
+        }
+      }
+    }
+
+    if (noSpaceLeft) {
+      err = {
+        message: downloadFileUtil.errors.NO_SPACE_LEFT_ERROR
+      };
+    }
     this.emit("error", err);
   }
 
@@ -181,7 +196,8 @@ DownloadFile.prototype._onDownloadSuccess = function (err) {
   err = err || [];
   for (let i = 0, j = err.length; i < j; i++) {
     if (err[i]) {
-      if (err[i] === downloadFileUtil.errors.ABORTED) {
+      if (err[i] === downloadFileUtil.errors.ABORTED ||
+          err[i] === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
         aborted = true;
       }
       error = true;

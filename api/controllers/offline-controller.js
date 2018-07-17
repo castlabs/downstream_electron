@@ -118,6 +118,7 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
     const data = results[4] || '';
 
     info.status = status.status || STATUSES.BROKEN;
+    info.details = status.details || undefined;
     if (!self.downloadStorage.keyExists(manifestId) && info.status === STATUSES.STARTED) {
       info.status = STATUSES.BROKEN;
     }
