@@ -139,7 +139,7 @@ Chunk.prototype.start = function () {
     }
 
     self._req = net.request(req_options);
-    self._req.chunkedEncoding = true;
+    self._req.chunkedEncoding = self.options.useChunkedEncoding;
 
     self._req.on('response', (response) => {
         response.on("error", function (error) {
