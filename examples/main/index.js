@@ -93,7 +93,8 @@ function getItemInfo(result) {
   }
 
   info.status = result.status;
-  info.data = result.data;
+  info.size = _convertToBytes(result.size, 1, 2, 2);
+  info.data = result.data, 1, 2, 2;
   info.downloaded = result.downloaded;
   info.persistent = result.persistent;
   info.left = result.left;
@@ -730,6 +731,39 @@ function clearContent(name) {
   $(contentStatus).html('');
   $(contentSubscribe).html('');
 }
+
+function _convertToKB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneKB = 1024;
+  return (Math.round((value * a) / oneKB) / a) + "kB";
+};
+
+function _convertToMB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneMB = 1024 * 1024;
+  return (Math.round((value * a) / oneMB) / a) + "MB";
+};
+
+function _convertToGB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneGB = 1024 * 1024 * 1024;
+  return (Math.round((value * a) / oneGB) / a) + "GB";
+};
+
+function _convertToBytes (value, precision, precision2, precision3) {
+  precision2 = typeof precision2 !== "undefined" ? precision2 : precision;
+  precision3 = typeof precision3 !== "undefined" ? precision3 : precision;
+  if (value < 100000) {
+    return _convertToKB(value, precision)
+  } else if (value < 1024 * 1024 * 1024) {
+    return _convertToMB(value, precision2)
+  } else {
+    return _convertToGB(value, precision3)
+  }
+};
 
 function onSubmit(e) {
   e.preventDefault();

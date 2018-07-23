@@ -1,5 +1,6 @@
 "use strict";
 const path = require("path");
+const getSize = require("get-folder-size");
 const rmdir = require("../util/remove-dir");
 
 const appSettings = require("../app-settings");
@@ -137,7 +138,22 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
     }
     info.data = data;
 
-    addManifestInfoAndContinue(info);
+    let downloadFolder = info.manifest.folder;
+    if (!downloadFolder) {
+      // try to serve from default download folder
+      downloadFolder = appSettings.getSettings().downloadsFolderPath
+    }
+    let videoFolder = path.join(downloadFolder, manifestId);
+    // get size of folder
+    getSize(videoFolder, (err, size) => {
+      if (err) {
+        info.size = 0
+      } else {
+        info.size = size;
+      }
+      addManifestInfoAndContinue(info);
+    });
+
   }, callback);
 };
 
