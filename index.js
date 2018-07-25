@@ -12,9 +12,13 @@ function createWindow () {
   // eslint-disable-next-line no-process-env
   let appDir = path.dirname(process.mainModule.filename) + "/";
 
+  // head request parameter test
+  let useHeadRequest = true;
+  // let useHeadRequest = false;
   downstreamElectron.init({
     appDir: appDir,
-    numberOfManifestsInParallel: 2
+    numberOfManifestsInParallel: 2,
+    useHeadRequests: useHeadRequest
   });
   const win = new BrowserWindow({
     width: 1200,

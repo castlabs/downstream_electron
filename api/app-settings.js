@@ -102,6 +102,7 @@ let settings = {
     RETRY_TIMEOUT: 5000
   },
   useChunkedEncoding: false,
+  useHeadRequests: true,
   defaultManifestRequestOptions: {
     headers: {
       "Accept": "*/*",
@@ -163,6 +164,21 @@ function loadUserSettings (jsonSettings) {
     }
     if (jsonSettings.closingTagForInvalidCustomManifestIdCharacter) {
       settings.closingTagForInvalidCustomManifestIdCharacter = jsonSettings.closingTagForInvalidCustomManifestIdCharacter;
+    }
+    if (jsonSettings.useHeadRequests !== undefined) {
+      settings.useHeadRequests = jsonSettings.useHeadRequests;
+    }
+    if (jsonSettings.times && jsonSettings.times.RETRY_TIMEOUT) {
+      settings.times.RETRY_TIMEOUT = jsonSettings.times.RETRY_TIMEOUT;
+    }
+    if (jsonSettings.MAX_ERRORS_DOWNLOAD_RETRY) {
+      settings.MAX_ERRORS_DOWNLOAD_RETRY = jsonSettings.MAX_ERRORS_DOWNLOAD_RETRY;
+    }
+    if (jsonSettings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY) {
+      settings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY = jsonSettings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY;
+    }
+    if (jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY) {
+      settings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY = jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY;
     }
   }
 
