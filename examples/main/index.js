@@ -93,7 +93,6 @@ function getItemInfo(result) {
   }
 
   info.status = result.status;
-  info.size = _convertToBytes(result.size, 1, 2, 2);
   info.data = result.data, 1, 2, 2;
   info.downloaded = result.downloaded;
   info.persistent = result.persistent;
@@ -113,12 +112,31 @@ function getItemInfo(result) {
   return html;
 }
 
+function getItemFolderInfo(result) {
+  let info = {};
+
+  info.folder = result.folder;
+  info.size = _convertToBytes(result.size, 1, 2, 2);
+  let html = $('<ul type="disc"></ul>');
+  for (let key in info) {
+    if (info.hasOwnProperty(key)) {
+      html.append($('<li>' + key + ': <span>' + JSON.stringify(info[key]) + '</span>' + '</li>'));
+    }
+  }
+  // return JSON.stringify(result);
+  return html;
+}
+
 function getContentName(contentMain) {
   return '#' + $(contentMain).attr('id').replace('Main', '');
 }
 
 function showInfo(info, container) {
   $(container).html(getItemInfo(info));
+}
+
+function showFolderInfo(info, container) {
+  $(container).html(getItemFolderInfo(info))
 }
 
 function addStartActions(manifestId) {
@@ -305,6 +323,22 @@ function addItemActions(manifestId,
       showStatusOK('info', contentStatus);
     }, function (err) {
       showStatusError('info', err, contentStatus);
+    });
+  }));
+  //FOLDER INFO
+  $(contentActions).append($('<input type="button" value="Folder Info">').on('click', function () {
+    downstreamElectron.downloads.getFolderInfo(manifestId).then(function (result) {
+      clearContent(getContentName(contentMain));
+      showFolderInfo(result, contentMain);
+      downstreamElectron.downloads.info(manifestId).then(function (result) {
+        addItemActions(manifestId, contentActions, contentHeader, contentMain, contentSubscribe, contentStatus,
+                       getHeaderInfo(result));
+        showStatusOK('folderInfo', contentStatus);
+      }, function (err) {
+        showStatusError('info', err, contentStatus);
+      });
+    }, function (err) {
+      showStatusError('folderInfo', err, contentStatus);
     });
   }));
   //PLAY

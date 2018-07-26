@@ -69,6 +69,20 @@ downloads.create = require('./be-methods/downloads/create');
 downloads.createPersistent = require('./be-methods/downloads/createPersistent');
 
 /**
+ * Get info about manifest folder
+ * @method getFolderInfo
+ * @memberOf DownstreamElectronFE.downloads
+ * @example
+ * DownstreamElectronFE.downloads.getFolderInfo()
+ *    .then(
+ *      function onSuccess(result) {console.log("success", result);},
+ *      function onError(err) {console.log("error", err);
+ *    })
+ * @returns {Promise} - promise
+ */
+downloads.getFolderInfo = require('./be-methods/downloads/folder-info');
+
+/**
  * get ids of all downloads
  * @method getList
  * @memberOf DownstreamElectronFE.downloads

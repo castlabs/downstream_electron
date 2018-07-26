@@ -137,13 +137,33 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
       info.downloadedFiles = downloaded;
     }
     info.data = data;
+    addManifestInfoAndContinue(info);
 
-    let downloadFolder = info.manifest.folder;
+  }, callback);
+};
+
+/**
+ *
+ * @param {string} manifestId - manifest identifier
+ * @param {Function} callback - function to be called when info for manifest is ready
+ * @returns {void}
+ */
+OfflineController.prototype.getManifestFolderInfo = function (manifestId, callback) {
+  Promise.all([
+    new ReadItem(manifestId, appSettings.getSettings().stores.MANIFEST),
+  ]).then(function (results) {
+    let info = {};
+    const manifestSettings = results[0] || {};
+
+    let downloadFolder = manifestSettings.folder;
     if (!downloadFolder) {
       // try to serve from default download folder
       downloadFolder = appSettings.getSettings().downloadsFolderPath
     }
     let videoFolder = path.join(downloadFolder, manifestId);
+
+    info.folder = videoFolder;
+
     // get size of folder
     getSize(videoFolder, (err, size) => {
       if (err) {
@@ -151,7 +171,7 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
       } else {
         info.size = size;
       }
-      addManifestInfoAndContinue(info);
+      callback(null, info);
     });
 
   }, callback);

@@ -68,6 +68,7 @@ function DownstreamElectronFE (window, persistent) {
   this._createApiMethods('downloads', [
     'create',
     'createPersistent',
+    'getFolderInfo',
     'getList',
     'getListWithInfo',
     'getOfflineLink',
