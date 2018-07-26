@@ -94,7 +94,6 @@ function getItemInfo(result) {
 
   info.status = result.status;
   info.details = result.details;
-  info.size = _convertToBytes(result.size, 1, 2, 2);
   info.data = result.data, 1, 2, 2;
   info.downloaded = result.downloaded;
   info.persistent = result.persistent;
