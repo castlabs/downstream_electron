@@ -120,9 +120,13 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         scope._persistent.createPersistentSession(config).then(function (persistentSessionId) {
           scope.downloads.savePersistent(manifestId, persistentSessionId).then(function () {
             if (existingPersistentSessionId) {
-              scope._persistent.removePersistentSession(existingPersistentSessionId).then(function () {
+              scope._persistent.removePersistentSession(existingPersistentSessionId)
+              .then(function () {
                 resolve(persistentSessionId);
-              }, reject);
+              })
+              .catch(function () {
+                resolve(persistentSessionId);
+              });
             } else {
               resolve(persistentSessionId);
             }

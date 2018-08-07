@@ -1,6 +1,6 @@
 {
   "name": "downstream-electron",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "DOWNstream For Electron - an open-source plugin to use with Electron allowing encrypted MPEG-DASH and Smooth Streaming streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.",
   "keywords": [
     "electron",
