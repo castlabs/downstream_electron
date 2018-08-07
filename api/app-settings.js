@@ -101,6 +101,7 @@ let settings = {
     DOWNLOAD_TIMEOUT: 5000,
     RETRY_TIMEOUT: 5000
   },
+  useChunkedEncoding: false,
   defaultManifestRequestOptions: {
     headers: {
       "Accept": "*/*",

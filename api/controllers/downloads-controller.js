@@ -115,6 +115,16 @@ DownloadsController.prototype._downloadOrderGetManifestId = function (nextManife
 
 /**
  *
+ * @param {manifestId} manifestId -  manifest identifier
+ * @returns {number} index number from array _manifestsDownloadOrder
+ * @private
+ */
+DownloadsController.prototype._indexOfManifest = function (manifestId) {
+  return this._manifestsDownloadOrder.indexOf(manifestId);
+}
+
+/**
+ *
  * @param {string} manifestId - manifest identifier
  * @returns {*} - if manifest has been already added to the queue
  * @private
@@ -376,7 +386,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
         if (info.manifest.text) {
           text = _.union(text, info.manifest.text);
         }
-        const downloaded = info.downloaded || [];
+        const downloaded = info.downloadedFiles || [];
         let downloadedHash = {};
         for (let i = 0, j = downloaded.length; i < j; i++) {
           downloadedHash[downloaded[i].localUrl] = downloaded[i];
@@ -386,6 +396,11 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
         const videoLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, video, videoR, downloadedHash);
         const audioLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, audio, audioR, downloadedHash);
         const textLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, text, textR, downloadedHash);
+
+        const allvideoLinks =  downloadUtil.getAllLinks(manifestId, localPath, remotePath, video, videoR);
+        const allaudioLinks = downloadUtil.getAllLinks(manifestId, localPath, remotePath, audio, audioR);
+        const alltextLinks = downloadUtil.getAllLinks(manifestId, localPath, remotePath, text, textR);
+        const allFiles = allvideoLinks.concat(allaudioLinks, alltextLinks);
 
         //collect Links - end
 
@@ -398,6 +413,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
               self.storage.manifest.setItem(manifestId, "video", video);
               self.storage.manifest.setItem(manifestId, "audio", audio);
               self.storage.manifest.setItem(manifestId, "text", text);
+              self.storage.manifest.setItem(manifestId, "files", allFiles);
 
               self.storage.downloaded.clear(manifestId);
               self.storage.downloaded.concat(manifestId, downloaded);
@@ -419,7 +435,11 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
                   ])
                   .then(function () {
                     self._addDownloads(manifestId, videoLinks, audioLinks, textLinks);
-                    self.storage.status.setItem(manifestId, "status", STATUSES.STARTED);
+                    if (self._indexOfManifest(manifestId) > appSettings.getSettings().numberOfManifestsInParallel - 1) {
+                      self.storage.status.setItem(manifestId, "status", STATUSES.QUEUED);
+                    } else {
+                      self.storage.status.setItem(manifestId, "status", STATUSES.STARTED);
+                    }
                     self.storage.status.setItem(manifestId, "left", self.storage.left.count(manifestId));
                     self.storage.sync(manifestId, [
                           self.storage.stores.DOWNLOADS.DOWNLOADED,
@@ -568,10 +588,16 @@ DownloadsController.prototype.startQueue = function (nextManifestPositionInArray
     nextManifestPositionInArray = 0;
   }
 
-  if (nextManifestPositionInArray >= appSettings.getSettings().numberOfManifestsInParallel) {
-    return;
-  }
   manifestId = this._downloadOrderGetManifestId(nextManifestPositionInArray);
+  if (nextManifestPositionInArray >= appSettings.getSettings().numberOfManifestsInParallel) {
+    if (manifestId) {
+      this.storage.status.setItem(manifestId, "status", STATUSES.QUEUED);
+    }
+    return;
+  } else {
+    this.storage.status.setItem(manifestId, "status", STATUSES.STARTED);
+  }
+
   if (!manifestId) {
     count = 0;
     let i, j, items;

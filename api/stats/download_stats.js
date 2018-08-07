@@ -124,6 +124,17 @@ DownloadStats.prototype._generate = function (refresh) {
     return parts;
   }
 
+  function toArray (obj) {
+    let arr = [];
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        let item = obj[key];
+        arr.push(item);
+      }
+    }
+    return arr;
+  }
+
   const stats = {
     downloading: 0,
     downloaded: 0,
@@ -139,7 +150,8 @@ DownloadStats.prototype._generate = function (refresh) {
     writeProgressDownloaded: 0,
     errors: 0,
     progress: 0,
-    speed: 0
+    speed: 0,
+    status: ''
   };
 
   //availableBytes - bates that has been already downloaded
@@ -198,6 +210,7 @@ DownloadStats.prototype._generate = function (refresh) {
     speed += this._getDiff("downloadedBytes", manifestId, allStats, this._statsPrevious);
     speed = (speed * 1000) / ((now - this._statsTime) || 1  );
     allStats[manifestId].speed = speed;
+    allStats[manifestId].status = this._storage.status.getItem(manifestId, "status");
 
     //progress for downloaded
     let leftParts = countParts(allStats[manifestId].leftI);
@@ -214,6 +227,54 @@ DownloadStats.prototype._generate = function (refresh) {
     allStats[manifestId].downloadedBytesTotal = Math.round(allStats[manifestId].progress * 10000) / 100;
     allStats[manifestId].downloadedBytesTotal += "%";
 
+    // progress of each represention
+    let reduceFunc = function (map, obj) {
+      if ( !map[obj.id] )  {
+        map[obj.id] = []
+      }
+      map[obj.id].push(obj);
+      return map;
+    }
+    let downloadedById = allStats[manifestId].downloadedI.reduce(reduceFunc, {});
+    let downloadingArray = toArray(allStats[manifestId].downloadingI);
+    let downloadingById = downloadingArray.reduce(reduceFunc, {});
+    let leftById = allStats[manifestId].leftI.reduce(reduceFunc, {});
+    let errorArray = toArray(allStats[manifestId].errorsI);
+    let errorsById = errorArray.reduce(reduceFunc, {});
+
+    let extend = function (obj, src) {
+      for (var key in src) {
+        if (src.hasOwnProperty(key)) {
+          if (!obj[key]) {
+            obj[key] = [];
+          }
+          obj[key] = obj[key].concat(src[key]);
+        }
+      }
+      return obj;
+    }
+    let allPartsById = {};
+    extend(allPartsById, downloadedById);
+    extend(allPartsById, downloadingById);
+    extend(allPartsById, leftById);
+    extend(allPartsById, errorsById);
+
+    // compute progres for each id
+    let progressById = {};
+    let key;
+    for (key in allPartsById) {
+      if (allPartsById.hasOwnProperty(key)) {
+        progressById[key] = (countPartsObj(downloadedById[key])) / (countPartsObj(allPartsById[key]) || 1);
+      }
+    }
+    let progressByIdPercent = {};
+    for (key in progressById) {
+      if (progressById.hasOwnProperty(key)) {
+        progressByIdPercent[key] = Math.round(progressById[key] * 10000) / 100 + "%";
+      }
+    }
+    allStats[manifestId].progressById = progressById;
+    allStats[manifestId].progressByIdPercent = progressByIdPercent;
   }
   let showStats = {};
   for (let i = 0, j = manifests.length; i < j; i++) {
@@ -222,6 +283,8 @@ DownloadStats.prototype._generate = function (refresh) {
     let downloadedBytesTotal = allStats[manifestId].downloadedBytes + allStats[manifestId].downloadingAvailableBytes;
     showStats[manifestId].progress = allStats[manifestId].progress;
     showStats[manifestId].progressPercentage = allStats[manifestId].downloadedBytesTotal;
+    showStats[manifestId].progressById = allStats[manifestId].progressById;
+    showStats[manifestId].progressByIdPercent = allStats[manifestId].progressByIdPercent;
     showStats[manifestId].downloadedBytesTotal = this._convertToBytes(downloadedBytesTotal, 1, 2, 2);
     showStats[manifestId].downloaded = allStats[manifestId].downloaded;
     showStats[manifestId].left = allStats[manifestId].left;
@@ -231,6 +294,7 @@ DownloadStats.prototype._generate = function (refresh) {
     }
     showStats[manifestId].speed = allStats[manifestId].speed;
     showStats[manifestId].speedBytes = this._convertToBytes(allStats[manifestId].speed, 3, 2);
+    showStats[manifestId].status = allStats[manifestId].status;
   }
   for (let key in showStats) {
     if (showStats.hasOwnProperty(key)) {
