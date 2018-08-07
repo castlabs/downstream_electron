@@ -133,9 +133,7 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
     info.manifest = manifestSettings;
     if (info.manifest.files) {
       info.manifest.totalFiles = info.manifest.files.length;
-      if (full) {
-        info.manifest.files = info.manifest.files;
-      } else {
+      if (full === false) {
         delete info.manifest.files;
       }
     }
