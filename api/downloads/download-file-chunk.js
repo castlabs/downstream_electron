@@ -139,7 +139,7 @@ Chunk.prototype.start = function () {
     }
 
     self._req = net.request(req_options);
-    self._req.chunkedEncoding = true;
+    self._req.chunkedEncoding = self.options.useChunkedEncoding;
 
     self._req.on('response', (response) => {
         response.on("error", function (error) {
@@ -158,9 +158,11 @@ Chunk.prototype.start = function () {
             }
           });
           response.on("data", function (data) {
-            self.available += data.length;
-            self.downloaded += data.length;
-            self.events.emit("download", data.length);
+            if (response.statusCode === 200 || response.statusCode === 206) {
+              self.available += data.length;
+              self.downloaded += data.length;
+              self.events.emit("download", data.length);
+            }
           });
           response.pipe(self.fileStream);
     });

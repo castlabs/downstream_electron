@@ -377,7 +377,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
         if (info.manifest.text) {
           text = _.union(text, info.manifest.text);
         }
-        const downloaded = info.downloaded || [];
+        const downloaded = info.downloadedFiles || [];
         let downloadedHash = {};
         for (let i = 0, j = downloaded.length; i < j; i++) {
           downloadedHash[downloaded[i].localUrl] = downloaded[i];
@@ -387,6 +387,11 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
         const videoLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, video, videoR, downloadedHash);
         const audioLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, audio, audioR, downloadedHash);
         const textLinks = downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, text, textR, downloadedHash);
+
+        const allvideoLinks =  downloadUtil.getAllLinks(manifestId, localPath, remotePath, video, videoR);
+        const allaudioLinks = downloadUtil.getAllLinks(manifestId, localPath, remotePath, audio, audioR);
+        const alltextLinks = downloadUtil.getAllLinks(manifestId, localPath, remotePath, text, textR);
+        const allFiles = allvideoLinks.concat(allaudioLinks, alltextLinks);
 
         //collect Links - end
 
@@ -399,6 +404,7 @@ DownloadsController.prototype.start = function (manifestId, representations, onS
               self.storage.manifest.setItem(manifestId, "video", video);
               self.storage.manifest.setItem(manifestId, "audio", audio);
               self.storage.manifest.setItem(manifestId, "text", text);
+              self.storage.manifest.setItem(manifestId, "files", allFiles);
 
               self.storage.downloaded.clear(manifestId);
               self.storage.downloaded.concat(manifestId, downloaded);

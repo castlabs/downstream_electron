@@ -8,6 +8,10 @@ const IsoDurationParser = (function () {
     const dur = moment.duration(val);
     return dur.asMilliseconds();
   };
+  IsoDurationParser.getDurationAsS = function (val) {
+    const dur = moment.duration(val);
+    return dur.asSeconds();
+  };
   IsoDurationParser.getMoment = function () {
     return moment;
   };
