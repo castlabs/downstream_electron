@@ -6,6 +6,7 @@ module.exports = function AudioRepresentation (attr) {
     "audioSamplingRate",
     "bandwidth",
     "id",
-    "lang"
+    "lang",
+    "durationInS"
   ], attr);
 };

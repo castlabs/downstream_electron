@@ -19,6 +19,30 @@ let downloadUtil = {};
  */
 
 /**
+ * @typedef {Link} Link
+ * @property {string} id - identifier
+ * @property {number} bandwidth - bandwidth
+ * @property {string} contentType - content type [video, audio, text]
+ * @property {string} remoteUrl - remote url
+ * @property {string} localUrl - local url
+ */
+
+/**
+ * @param {string} manifestId - manifest identifier
+ * @param {string} localPath - local path
+ * @param {string} remotePath - remote path
+ * @param {Array} userRepresentations - representations chosen by a user
+ * @param {Array} manifestRepresentations - all manifest representations
+ * @param {object} downloadedHash - download unique identifier
+ * @returns {Link[]} array of {@link Link}
+ */
+downloadUtil.getAllLinks = function getAllLinks (manifestId, localPath, remotePath, userRepresentations,
+                                                            manifestRepresentations) {
+  return downloadUtil.getDownloadLinks(manifestId, localPath, remotePath, userRepresentations,
+                                        manifestRepresentations);
+};
+
+/**
  * @param {string} manifestId - manifest identifier
  * @param {string} localPath - local path
  * @param {string} remotePath - remote path

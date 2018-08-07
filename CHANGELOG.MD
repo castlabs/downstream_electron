@@ -1,3 +1,9 @@
+# 0.2.9
+ * Optional chunked encoding configurable in app-settings
+ * Fix error message concatenate in chunk files
+ * Reporting progress by representation
+ * Add duration for each representation
+
 # 0.2.8
  * Fixed: some servers doesn't work correctly with default electron net class when "chunkedEncoding" has default value
  * Updating dependencies to latest 2018-05-09

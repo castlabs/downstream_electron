@@ -6,6 +6,7 @@ module.exports = function VideoRepresentation (attr) {
     "id",
     "height",
     "lang",
-    "width"
+    "width",
+    "durationInS"
   ], attr);
 };
