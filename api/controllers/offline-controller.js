@@ -1,5 +1,6 @@
 "use strict";
 const path = require("path");
+const getSize = require("get-folder-size");
 const rmdir = require("../util/remove-dir");
 
 const appSettings = require("../app-settings");
@@ -23,21 +24,11 @@ function OfflineController (manifestController) {
  * @returns {void}
  */
 OfflineController.prototype.getManifestsList = function (callback) {
-  Promise.all([
-    dirList(appSettings.getSettings().settingsFolder, true, false),
-    dirList(appSettings.getSettings().downloadsFolderPath, true, false)
-  ]).then(function (results) {
+  dirList(appSettings.getSettings().settingsFolder, true, false)
+    .then(function (settingsFolderList) {
     let manifestList = [];
-    const settingsFolderList = results[0];
-    const downloadsFolderList = results[1];
-    let downloadsFolderListObj = {};
-    for (let i = 0, j = downloadsFolderList.length; i < j; i++) {
-      downloadsFolderListObj[downloadsFolderList[i]] = true;
-    }
     for (let i = 0, j = settingsFolderList.length; i < j; i++) {
-      // if (downloadsFolderListObj[settingsFolderList[i]]) {
       manifestList.push(settingsFolderList[i]);
-      // }
     }
     callback(null, manifestList);
   }, function (err) {
@@ -144,8 +135,43 @@ OfflineController.prototype.getManifestInfo = function (manifestId, callback, fu
       info.downloadedFiles = downloaded;
     }
     info.data = data;
-
     addManifestInfoAndContinue(info);
+
+  }, callback);
+};
+
+/**
+ *
+ * @param {string} manifestId - manifest identifier
+ * @param {Function} callback - function to be called when info for manifest is ready
+ * @returns {void}
+ */
+OfflineController.prototype.getManifestFolderInfo = function (manifestId, callback) {
+  Promise.all([
+    new ReadItem(manifestId, appSettings.getSettings().stores.MANIFEST),
+  ]).then(function (results) {
+    let info = {};
+    const manifestSettings = results[0] || {};
+
+    let downloadFolder = manifestSettings.folder;
+    if (!downloadFolder) {
+      // try to serve from default download folder
+      downloadFolder = appSettings.getSettings().downloadsFolderPath
+    }
+    let videoFolder = path.join(downloadFolder, manifestId);
+
+    info.folder = videoFolder;
+
+    // get size of folder
+    getSize(videoFolder, (err, size) => {
+      if (err) {
+        info.size = 0
+      } else {
+        info.size = size;
+      }
+      callback(null, info);
+    });
+
   }, callback);
 };
 
@@ -191,12 +217,9 @@ OfflineController.prototype.getManifestDataFile = function (manifestId, callback
  */
 OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure) {
   const settingsFolder = appSettings.getSettings().settingsFolder + manifestId;
-  const downloadsFolder = appSettings.getSettings().downloadsFolderPath + manifestId;
-
-  rmdir(downloadsFolder, function (err) {
-    if (err && err.code !== "ENOENT") {
-      onFailure(err);
-    } else {
+  this.getManifestDataFile( manifestId, function (info) {
+    if (!info) {
+      // no manifest data found for manifest, the download has not been started => just remove settings
       rmdir(settingsFolder, function (err) {
         if (err && err.code !== "ENOENT") {
           onFailure(err);
@@ -204,8 +227,28 @@ OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure)
           onSuccess();
         }
       })
+    } else {
+      let folder = info.folder;
+      if (!folder) {
+        // use default download folder path
+        folder =  path.resolve(appSettings.getSettings().downloadsFolderPath);
+      }
+      const downloadsFolder = folder + '/' + manifestId;
+      rmdir(downloadsFolder, function (err) {
+        if (err && err.code !== "ENOENT") {
+          onFailure(err);
+        } else {
+          rmdir(settingsFolder, function (err) {
+            if (err && err.code !== "ENOENT") {
+              onFailure(err);
+            } else {
+              onSuccess();
+            }
+          })
+        }
+      });
     }
-  });
+  })
 };
 
 /**
@@ -225,20 +268,29 @@ OfflineController.prototype.removePromise = function (manifestId) {
  * @returns {Promise} - promise
  */
 OfflineController.prototype.removeAllPromise = function () {
+  const self = this;
   return new Promise(function (resolve, reject) {
     const settingsFolder = appSettings.getSettings().settingsFolder;
-    const downloadsFolder = appSettings.getSettings().downloadsFolderPath;
-    rmdir(downloadsFolder, function (err) {
-      if (err && err.code !== "ENOENT") {
+
+    self.getManifestsList(function (err, list) {
+      if (err) {
         reject(err);
       } else {
-        rmdir(settingsFolder, function (err) {
-          if (err && err.code !== "ENOENT") {
-            reject(err);
-          } else {
-            resolve();
-          }
-        })
+        let removeP = [];
+        for (let i = 0, j = list.length; i < j; i++) {
+          removeP.push(self.removePromise(list[i]))
+        }
+        Promise.all(removeP).then(function () {
+          rmdir(settingsFolder, function (err) {
+            if (err && err.code !== "ENOENT") {
+              reject(err);
+            } else {
+              resolve();
+            }
+          })
+        }, function (err) {
+          reject(err);
+        });
       }
     });
   });

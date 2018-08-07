@@ -93,7 +93,7 @@ function getItemInfo(result) {
   }
 
   info.status = result.status;
-  info.data = result.data;
+  info.data = result.data, 1, 2, 2;
   info.downloaded = result.downloaded;
   info.persistent = result.persistent;
   info.left = result.left;
@@ -112,6 +112,21 @@ function getItemInfo(result) {
   return html;
 }
 
+function getItemFolderInfo(result) {
+  let info = {};
+
+  info.folder = result.folder;
+  info.size = _convertToBytes(result.size, 1, 2, 2);
+  let html = $('<ul type="disc"></ul>');
+  for (let key in info) {
+    if (info.hasOwnProperty(key)) {
+      html.append($('<li>' + key + ': <span>' + JSON.stringify(info[key]) + '</span>' + '</li>'));
+    }
+  }
+  // return JSON.stringify(result);
+  return html;
+}
+
 function getContentName(contentMain) {
   return '#' + $(contentMain).attr('id').replace('Main', '');
 }
@@ -120,13 +135,18 @@ function showInfo(info, container) {
   $(container).html(getItemInfo(info));
 }
 
+function showFolderInfo(info, container) {
+  $(container).html(getItemFolderInfo(info))
+}
+
 function addStartActions(manifestId) {
   //START
   $('#contentActions').append($('<input type="button" value="Start">').on('click', function () {
     let representations = getSelectedRepresentations();
     let count = representations.video.length + representations.audio.length + representations.text.length;
     if (count > 0) {
-      downstreamElectron.downloads.start(manifestId, representations).then(function () {
+      let customFolder = document.getElementById('customDownloadFolder').value;
+      downstreamElectron.downloads.start(manifestId, representations, customFolder).then(function () {
         clearContent();
         showStatusOK('start');
         addItemActions(manifestId, '#contentActions', '#contentHeader', '#contentMain', '#contentSubscribe',
@@ -190,6 +210,22 @@ function addStartActions(manifestId) {
       showStatusError('Remove Persistent Session', err, contentStatus);
     });
   }));
+
+  //Update download folder
+  $('#contentActions').append($('<input type="button" value="Update Download Folder">').on('click', function () {
+    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    let path = pathArray ? pathArray[0] : undefined;
+    if (path) {
+      downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
+        showStatusOK('Update Download Folder', contentStatus);
+      }, function (err) {
+        showStatusError('Update Download Folder', err, contentStatus);
+      });
+    } else {
+      showStatusError('Update Download Folder', 'Choose a folder');
+    }
+  }));
+
   $('#contentActions').clone(true).appendTo($('#contentActions2'));
 }
 
@@ -289,6 +325,22 @@ function addItemActions(manifestId,
       showStatusError('info', err, contentStatus);
     });
   }));
+  //FOLDER INFO
+  $(contentActions).append($('<input type="button" value="Folder Info">').on('click', function () {
+    downstreamElectron.downloads.getFolderInfo(manifestId).then(function (result) {
+      clearContent(getContentName(contentMain));
+      showFolderInfo(result, contentMain);
+      downstreamElectron.downloads.info(manifestId).then(function (result) {
+        addItemActions(manifestId, contentActions, contentHeader, contentMain, contentSubscribe, contentStatus,
+                       getHeaderInfo(result));
+        showStatusOK('folderInfo', contentStatus);
+      }, function (err) {
+        showStatusError('info', err, contentStatus);
+      });
+    }, function (err) {
+      showStatusError('folderInfo', err, contentStatus);
+    });
+  }));
   //PLAY
   $(contentActions).append($('<input type="button" value="PLAY">').on('click', function () {
     downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
@@ -340,6 +392,21 @@ function addItemActions(manifestId,
     }, function (err) {
       showStatusError('Remove Persistent Session', err, contentStatus);
     });
+  }));
+
+  //Update download folder
+  $(contentActions).append($('<input type="button" value="Update Download Folder">').on('click', function () {
+    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    let path = pathArray ? pathArray[0] : undefined;
+    if (path) {
+      downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
+        showStatusOK('Update Download Folder', contentStatus);
+      }, function (err) {
+        showStatusError('Update Download Folder', err, contentStatus);
+      });
+    } else {
+      showStatusError('Update Download Folder', 'Choose a folder');
+    }
   }));
 
 }
@@ -586,7 +653,8 @@ function addStressTest() {
         // leave only one representation
         video.splice(1);
 
-        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }).then(function () {
+        let customFolder = document.getElementById('customDownloadFolder').value;
+        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }, customFolder).then(function () {
           onStart(manifestId, itemContainer);
           resolve(manifestId);
         }, function (err) {
@@ -697,6 +765,39 @@ function clearContent(name) {
   $(contentStatus).html('');
   $(contentSubscribe).html('');
 }
+
+function _convertToKB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneKB = 1024;
+  return (Math.round((value * a) / oneKB) / a) + "kB";
+};
+
+function _convertToMB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneMB = 1024 * 1024;
+  return (Math.round((value * a) / oneMB) / a) + "MB";
+};
+
+function _convertToGB (value, precision) {
+  precision = typeof precision !== "undefined" ? precision : 0;
+  const a = Math.pow(10, precision);
+  const oneGB = 1024 * 1024 * 1024;
+  return (Math.round((value * a) / oneGB) / a) + "GB";
+};
+
+function _convertToBytes (value, precision, precision2, precision3) {
+  precision2 = typeof precision2 !== "undefined" ? precision2 : precision;
+  precision3 = typeof precision3 !== "undefined" ? precision3 : precision;
+  if (value < 100000) {
+    return _convertToKB(value, precision)
+  } else if (value < 1024 * 1024 * 1024) {
+    return _convertToMB(value, precision2)
+  } else {
+    return _convertToGB(value, precision3)
+  }
+};
 
 function onSubmit(e) {
   e.preventDefault();

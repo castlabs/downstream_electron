@@ -68,6 +68,7 @@ function DownstreamElectronFE (window, persistent) {
   this._createApiMethods('downloads', [
     'create',
     'createPersistent',
+    'getFolderInfo',
     'getList',
     'getListWithInfo',
     'getOfflineLink',
@@ -83,7 +84,8 @@ function DownstreamElectronFE (window, persistent) {
     'stop',
     'stopAll',
     'subscribe',
-    'unsubscribe'
+    'unsubscribe',
+    'updateDownloadFolder'
   ]);
   this._attachEvents();
 }
