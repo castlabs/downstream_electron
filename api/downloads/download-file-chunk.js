@@ -82,11 +82,16 @@ Chunk.prototype.createFileStream = function (callback) {
 
         this.removeListener("error", callback);
         this.on("error", function (error) {
-          self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
-            if (!retried) {
-              self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
-            }
-          });
+          if (error.code === "ENOSPC") {
+            // no space left on disk, do not retry downloading
+            self.resolve(downloadFileUtil.errors.NO_SPACE_LEFT_ERROR, error);
+          } else {
+             self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
+               if (!retried) {
+                 self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
+               }
+             });
+           }
         });
         this.on("finish", function () {
           if (!self.isDownloaded()) {
