@@ -52,11 +52,16 @@ DownloadFileNoHead.prototype._createFileStream = function (callback) {
 
       this.removeListener("error", callback);
       this.on("error", function (error) {
-        self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
-          if (!retried) {
-            self.emit("error", {message: downloadFileUtil.errors.FILE_WRITING_ERROR, data: error});
-          }
-        });
+        if (error.code === "ENOSPC") {
+          // no space left on disk, do not retry downloading
+          self.emit("error", {message: downloadFileUtil.errors.NO_SPACE_LEFT_ERROR, data: error});
+        } else {
+          self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
+            if (!retried) {
+              self.emit("error", {message: downloadFileUtil.errors.FILE_WRITING_ERROR, data: error});
+            }
+          });
+        }
       });
       this.on("finish", function () {
         if (!self.isDownloaded()) {
