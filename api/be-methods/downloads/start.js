@@ -3,7 +3,7 @@
 const translation = require("../../translation/index");
 const canCreateManifest = require("../../util/can-create-manifest");
 
-module.exports = function (api, onSuccess, onFailure, target, manifestId, representations) {
+module.exports = function (api, onSuccess, onFailure, target, manifestId, representations, downloadFolder) {
   const manifest = api.manifestController.getManifestById(manifestId);
   if (!manifest) {
     onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
@@ -15,7 +15,7 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
       if (result) {
         onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
       } else {
-        api.downloadsController.start(manifestId, representations, onSuccess, function (err) {
+        api.downloadsController.start(manifestId, representations, downloadFolder, onSuccess, function (err) {
           onFailure(translation.getError(translation.e.downloads._GENERAL), err);
         });
       }
@@ -24,7 +24,7 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
     });
   }
 
-  canCreateManifest(manifestId).then(function () {
+  canCreateManifest(manifestId, downloadFolder).then(function () {
     start();
   }, function (errors) {
     errors = errors || [];

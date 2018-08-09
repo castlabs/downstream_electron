@@ -39,8 +39,10 @@ banner.push("WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or imp
 banner.push("See the License for the specific language governing permissions and");
 banner.push("limitations under the License.");
 banner = banner.join("\n");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+  mode: "production",
   target: "node",
   entry: {
     "index": [
@@ -86,15 +88,20 @@ module.exports = {
       dry: false
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: true
-      }
-    }),
     new webpack.BannerPlugin({
       banner: banner
     })
   ],
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          warnings: true,
+        },
+      }),
+    ],
+  },
 
   externals: externals
 };
