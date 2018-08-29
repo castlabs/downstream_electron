@@ -18,7 +18,10 @@
     "storage",
     "files"
   ],
-  "main": "dist/index.js",
+  "//": "DEV",
+  "main": "index.js",
+  "//": "TESTING PRODUCTION",
+  "//": "dist/index.js",
   "files": [
     "dist"
   ],
