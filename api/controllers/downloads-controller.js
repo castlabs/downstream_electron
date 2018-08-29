@@ -54,9 +54,11 @@ DownloadsController.prototype._addDownloads = function (manifestId, videoLinks, 
   let working = true;
   this._prepareStartOptions(manifestId, videoLinks, audioLinks, textLinks);
   while (working) {
-    this._addNextItemToQueue(manifestId, textLinks);
+    let ratioAudioVideo = videoLinks.length ? Math.round(audioLinks.length / videoLinks.length) : 1;
+    let ratioTextVideo = videoLinks.length ? Math.round(textLinks.length / videoLinks.length) : 1;
+    this._addNextItemToQueue(manifestId, textLinks, ratioTextVideo);
+    this._addNextItemToQueue(manifestId, audioLinks, ratioAudioVideo);
     this._addNextItemToQueue(manifestId, videoLinks);
-    this._addNextItemToQueue(manifestId, audioLinks);
     working = !!(textLinks.length || videoLinks.length || audioLinks.length);
   }
 };
@@ -65,15 +67,22 @@ DownloadsController.prototype._addDownloads = function (manifestId, videoLinks, 
  *
  * @param {string} manifestId - manifest identifier
  * @param {Array} links - array of links to be downloaded
+ * @param {number} nbItems - the rnumber of items to add to the queue
  * @private
  * @returns {void}
  */
-DownloadsController.prototype._addNextItemToQueue = function (manifestId, links) {
+DownloadsController.prototype._addNextItemToQueue = function (manifestId, links, nbItems) {
   let link;
+  if (!nbItems) {
+    nbItems = 1;
+  }
   if (links.length) {
-    link = links.shift();
-    link.manifestId = manifestId;
-    this.storage.left.push(manifestId, link);
+    while (nbItems > 0) {
+      link = links.shift();
+      link.manifestId = manifestId;
+      this.storage.left.push(manifestId, link);
+      nbItems--;
+    }
   }
 };
 
@@ -282,7 +291,6 @@ DownloadsController.prototype._stopWithStatus = function (manifestId, onSuccess,
 
 };
 /**
- *
  * @param {Download} download - Download Class
  * @param {object} err - error object
  * @returns {void}
@@ -360,6 +368,96 @@ DownloadsController.prototype.isDownloadFinished = function (manifestId) {
  */
 DownloadsController.prototype.isDownloadFinishedAndSynced = function (manifestId) {
   return !this.storage.left.count(manifestId) && !this.storage.downloading.count(manifestId) && !this.storage.keyExists(manifestId);
+};
+
+
+DownloadsController.prototype.getDownloading = function (manifestId, localFile) {
+  let items = this.storage.downloading.getItems(manifestId);
+  if ( !items ) {
+    return null;
+  }
+
+  for (var link in items) {
+    if (items.hasOwnProperty(link)) {
+      let download = items[link];
+      if (download.localUrl === localFile) {
+        return download;
+      }
+    }
+  }
+  return null;
+}
+
+DownloadsController.prototype.waitForDownload = function (download, callback) {
+  let _onDownloadEnd;
+  let _onDownloadError;
+
+  let removeListener = function (download) {
+    download.events.removeListener("end", _onDownloadEnd);
+    download.events.removeListener("error", _onDownloadError);
+  }
+
+  _onDownloadEnd = function (download) {
+    removeListener(download);
+    callback();
+  }
+
+  _onDownloadError = function (download, err) {
+    removeListener(download);
+    callback(err);
+  }
+
+  download.events.on("end", _onDownloadEnd);
+  download.events.on("error", _onDownloadError);
+}
+
+ /**
+ * Perform a seek - this changes order of fragment download for a manifest
+ * @param {string} manifestId - manifest identifier
+ * @param {string} localFile - local file
+ * @param {function} callback - callback to get result
+ * @returns {void}
+ */
+DownloadsController.prototype.performSeek = function (manifestId, localFile, callback) {
+  let self = this;
+  let download;
+
+  download = self.getDownloading(manifestId, localFile);
+  if (download) {
+    self.waitForDownload(download, callback);
+    return;
+  }
+
+  let items = self.storage.left.getItems(manifestId);
+  if ( !items ) {
+    callback('No download found');
+    return;
+  }
+
+  let index = items.findIndex(function (download) {
+    return (download.localUrl === localFile)
+  });
+  if (index > -1) {
+
+    let part1 =  items.slice(0, index);
+    let part2 =  items.slice(index);
+
+    self.storage.left.clear(manifestId);
+    self.storage.left.concat(manifestId, part2);
+    self.storage.left.concat(manifestId, part1);
+
+    items = self.storage.left.getItems(manifestId);
+    self.startQueue(self._indexOfManifest(manifestId), true);
+    download = self.getDownloading(manifestId, localFile);
+    if (download) {
+      self.waitForDownload(download, callback);
+    } else {
+      // if not queued, return an error
+      callback('No download found');
+    }
+  } else {
+    callback('No download found');
+  }
 };
 
 /**
@@ -655,15 +753,18 @@ DownloadsController.prototype._addLinkToDownload = function (manifestId, link) {
   download.events.on("end", self._onDownloadEnd);
   download.events.on("error", self._onDownloadError);
   download.start();
+
+  return download;
 };
 
 /**
  *
  * @param {number} [nextManifestPositionInArray] - index from array to decide which manifest should be downloaded next
  *   (queue)
+ * @param {boolean} forceDownload true to force next download to be queued
  * @returns {void}
  */
-DownloadsController.prototype.startQueue = function (nextManifestPositionInArray) {
+DownloadsController.prototype.startQueue = function (nextManifestPositionInArray, forceDownload) {
   let count, downloadsInProgress, link, manifestId, maxDownloads;
   if (typeof nextManifestPositionInArray === "undefined") {
     nextManifestPositionInArray = 0;
@@ -693,7 +794,7 @@ DownloadsController.prototype.startQueue = function (nextManifestPositionInArray
   }
   downloadsInProgress = this.storage.params.getItem(manifestId, this._names.downloadInProgress);
   maxDownloads = this.storage.params.getItem(manifestId, this._names.maxDownloadInProgress);
-  if (downloadsInProgress < maxDownloads - 1) {
+  if ((downloadsInProgress < maxDownloads - 1) || forceDownload) {
     link = this.storage.left.shift(manifestId);
     if (link) {
       this.storage.params.increase(manifestId, this._names.downloadInProgress);
