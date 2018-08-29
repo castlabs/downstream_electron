@@ -9,18 +9,20 @@ const isPortTaken = require('../util/is-port-taken');
 /**
  * Offline content server
  * @param {object} offlineController : offline controller
+ * @param {object} downloadController : download controller
  * @param {string} maxOfflineContentPortRange - max range for offline port to on which content can be served
  * @param {string} offlineContentPort - on which port offline content should be served, default is 3010
  * @constructor
  */
-function OfflineContentServer (offlineController, maxOfflineContentPortRange, offlineContentPort) {
+function OfflineContentServer (offlineController, downloadController, maxOfflineContentPortRange, offlineContentPort) {
   this._offlineController = offlineController;
+  this._downloadController = downloadController;
   this._maxOfflineContentPortRange = maxOfflineContentPortRange;
   this._offlineContentPort = offlineContentPort;
   this._server = express();
   this._server.use(cors());
 
-  require('./contentRoute')(this._server, this._offlineController);
+  require('./contentRoute')(this._server, this._offlineController, this._downloadController);
 }
 
 /**

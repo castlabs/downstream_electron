@@ -88,6 +88,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
     response.status = "ERROR";
     response.error = err || {};
     response.error.errorId = errorId;
+    response.error.details = internalError;
 
     self._send(response, target);
 
@@ -203,7 +204,7 @@ DownstreamElectronBE.prototype._serveOfflineContent = function () {
   const self = this;
   const maxOfflineContentPortRange = appSettings.getSettings().maxOfflineContentPortRange;
 
-  const server = new Server(this.offlineController, maxOfflineContentPortRange, this._offlineContentPort);
+  const server = new Server(this.offlineController, this.downloadsController, maxOfflineContentPortRange, this._offlineContentPort);
   server.serveOfflineContent( function (offlinePort) {
     self._offlineContentPort = offlinePort;
   })

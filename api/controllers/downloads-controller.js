@@ -16,6 +16,7 @@ const utilUrl = require("../util/url");
 const path = require("path");
 const ReadItem = require("../downloads/read-item");
 const FlushItem = require("../downloads/flush-item");
+const downloadFileUtil = require("../downloads/download-file-util");
 
 /**
  *
@@ -233,6 +234,54 @@ DownloadsController.prototype._markDownloadItem = function (download) {
 
 /**
  *
+ * @param {string} manifestId - manifest identifier
+ * @param {function} onSuccess - callback to be invoked when stop has been successfully
+ * @param {function} onFailure - callback to be invoked when stop failed
+ * @param {string} status - the status
+ * @param {string} statusDetails - adds details about status (on errors for example)
+ * @returns {void}
+ */
+DownloadsController.prototype._stopWithStatus = function (manifestId, onSuccess, onFailure, status, statusDetails) {
+  const self = this;
+  self._downloadOrderRemoveManifest(manifestId);
+  self.storage.getItem(manifestId)
+    .then(function (result) {
+    if (!result) {
+      onFailure(translation.getError(translation.e.downloads.ALREADY_STOPPED, manifestId));
+      return;
+    }
+    const itemsToStop = self.storage.downloading.getKeys(manifestId);
+    let itemToStop;
+    console.info("STOPPING", manifestId, itemsToStop.length);
+    let promises = [];
+    for (let i = 0, j = itemsToStop.length; i < j; i++) {
+      itemToStop = self.storage.downloading.getItem(manifestId, itemsToStop[i]);
+      itemToStop.events.removeListener("end", self._onDownloadEnd);
+      itemToStop.events.removeListener("error", self._onDownloadError);
+      promises.push(itemToStop.stopPromise());
+    }
+
+    self.storage.status.setItem(manifestId, "status", status);
+    if (statusDetails) {
+      self.storage.status.setItem(manifestId, "details", statusDetails);
+    }
+
+    promises.push(self.storage.sync(manifestId, [
+      self.storage.stores.DOWNLOADS.DOWNLOADED,
+      self.storage.stores.STATUS,
+    ]));
+    Promise.all(promises)
+      .then(function () {
+      self._finish(manifestId, onSuccess, onFailure);
+    }, function (err) {
+      onFailure(translation.getError(translation.e.downloads.STOPPING_FAILED, manifestId), err);
+    });
+  }, function (err) {
+    onFailure(translation.getError(translation.e.downloads.STOPPING_FAILED, manifestId), err);
+  });
+
+};
+/**
  * @param {Download} download - Download Class
  * @param {object} err - error object
  * @returns {void}
@@ -241,6 +290,14 @@ DownloadsController.prototype._markDownloadItem = function (download) {
 DownloadsController.prototype._onDownloadError = function (download, err) {
   console.error("ERROR", download.remoteUrl, err);
   this._markDownloadItem(download);
+  if (err === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
+    // stop downloading => cannot write
+    this._stopWithStatus(download.manifestId, () => {
+      console.info('stopped');
+    }, (failure) => {
+      console.info(failure);
+    }, STATUSES.ERROR, downloadFileUtil.errors.NO_SPACE_LEFT_ERROR);
+  }
 };
 
 /**
@@ -302,6 +359,96 @@ DownloadsController.prototype.isDownloadFinished = function (manifestId) {
  */
 DownloadsController.prototype.isDownloadFinishedAndSynced = function (manifestId) {
   return !this.storage.left.count(manifestId) && !this.storage.downloading.count(manifestId) && !this.storage.keyExists(manifestId);
+};
+
+
+DownloadsController.prototype.getDownloading = function (manifestId, localFile) {
+  let items = this.storage.downloading.getItems(manifestId);
+  if ( !items ) {
+    return null;
+  }
+
+  for (var link in items) {
+    if (items.hasOwnProperty(link)) {
+      let download = items[link];
+      if (download.localUrl === localFile) {
+        return download;
+      }
+    }
+  }
+  return null;
+}
+
+DownloadsController.prototype.waitForDownload = function (download, callback) {
+  let _onDownloadEnd;
+  let _onDownloadError;
+
+  let removeListener = function (download) {
+    download.events.removeListener("end", _onDownloadEnd);
+    download.events.removeListener("error", _onDownloadError);
+  }
+
+  _onDownloadEnd = function (download) {
+    removeListener(download);
+    callback();
+  }
+
+  _onDownloadError = function (download, err) {
+    removeListener(download);
+    callback(err);
+  }
+
+  download.events.on("end", _onDownloadEnd);
+  download.events.on("error", _onDownloadError);
+}
+
+ /**
+ * Perform a seek - this changes order of fragment download for a manifest
+ * @param {string} manifestId - manifest identifier
+ * @param {string} localFile - local file
+ * @param {function} callback - callback to get result
+ * @returns {void}
+ */
+DownloadsController.prototype.performSeek = function (manifestId, localFile, callback) {
+  let self = this;
+  let download;
+
+  download = self.getDownloading(manifestId, localFile);
+  if (download) {
+    self.waitForDownload(download, callback);
+    return;
+  }
+
+  let items = self.storage.left.getItems(manifestId);
+  if ( !items ) {
+    callback('No download found');
+    return;
+  }
+
+  let index = items.findIndex(function (download) {
+    return (download.localUrl === localFile)
+  });
+  if (index > -1) {
+
+    let part1 =  items.slice(0, index);
+    let part2 =  items.slice(index);
+
+    self.storage.left.clear(manifestId);
+    self.storage.left.concat(manifestId, part2);
+    self.storage.left.concat(manifestId, part1);
+
+    items = self.storage.left.getItems(manifestId);
+    self.startQueue(self._indexOfManifest(manifestId), true);
+    download = self.getDownloading(manifestId, localFile);
+    if (download) {
+      self.waitForDownload(download, callback);
+    } else {
+      // if not queued, return an error
+      callback('No download found');
+    }
+  } else {
+    callback('No download found');
+  }
 };
 
 /**
@@ -529,41 +676,7 @@ DownloadsController.prototype.updateDownloadFolder = function (manifestId, downl
  * @returns {void}
  */
 DownloadsController.prototype.stop = function (manifestId, onSuccess, onFailure) {
-  const self = this;
-  self._downloadOrderRemoveManifest(manifestId);
-  self.storage.getItem(manifestId)
-      .then(function (result) {
-        if (!result) {
-          onFailure(translation.getError(translation.e.downloads.ALREADY_STOPPED, manifestId));
-          return;
-        }
-        const itemsToStop = self.storage.downloading.getKeys(manifestId);
-        let itemToStop;
-        console.info("STOPPING", manifestId, itemsToStop.length);
-        let promises = [];
-        for (let i = 0, j = itemsToStop.length; i < j; i++) {
-          itemToStop = self.storage.downloading.getItem(manifestId, itemsToStop[i]);
-          itemToStop.events.removeListener("end", self._onDownloadEnd);
-          itemToStop.events.removeListener("error", self._onDownloadError);
-          promises.push(itemToStop.stopPromise());
-        }
-
-        self.storage.status.setItem(manifestId, "status", STATUSES.STOPPED);
-
-        promises.push(self.storage.sync(manifestId, [
-          self.storage.stores.DOWNLOADS.DOWNLOADED,
-          self.storage.stores.STATUS,
-        ]));
-        Promise.all(promises)
-            .then(function () {
-              self._finish(manifestId, onSuccess, onFailure);
-            }, function (err) {
-              onFailure(translation.getError(translation.e.downloads.STOPPING_FAILED, manifestId), err);
-            });
-      }, function (err) {
-        onFailure(translation.getError(translation.e.downloads.STOPPING_FAILED, manifestId), err);
-      });
-
+  this._stopWithStatus(manifestId, onSuccess, onFailure, STATUSES.STOPPED)
 };
 
 /**
@@ -631,15 +744,18 @@ DownloadsController.prototype._addLinkToDownload = function (manifestId, link) {
   download.events.on("end", self._onDownloadEnd);
   download.events.on("error", self._onDownloadError);
   download.start();
+
+  return download;
 };
 
 /**
  *
  * @param {number} [nextManifestPositionInArray] - index from array to decide which manifest should be downloaded next
  *   (queue)
+ * @param {boolean} forceDownload true to force next download to be queued
  * @returns {void}
  */
-DownloadsController.prototype.startQueue = function (nextManifestPositionInArray) {
+DownloadsController.prototype.startQueue = function (nextManifestPositionInArray, forceDownload) {
   let count, downloadsInProgress, link, manifestId, maxDownloads;
   if (typeof nextManifestPositionInArray === "undefined") {
     nextManifestPositionInArray = 0;
@@ -669,7 +785,7 @@ DownloadsController.prototype.startQueue = function (nextManifestPositionInArray
   }
   downloadsInProgress = this.storage.params.getItem(manifestId, this._names.downloadInProgress);
   maxDownloads = this.storage.params.getItem(manifestId, this._names.maxDownloadInProgress);
-  if (downloadsInProgress < maxDownloads - 1) {
+  if ((downloadsInProgress < maxDownloads - 1) || forceDownload) {
     link = this.storage.left.shift(manifestId);
     if (link) {
       this.storage.params.increase(manifestId, this._names.downloadInProgress);
