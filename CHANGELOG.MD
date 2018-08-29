@@ -1,3 +1,13 @@
+# 0.3.0
+ * Download fragments without head functionality
+ * Improved download process 
+ * Implements seek during download
+ * Handling not enough space error
+ * Upgrade dependencies
+ * Download content to custom folder
+ * Previous license removal error handling
+ * Queued status for manifest downloads
+
 # 0.2.9
  * Optional chunked encoding configurable in app-settings
  * Fix error message concatenate in chunk files
