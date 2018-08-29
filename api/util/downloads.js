@@ -92,20 +92,23 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
       }
 
       if ((!downloadedHash[localUrl]) || (!downloadedHash[localUrl] && downloadedHash[localUrl].remoteUrl !== remoteUrl)) {
-        links.push({
+        if (!links[k]) {
+          links[k] = [];
+        }
+
+        links[k].push({
           id: id,
           bandwidth: bandwidth,
           contentType: contentType,
           remoteUrl: remoteUrl,
-          localUrl: localUrl,
-          index: k
+          localUrl: localUrl
         });
       }
     }
   }
-  // sort links in order to allow playback before all links are downloaded (for ex: to switch from audio tracks)
-  links.sort((a, b) => a.index - b.index);
-  return links;
+
+  // NOTE: use links.flat() in the future
+  return links.reduce((acc, val) => acc.concat(val), []);
 };
 
 /**
