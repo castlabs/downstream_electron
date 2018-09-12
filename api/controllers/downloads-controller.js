@@ -771,6 +771,10 @@ DownloadsController.prototype.startQueue = function (nextManifestPositionInArray
   }
 
   manifestId = this._downloadOrderGetManifestId(nextManifestPositionInArray);
+  if (manifestId && this.isDownloadFinished(manifestId)) {
+    // the manifest id will be removed from queue, wait next time. Thus, do not change status
+    return;
+  }
   if (nextManifestPositionInArray >= appSettings.getSettings().numberOfManifestsInParallel) {
     if (manifestId) {
       this.storage.status.setItem(manifestId, "status", STATUSES.QUEUED);
