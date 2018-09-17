@@ -468,6 +468,7 @@ DownloadsController.prototype.performSeek = function (manifestId, localFile, cal
  * @param {function} onSuccess - callback to be invoked when start has been successfully
  * @param {function} onFailure - callback to be invoked when start failed
  * @param {boolean} fromResumed - if start has been called from resume api method
+ * @param {string} oldstatus - if from resumed, then indicates the old status of download
  * @returns {void}
  */
 DownloadsController.prototype.start = function (manifestId, representations, downloadFolder,  onSuccess, onFailure, fromResumed, oldstatus) {
