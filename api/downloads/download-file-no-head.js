@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 const fs = require("fs");
 const {net} = require('electron');
 const EventEmitter = require("events").EventEmitter;
@@ -184,6 +185,7 @@ DownloadFileNoHead.prototype.start = function () {
 
     self._req.on('response', (response) => {
       response.on("error", function (error) {
+        console.error('ERROR (' + self._url + ') :' + error)
         if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
           self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
             if (!retried) {
@@ -193,8 +195,12 @@ DownloadFileNoHead.prototype.start = function () {
             }
           });
         } else {
-          self._closeStreamAndRequest(function () {
-            self.emit("error", {message: downloadFileUtil.errors.CHUNK_ERROR, data: error});
+          self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
+            if (!retried) {
+              self._closeStreamAndRequest(function () {
+                self.emit("error", {message: downloadFileUtil.errors.CHUNK_ERROR, data: error});
+              });
+            }
           });
         }
       });
