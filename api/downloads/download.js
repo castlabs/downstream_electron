@@ -107,6 +107,24 @@ Download.prototype._onError = function (data) {
   }
 };
 
+Download.prototype._onDomainError = function (data) {
+  const self = this;
+  data = data || {};
+  const message = data.message || "";
+
+  if (self._dl) {
+    if (message === 'net::ERR_NETWORK_CHANGED') {
+      // network changed during download, retry download
+      self.stop(() => {
+        self.start();
+      })
+      return;
+    }
+  }
+
+  this._onError(data);
+}
+
 /**
  * @private
  * @returns {void}
@@ -165,7 +183,7 @@ Download.prototype.start = function () {
       }
       // this needs to be disposed otherwise it might complain about unhandled error.
       d.dispose();
-      self._onError({
+      self._onDomainError({
         message: message
       });
     });
