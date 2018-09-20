@@ -118,11 +118,15 @@ Download.prototype._onDomainError = function (data) {
       self.stop(() => {
         self.start();
       })
-      return;
+    } else {
+      // stop current download to release file stream and notify error
+      self.stop(() => {
+        self._onError(data);
+      })
     }
+  } else {
+    self._onError(data);
   }
-
-  this._onError(data);
 }
 
 /**
