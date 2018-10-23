@@ -1,3 +1,10 @@
+# 0.3.1
+ * Start HTTP server as a child process
+ * Improve download errors handling
+ * Make sure resume method use correct last status of download
+ * Update settings types in documentation
+ * Fix download status setting in startQueue
+
 # 0.3.0
  * Download fragments without head functionality
  * Improved download process 
