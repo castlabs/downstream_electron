@@ -468,9 +468,10 @@ DownloadsController.prototype.performSeek = function (manifestId, localFile, cal
  * @param {function} onSuccess - callback to be invoked when start has been successfully
  * @param {function} onFailure - callback to be invoked when start failed
  * @param {boolean} fromResumed - if start has been called from resume api method
+ * @param {string} oldstatus - if from resumed, then indicates the old status of download
  * @returns {void}
  */
-DownloadsController.prototype.start = function (manifestId, representations, downloadFolder,  onSuccess, onFailure, fromResumed) {
+DownloadsController.prototype.start = function (manifestId, representations, downloadFolder,  onSuccess, onFailure, fromResumed, oldstatus) {
   const self = this;
   this.downloadStats.start();
   const manifest = this._manifestController.getManifestById(manifestId);
@@ -575,7 +576,14 @@ DownloadsController.prototype.start = function (manifestId, representations, dow
               self.storage.downloaded.concat(manifestId, downloaded);
               self.storage.errors.clear(manifestId);
 
-              self.storage.status.setItem(manifestId, "status", STATUSES.CREATED);
+              if (!fromResumed) {
+                // do not initialise state of manifest is start is from resume
+                // state must stay the last one
+                self.storage.status.setItem(manifestId, "status", STATUSES.CREATED);
+              } else {
+                // init status with last status
+                self.storage.status.setItem(manifestId, "status", oldstatus);
+              }
 
               Promise.all([
                     self.storage.sync(manifestId, [
@@ -640,7 +648,7 @@ DownloadsController.prototype.resume = function (manifestId, representations,  o
         // use default download folder path
         folder =  path.resolve(appSettings.getSettings().downloadsFolderPath)
       }
-      self.start(manifestId, representations, folder, onSuccess, onFailure, true);
+      self.start(manifestId, representations, folder, onSuccess, onFailure, true, info.status);
     }
   });
 };
