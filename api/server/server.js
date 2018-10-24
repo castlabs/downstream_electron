@@ -22,6 +22,7 @@ function OfflineContentServer (offlineController, downloadController, maxOffline
   this._downloadController = downloadController;
   this._maxOfflineContentPortRange = maxOfflineContentPortRange;
   this._offlineContentPort = offlineContentPort;
+  this.childProcess = undefined;
 }
 
 /**
@@ -41,8 +42,8 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
   let script = path.join(serverPath, 'startServer.js');
   console.log('script for server: ', script);
 
-  //  FOR DEBUG PURPOSE var child = fork(script ,[],{execArgv:['--inspect=5860']});
-  var child = fork(script, []);
+  //  FOR DEBUG PURPOSE self.childProcess = fork(script ,[],{execArgv:['--inspect=5860']});
+  self.childProcess = fork(script, []);
   let routeName = appSettings.getSettings().downloadsName;
 
   // send init data for http server
@@ -51,13 +52,13 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
     routeName: routeName,
     port: port
   };
-  child.send(data)
+  self.childProcess.send(data)
 
-  child.on('error', function (err) {
+  self.childProcess.on('error', function (err) {
     console.error(err);
   })
   // handles message from child process
-  child.on('message', function (data) {
+  self.childProcess.on('message', function (data) {
     if (data.cmd === 'log') {
       // http server wants to log some data
       console.log(data.log);
@@ -76,7 +77,7 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
 
       self._offlineController.getManifestInfo(manifestId, function (err, info) {
         if (err) {
-          return child.send({error: err,
+          return self.childProcess.send({error: err,
                              requestId: requestId
                             });
         }
@@ -87,7 +88,7 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
         }
 
         // send response back
-        return child.send({status: 'OK', requestId: requestId, result: {folder: downloadFolder}});
+        return self.childProcess.send({status: 'OK', requestId: requestId, result: {folder: downloadFolder}});
       })
     }
 
@@ -99,9 +100,9 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
       let download = self._downloadController.getDownloading(manifestId, file);
       let downloadedCallback = function (err) {
         if (err) {
-          return child.send({error: err, requestId: requestId});
+          return self.childProcess.send({error: err, requestId: requestId});
         }
-        return child.send({status: 'OK', requestId: requestId});
+        return self.childProcess.send({status: 'OK', requestId: requestId});
       }
       if (download) {
         // file is created but being downloading => wait for download before sending result
@@ -117,22 +118,21 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
       let file = data.args.file;
       let downloadedCallback = function (err) {
         if (err) {
-          return child.send({error: err, requestId: requestId});
+          return self.childProcess.send({error: err, requestId: requestId});
         }
-        return child.send({status: 'OK', requestId: requestId});
+        return self.childProcess.send({status: 'OK', requestId: requestId});
       }
       self._downloadController.performSeek(manifestId, file, downloadedCallback)
     }
   });
 
-  child.on('close', function (code) {
+  self.childProcess.on('close', function (code) {
     // child has closed
     console.log('child process closed ' + code);
   });
 }
 /**
  * @param {Function} callback - a callback function to get listen port (if default is taken)
- * @param {string} storageKey - storage key
  * @constructor
  */
 OfflineContentServer.prototype.serveOfflineContent = function (callback) {
@@ -158,6 +158,14 @@ OfflineContentServer.prototype.serveOfflineContent = function (callback) {
   }
 
   startOnPort(this._offlineContentPort);
+}
+
+/*
+ * Stop server process
+ * @returns
+ */
+OfflineContentServer.prototype.stop = function () {
+  this.childProcess.kill('SIGTERM');
 }
 
 module.exports = OfflineContentServer;
