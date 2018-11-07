@@ -30,8 +30,9 @@ let DownstreamElectronBE;
  *   "publicName": "public",
  *   "downloadsName": "movies"
  * };
+ * const downstreamInstance;
  * function createWindow() {
- *   downstreamElectron.init(userSettings);
+ *   downstreamInstance = downstreamElectron.init(userSettings);
  *   const win = new BrowserWindow({
  *     width: 1200,
  *     height: 700,
@@ -43,7 +44,11 @@ let DownstreamElectronBE;
  *   win.loadURL('file://index.html');
  *   win.webContents.openDevTools();
  * }
+ * function onWillQuit() {
+ *  downstreamInstance.stop();
+ * }
  * app.on('ready', createWindow);
+ * app.on('will-quit', onWillQuit);
  */
 DownstreamElectronBE = function () {
   this._offlineContentPort = appSettings.getSettings().offlineContentPortStart;
@@ -53,6 +58,10 @@ DownstreamElectronBE = function () {
   this._attachEvents();
   // this.offlineController.restoreLocalManifest("6163760572308389888");
 };
+
+DownstreamElectronBE.prototype.stop = function () {
+  this.server.stop();
+}
 
 /**
  *
@@ -204,8 +213,8 @@ DownstreamElectronBE.prototype._serveOfflineContent = function () {
   const self = this;
   const maxOfflineContentPortRange = appSettings.getSettings().maxOfflineContentPortRange;
 
-  const server = new Server(this.offlineController, this.downloadsController, maxOfflineContentPortRange, this._offlineContentPort);
-  server.serveOfflineContent( function (offlinePort) {
+  this.server = new Server(this.offlineController, this.downloadsController, maxOfflineContentPortRange, this._offlineContentPort);
+  this.server.serveOfflineContent( function (offlinePort) {
     self._offlineContentPort = offlinePort;
   })
 

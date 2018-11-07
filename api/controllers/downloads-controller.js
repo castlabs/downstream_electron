@@ -380,7 +380,9 @@ DownloadsController.prototype.getDownloading = function (manifestId, localFile) 
   for (var link in items) {
     if (items.hasOwnProperty(link)) {
       let download = items[link];
-      if (download.localUrl === localFile) {
+      let downloadPath = path.normalize(download.localUrl);
+      let local =  path.normalize(localFile);
+      if (downloadPath === local) {
         return download;
       }
     }
@@ -435,7 +437,9 @@ DownloadsController.prototype.performSeek = function (manifestId, localFile, cal
   }
 
   let index = items.findIndex(function (download) {
-    return (download.localUrl === localFile)
+    let downloadPath = path.normalize(download.localUrl);
+    let local =  path.normalize(localFile);
+    return (downloadPath === local)
   });
   if (index > -1) {
 
