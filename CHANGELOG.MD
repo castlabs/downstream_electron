@@ -1,3 +1,8 @@
+# 0.3.2
+ * Improve manifest download handling by checking status
+ * Fix comparison of local files issues on Windows
+ * Stop HTTP server process when application is quitting
+
 # 0.3.1
  * Start HTTP server as a child process
  * Improve download errors handling
