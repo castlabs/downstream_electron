@@ -7,16 +7,16 @@
  * @property {string=} publicName - name of the folder in main directory path which will be served over http
  * @property {string=} downloadsName - name of the folder in main directory path and publicName where to store assets
  * @property {string=} offlineDomain - on which domain the content should be served, default is 127.0.0.1
- * @property {string=} offlineContentPortStart - on which port offline content should be served, default is 3010
- * @property {string=} maxOfflineContentPortRange - max range for offline port to on which content can be served
+ * @property {number=} offlineContentPortStart - on which port offline content should be served, default is 3010
+ * @property {number=} maxOfflineContentPortRange - max range for offline port to on which content can be served
  *   It will try from {offlineContentPortStart} and if taken it will try next until it finds a free one
- * @property {string=} numberOfManifestsInParallel - max number of manifest that can be downloaded at the same time,
+ * @property {number=} numberOfManifestsInParallel - max number of manifest that can be downloaded at the same time,
  *   the rest will go into queue.
  *   Be reasonable here, as it might slow down your computer, default value is 2. With 10 and very larges manifests
  *   it might go to hundreds of chunks (50 files can be downloaded at the same time per manifest). Also the highger number
  *   doesn't mean it will downloads all movies faster. You should find here some balance.
  *   Seems like 2-3 manifests gives the best results, 1 manifest limitation might work better for slower computers.
- * @property {string=} customManifestIdFolderRegex - regex to use to validate custom manifest id - bear in mind that this
+ * @property {regex | string=} customManifestIdFolderRegex - regex to use to validate custom manifest id - bear in mind that this
  * need to be also a valid folder name.<br>
  * By default it matches any letter or number or unicode characters (regional characters) or "-" or "_" as a first character<br>
  * Then it may have any letter or number or unicode characters (regional characters) or space or any of the following characters:
@@ -26,7 +26,7 @@
  * against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
  * this is the opening tag to be added before invalid character
  *
- * @property {regex=} closingTagForInvalidCustomManifestIdCharacter - when customManifestId is being invalidated
+ * @property {string=} closingTagForInvalidCustomManifestIdCharacter - when customManifestId is being invalidated
  * against customManifestIdFolderRegex it will raise the error and include the customManifestId with marked invalid characters
  * this is the closing tag to be added after invalid character
  *
@@ -101,6 +101,8 @@ let settings = {
     DOWNLOAD_TIMEOUT: 5000,
     RETRY_TIMEOUT: 5000
   },
+  useChunkedEncoding: false,
+  useHeadRequests: true,
   defaultManifestRequestOptions: {
     headers: {
       "Accept": "*/*",
@@ -162,6 +164,21 @@ function loadUserSettings (jsonSettings) {
     }
     if (jsonSettings.closingTagForInvalidCustomManifestIdCharacter) {
       settings.closingTagForInvalidCustomManifestIdCharacter = jsonSettings.closingTagForInvalidCustomManifestIdCharacter;
+    }
+    if (jsonSettings.useHeadRequests !== undefined) {
+      settings.useHeadRequests = jsonSettings.useHeadRequests;
+    }
+    if (jsonSettings.times && jsonSettings.times.RETRY_TIMEOUT) {
+      settings.times.RETRY_TIMEOUT = jsonSettings.times.RETRY_TIMEOUT;
+    }
+    if (jsonSettings.MAX_ERRORS_DOWNLOAD_RETRY) {
+      settings.MAX_ERRORS_DOWNLOAD_RETRY = jsonSettings.MAX_ERRORS_DOWNLOAD_RETRY;
+    }
+    if (jsonSettings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY) {
+      settings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY = jsonSettings.MAX_INTERNET_ERRORS_DOWNLOAD_CHUNK_RETRY;
+    }
+    if (jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY) {
+      settings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY = jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY;
     }
   }
 

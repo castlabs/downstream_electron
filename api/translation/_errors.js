@@ -55,6 +55,10 @@ const translationErrors = {
       code: CODES.ERRORS.INTERNAL_ERROR,
       msg: "Resuming of download '%manifestId%' failed.",
     },
+    UPDATE_DOWNLOAD_FOLDER_FAILED: {
+      code: CODES.ERRORS.INTERNAL_ERROR,
+      msg: "Updating of download folder for '%manifestId%' failed.",
+    },
     STOPPING_FAILED: {
       code: CODES.ERRORS.INTERNAL_ERROR,
       msg: "Stopping of download '%manifestId%' failed.",

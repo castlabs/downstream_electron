@@ -1,16 +1,15 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 "use strict";
 const _ = require('underscore');
-const express = require('express');
 const Snowflake = require("./util/snowflake-id");
 
 const appSettings = require('./app-settings');
 const beMethods = require('./be-methods-all');
 const DownloadsController = require('./controllers/downloads-controller');
-const isPortTaken = require('./util/is-port-taken');
 const ManifestController = require('./controllers/manifest-controller');
 const OfflineController = require('./controllers/offline-controller');
 const SubscribersController = require('./controllers/subscribers-controller');
+const Server = require('./server/server.js');
 
 let DownstreamElectronBE;
 
@@ -31,8 +30,9 @@ let DownstreamElectronBE;
  *   "publicName": "public",
  *   "downloadsName": "movies"
  * };
+ * const downstreamInstance;
  * function createWindow() {
- *   downstreamElectron.init(userSettings);
+ *   downstreamInstance = downstreamElectron.init(userSettings);
  *   const win = new BrowserWindow({
  *     width: 1200,
  *     height: 700,
@@ -44,7 +44,11 @@ let DownstreamElectronBE;
  *   win.loadURL('file://index.html');
  *   win.webContents.openDevTools();
  * }
+ * function onWillQuit() {
+ *  downstreamInstance.stop();
+ * }
  * app.on('ready', createWindow);
+ * app.on('will-quit', onWillQuit);
  */
 DownstreamElectronBE = function () {
   this._offlineContentPort = appSettings.getSettings().offlineContentPortStart;
@@ -54,6 +58,10 @@ DownstreamElectronBE = function () {
   this._attachEvents();
   // this.offlineController.restoreLocalManifest("6163760572308389888");
 };
+
+DownstreamElectronBE.prototype.stop = function () {
+  this.server.stop();
+}
 
 /**
  *
@@ -89,6 +97,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
     response.status = "ERROR";
     response.error = err || {};
     response.error.errorId = errorId;
+    response.error.details = internalError;
 
     self._send(response, target);
 
@@ -202,32 +211,13 @@ DownstreamElectronBE.prototype._send = function (response, target) {
  */
 DownstreamElectronBE.prototype._serveOfflineContent = function () {
   const self = this;
-  const cors = require('cors');
-  const server = express();
   const maxOfflineContentPortRange = appSettings.getSettings().maxOfflineContentPortRange;
-  const publicFolderPath = appSettings.getSettings().publicFolderPath;
-  server.use(cors());
 
-  server.use(express.static(publicFolderPath));
+  this.server = new Server(this.offlineController, this.downloadsController, maxOfflineContentPortRange, this._offlineContentPort);
+  this.server.serveOfflineContent( function (offlinePort) {
+    self._offlineContentPort = offlinePort;
+  })
 
-  function startOnPort (port) {
-    if (port > maxOfflineContentPortRange) {
-      return;
-    }
-    isPortTaken(port, function (err) {
-      if (err) {
-        port++;
-        startOnPort(port);
-      } else {
-        server.listen(port, function () {
-          self._offlineContentPort = port;
-          console.info('Offline content served on port ' + port);
-        });
-      }
-    });
-  }
-
-  startOnPort(this._offlineContentPort);
 };
 
 /**

@@ -4,6 +4,7 @@ module.exports = function TextRepresentation (attr) {
   fieldsPicker(this, [
     "bandwidth",
     "id",
-    "lang"
+    "lang",
+    "durationInS"
   ], attr);
 };

@@ -82,11 +82,16 @@ Chunk.prototype.createFileStream = function (callback) {
 
         this.removeListener("error", callback);
         this.on("error", function (error) {
-          self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
-            if (!retried) {
-              self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
-            }
-          });
+          if (error.code === "ENOSPC") {
+            // no space left on disk, do not retry downloading
+            self.resolve(downloadFileUtil.errors.NO_SPACE_LEFT_ERROR, error);
+          } else {
+             self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
+               if (!retried) {
+                 self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
+               }
+             });
+           }
         });
         this.on("finish", function () {
           if (!self.isDownloaded()) {
@@ -139,7 +144,7 @@ Chunk.prototype.start = function () {
     }
 
     self._req = net.request(req_options);
-    self._req.chunkedEncoding = true;
+    self._req.chunkedEncoding = self.options.useChunkedEncoding;
 
     self._req.on('response', (response) => {
         response.on("error", function (error) {
@@ -158,9 +163,11 @@ Chunk.prototype.start = function () {
             }
           });
           response.on("data", function (data) {
-            self.available += data.length;
-            self.downloaded += data.length;
-            self.events.emit("download", data.length);
+            if (response.statusCode === 200 || response.statusCode === 206) {
+              self.available += data.length;
+              self.downloaded += data.length;
+              self.events.emit("download", data.length);
+            }
           });
           response.pipe(self.fileStream);
     });

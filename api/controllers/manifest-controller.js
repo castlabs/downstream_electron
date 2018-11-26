@@ -156,10 +156,11 @@ ManifestController.prototype.saveOriginalManifestOnceOnly = function (manifestId
  *
  * @param {string} manifestId - manifest identifier
  * @param {object} representations representations to be saved
+ * @param {string} downloadFolder - folder where all fragments are downloaded
  * @returns {Promise} promise
  */
-ManifestController.prototype.saveManifestWithChosenRepresentations = function (manifestId, representations) {
-  const localPath = appSettings.getSettings().downloadsFolderPath + manifestId + "/";
+ManifestController.prototype.saveManifestWithChosenRepresentations = function (manifestId, representations, downloadFolder) {
+  const localPath = downloadFolder;
   const self = this;
   return new Promise(function (resolve, reject) {
     const manifest = self.getManifestById(manifestId);

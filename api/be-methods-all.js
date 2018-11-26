@@ -69,6 +69,20 @@ downloads.create = require('./be-methods/downloads/create');
 downloads.createPersistent = require('./be-methods/downloads/createPersistent');
 
 /**
+ * Get info about manifest folder
+ * @method getFolderInfo
+ * @memberOf DownstreamElectronFE.downloads
+ * @example
+ * DownstreamElectronFE.downloads.getFolderInfo()
+ *    .then(
+ *      function onSuccess(result) {console.log("success", result);},
+ *      function onError(err) {console.log("error", err);
+ *    })
+ * @returns {Promise} - promise
+ */
+downloads.getFolderInfo = require('./be-methods/downloads/folder-info');
+
+/**
  * get ids of all downloads
  * @method getList
  * @memberOf DownstreamElectronFE.downloads
@@ -322,6 +336,23 @@ downloads.subscribe = require('./be-methods/downloads/subscribe');
  * @returns {Promise} - promise
  */
 downloads.unsubscribe = require('./be-methods/downloads/unsubscribe');
+
+/**
+ * update download folder info for manifest id
+ * this can be usefule when user has copied download folder
+ * @method updateDownloadFolder
+ * @memberOf DownstreamElectronFE.downloads
+ * @param {string} manifestId - manifest identifier
+ * @param {string} downloadFolder - new download folder path
+ * @example
+ * DownstreamElectronFE.downloads.updateDownloadFolder(manifestId, downloadFolder)
+ *    .then(
+ *      function onSuccess(result) {console.log("success", result);},
+ *      function onError(err) {console.log("error", err);
+ *    })
+ * @returns {Promise} - promise
+ */
+downloads.updateDownloadFolder = require('./be-methods/downloads/update-download-folder');
 
 /**
  * remove all subscribers

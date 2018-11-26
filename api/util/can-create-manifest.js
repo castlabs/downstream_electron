@@ -6,11 +6,16 @@ const appSettings = require("../app-settings");
 /**
  *
  * @param {string} manifestId - manifest Id
+ * @param {string} downloadFolder - donwload folder
  * @returns {Promise} promise
  */
-module.exports = function (manifestId) {
+module.exports = function (manifestId, downloadFolder) {
   const settingsPath = path.resolve(appSettings.getSettings().settingsFolder + "/" + manifestId + "/");
-  const moviePath = path.resolve(appSettings.getSettings().downloadsFolderPath + "/" + manifestId + "/");
+
+  let moviePath = path.resolve(appSettings.getSettings().downloadsFolderPath + "/" + manifestId + "/");
+  if (downloadFolder) {
+    moviePath = path.resolve(downloadFolder + "/" + manifestId + "/");
+  }
 
   function dirNotExists (dirToCheck) {
     return new Promise(function (resolve /* , reject */) {

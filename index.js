@@ -2,6 +2,7 @@ const { BrowserWindow, app } = require('electron');
 
 //DEV
 const downstreamElectron = require('./api/index');
+let downstreamInstance;
 // TESTING PRODUCTION
 // const downstreamElectron = require('./dist/index');
 
@@ -12,9 +13,13 @@ function createWindow () {
   // eslint-disable-next-line no-process-env
   let appDir = path.dirname(process.mainModule.filename) + "/";
 
-  downstreamElectron.init({
+  // head request parameter test
+  let useHeadRequest = true;
+  // let useHeadRequest = false;
+  downstreamInstance = downstreamElectron.init({
     appDir: appDir,
-    numberOfManifestsInParallel: 2
+    numberOfManifestsInParallel: 2,
+    useHeadRequests: useHeadRequest
   });
   const win = new BrowserWindow({
     width: 1200,
@@ -27,8 +32,12 @@ function createWindow () {
   win.loadURL(exampleFile);
   win.webContents.openDevTools();
 }
-app.on('ready', createWindow);
+function onWillQuit() {
+  downstreamInstance.stop();
+}
 
+app.on('ready', createWindow);
+app.on('will-quit', onWillQuit);
 app.on('window-all-closed', function () {
   console.log("window-all-closed");
   app.quit();
