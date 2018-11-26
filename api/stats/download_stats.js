@@ -364,6 +364,7 @@ DownloadStats.prototype.stop = function () {
   clearInterval(this._interval);
   this._interval = null;
   this._generate();
+  this._statsPrevious = {};
 };
 
 module.exports = DownloadStats;
