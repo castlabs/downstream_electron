@@ -65,7 +65,7 @@ function _attachEvents () {
 
 function ContentRoute (app, routeName) {
 
-  let manifestFolderPath = {};
+  let manifestInfo = {};
 
   _attachEvents();
 
@@ -89,8 +89,8 @@ function ContentRoute (app, routeName) {
       }
       res.sendFile(file, options, function (err) {
         if (err && err.status) {
-          // error to open file => remove saved folder (maybe moved)
-          delete  manifestFolderPath[manifestId];
+          // error to open file => remove saved info (maybe moved)
+          delete manifestInfo[manifestId];
           res.status(err.status).end();
         }
       })
@@ -100,7 +100,7 @@ function ContentRoute (app, routeName) {
       let file = folder + '/' + manifestId + '/' + req.params[0];
       fs.exists(file, (exists) => {
         if (exists) {
-          // no cached folder for manifest id, asks main process for folder
+          // fragment exists on disk, let's check if it is not being downloaded
           processCmd('is_downloading', {manifest: manifestId, file: file})
           .then(() => {
             sendFile(file)
@@ -109,32 +109,50 @@ function ContentRoute (app, routeName) {
             return res.status(404).end();
           });
         } else {
-           // ask to perform seek
+          // fragment doesn't on disk, ask to download it
           processCmd('perform_seek', {manifest: manifestId, file: file})
           .then(() => {
             sendFile(file)
           })
-            .catch(function () {
+          .catch(function () {
             return res.status(404).end();
           });
         }
       })
     }
 
-    // check if a folder has been already saved for the manifest
-    if (manifestFolderPath[manifestId]) {
-      seekIfNeeded(manifestFolderPath[manifestId]);
+    let getFile = function (info) {
+      if (info && info.status === 'FINISHED') {
+        // if file has status finished, no need to check if fragment is being downloaded
+        let file = info.folder + '/' + manifestId + '/' + req.params[0];
+        fs.exists(file, (exists) => {
+          if (exists) {
+            // fragment exists => send data
+            sendFile(file)
+          } else {
+            // fragment doesn't exists => 404 and remove cached data
+            delete  manifestInfo[manifestId];
+            return res.status(404).end();
+          }
+        });
+      } else {
+        // file is not finished, let's perform seek if needed
+        seekIfNeeded( info.folder);
+      }
+    }
+
+    // check if info have been already saved for the manifest
+    if (manifestInfo[manifestId]) {
+      getFile( manifestInfo[manifestId]);
     } else {
-      // no cached folder for manifest id, asks main process for folder
-      processCmd('get_folder', {manifest: manifestId})
+      // no info for manifest id, asks main process to get manifest info
+      processCmd('get_info', {manifest: manifestId})
       .then((result) => {
-        let downloadFolder = result.folder;
-        // save folder location for manifest and then send file
-        manifestFolderPath[manifestId] = downloadFolder;
-        seekIfNeeded(manifestFolderPath[manifestId]);
+        manifestInfo[manifestId] = result;
+        getFile( manifestInfo[manifestId]);
       })
       .catch(function () {
-        delete  manifestFolderPath[manifestId];
+        delete  manifestInfo[manifestId];
         return res.status(404).send('Cannot find manifest');
       });
     }

@@ -69,7 +69,7 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
       callback(data.port);
     }
 
-    if (data.cmd === 'get_folder') {
+    if (data.cmd === 'get_info') {
 
       let requestId = data.requestId;
       // http server asks data folder for manifest id
@@ -88,7 +88,7 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
         }
 
         // send response back
-        return self.childProcess.send({status: 'OK', requestId: requestId, result: {folder: downloadFolder}});
+        return self.childProcess.send({status: 'OK', requestId: requestId, result: {folder: downloadFolder, status: info.status}});
       })
     }
 
