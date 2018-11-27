@@ -299,13 +299,13 @@ DownloadsController.prototype._stopWithStatus = function (manifestId, onSuccess,
 DownloadsController.prototype._onDownloadError = function (download, err) {
   console.error("ERROR", download.remoteUrl, err);
   this._markDownloadItem(download);
-  if (err === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
+  if (err === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR || appSettings.getSettings().stopOnError) {
     // stop downloading => cannot write
     this._stopWithStatus(download.manifestId, () => {
       console.info('stopped');
     }, (failure) => {
       console.info(failure);
-    }, STATUSES.ERROR, downloadFileUtil.errors.NO_SPACE_LEFT_ERROR);
+    }, STATUSES.ERROR, err);
   }
 };
 
