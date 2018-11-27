@@ -83,6 +83,7 @@ let settings = {
   offlineContentPortStart: 3010,
   maxOfflineContentPortRange: 3030,
   numberOfManifestsInParallel: 2,
+  stopOnError: false,
   stores: {
     DOWNLOADS: {
       "LEFT": "left",
@@ -155,6 +156,9 @@ function loadUserSettings (jsonSettings) {
     }
     if (jsonSettings.numberOfManifestsInParallel) {
       settings.numberOfManifestsInParallel = jsonSettings.numberOfManifestsInParallel;
+    }
+    if (jsonSettings.stopOnError !== undefined) {
+      settings.stopOnError = jsonSettings.stopOnError;
     }
     if (jsonSettings.customManifestIdFolderRegex) {
       settings.customManifestIdFolderRegex = jsonSettings.customManifestIdFolderRegex;
