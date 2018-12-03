@@ -30,6 +30,7 @@ function Download (params, options) {
   this._options.retryTimeout = appSettings.getSettings().times.RETRY_TIMEOUT;
   this._options.useChunkedEncoding = appSettings.getSettings().useChunkedEncoding;
   this._options.useHeadRequests = appSettings.getSettings().useHeadRequests;
+  this._options.noCache = appSettings.getSettings().noCache;
   this.stats = {
     available: 0,
     downloaded: 0,

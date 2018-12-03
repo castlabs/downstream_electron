@@ -103,6 +103,7 @@ let settings = {
   },
   useChunkedEncoding: false,
   useHeadRequests: true,
+  noCache: false,
   defaultManifestRequestOptions: {
     headers: {
       "Accept": "*/*",
@@ -179,6 +180,9 @@ function loadUserSettings (jsonSettings) {
     }
     if (jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY) {
       settings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY = jsonSettings.MAX_ERRORS_DOWNLOAD_CHUNK_RETRY;
+    }
+    if (jsonSettings.noCache) {
+      settings.noCache = jsonSettings.noCache
     }
   }
 

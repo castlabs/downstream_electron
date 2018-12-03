@@ -168,6 +168,12 @@ DownloadFileNoHead.prototype.start = function () {
     url: this._url,
   };
 
+  if (this._options.noCache) {
+    req_options.headers = {
+      'Cache-Control': 'no-cache'
+    }
+  }
+
   self._createFileStream(function (err) {
     if (err) {
       self._retry(downloadFileUtil.errors.FILE_CREATING_ERROR, function (retried) {
