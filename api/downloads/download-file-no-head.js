@@ -204,16 +204,28 @@ DownloadFileNoHead.prototype.start = function () {
           });
         }
       });
-      self._headers = response.headers;
-      self.file_size = Number(self._headers["content-length"]);
 
-      response.on("data", function (data) {
-        if (response.statusCode === 200 || response.statusCode === 206) {
-          self.available += data.length;
-          self.downloaded += data.length;
-        }
-      });
-      response.pipe(self.fileStream);
+      if (response && response.statusCode >= 400) {
+        self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
+          if (!retried) {
+            self._closeStreamAndRequest(function () {
+              console.error(`HTTP DOWNLOAD ERROR url: ${self._url}, statusCode: ${response.statusCode}`);
+              self.emit("error", {message: downloadFileUtil.errors.CHUNK_ERROR, data: response});
+            });
+          }
+        });
+      } else {
+        self._headers = response.headers;
+        self.file_size = Number(self._headers["content-length"]);
+
+        response.on("data", function (data) {
+          if (response.statusCode === 200 || response.statusCode === 206) {
+            self.available += data.length;
+            self.downloaded += data.length;
+          }
+        });
+        response.pipe(self.fileStream);
+      }
     });
     self._req.end();
   });
