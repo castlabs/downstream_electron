@@ -1,3 +1,8 @@
+# 0.3.3
+ * Add force no cache for downloads preference
+ * Release all DownloadStats on stop kept in _statsPrevious
+ * Add stop on download error preference
+
 # 0.3.2
  * Improve manifest download handling by checking status
  * Fix comparison of local files issues on Windows
