@@ -129,9 +129,13 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
     }
   });
 
-  self.childProcess.on('close', function (code) {
+  self.childProcess.on('close', function (code, signal) {
     // child has closed
-    console.log('child process closed ' + code);
+    if (code == null) {
+      console.log('child process closed with signal: ' + signal);
+    } else {
+      console.log('child process closed with code: ' + code);
+    }
   });
 }
 /**
