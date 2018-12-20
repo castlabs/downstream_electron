@@ -36,6 +36,9 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
 
   let serverPath = path.join(app.getAppPath(), 'node_modules/downstream-electron/api/server');
   if (!fs.existsSync(serverPath)) {
+    serverPath = path.join(app.getAppPath(), 'dist');
+  }
+  if (!fs.existsSync(serverPath)) {
     serverPath = __dirname;
   }
   console.log('server Path : ', serverPath);
