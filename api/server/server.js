@@ -41,9 +41,9 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
   if (!fs.existsSync(serverPath)) {
     serverPath = __dirname;
   }
-  console.log('server Path : ', serverPath);
+  console.log('Server Path:', serverPath);
   let script = path.join(serverPath, 'startServer.js');
-  console.log('script for server: ', script);
+  console.log('Script for server:', script);
 
   //  FOR DEBUG PURPOSE self.childProcess = fork(script ,[],{execArgv:['--inspect=5860']});
   self.childProcess = fork(script, []);
@@ -132,9 +132,9 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
   self.childProcess.on('close', function (code, signal) {
     // child has closed
     if (code == null) {
-      console.log('child process closed with signal: ' + signal);
+      console.log('Child process closed with signal:', signal);
     } else {
-      console.log('child process closed with code: ' + code);
+      console.log('Child process closed with code:', code);
     }
   });
 }
@@ -154,11 +154,11 @@ OfflineContentServer.prototype.serveOfflineContent = function (callback) {
         port++;
         startOnPort(port);
       } else {
-        console.log('port found :', port)
+        console.log('Port found:', port)
         self._startServer(port, function () {
           self._offlineContentPort = port;
           callback(self._offlineContentPort);
-          console.info('Offline content served on port ' + port);
+          console.info('Offline content served on port:', port);
         });
       }
     });
