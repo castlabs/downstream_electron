@@ -18,10 +18,7 @@
     "storage",
     "files"
   ],
-  "//": "DEV",
   "main": "index.js",
-  "//": "TESTING PRODUCTION",
-  "//": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -39,6 +36,10 @@
   },
   "author": "castlabs GmbH",
   "maintainers": [
+    {
+      "name": "Bartłomiej Makowski",
+      "email": "bartek.makowski@gmail.com"
+    },
     {
       "name": "Bartlomiej Obecny",
       "email": "bobecny@gmail.com"
