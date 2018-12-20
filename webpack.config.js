@@ -53,6 +53,9 @@ module.exports = {
     ],
     "downstream-electron-fe": [
       "./api/downstream-electron-fe"
+    ],
+    "startServer": [
+      "./api/server/startServer"
     ]
   },
 
