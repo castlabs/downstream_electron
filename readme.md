@@ -13,15 +13,16 @@ More information is available here:
 https://github.com/castlabs/electron-releases
 
 ## Development
+
+Remove `dist/` directory if exists.
+
 1. `npm install`
 2. `npm start`
 
 ## Build
 1. `npm install`
-2. edit `index.js` and change line to use `downstream-electron` from `dist` folder
-3. edit `examples/main/index.js` and change line to use `downstream-electron` from `dist` folder
-4. `npm run build`
-5. `npm start`
+2. `npm run build`
+3. `npm start`
 
 ## Documentation 
 Documentation is available publicly at 

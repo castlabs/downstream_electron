@@ -1,7 +1,7 @@
 'use strict';
 window.$ = window.jQuery = require('jquery');
 const { remote } = require('electron');
-
+const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
 // fake persistent plugin - needed for easier testing
@@ -27,10 +27,18 @@ function FakePersistentPlugin () {
   };
 }
 
-// DEV
-const downstreamElectron = require('../../api/index').init(window, new FakePersistentPlugin());
+process.argv.forEach(function (val, index, array) {
+  console.log(index + ': ' + val);
+});
+
 // TESTING PRODUCTION
-// const downstreamElectron = require('../../dist/index').init(window, new FakePersistentPlugin());
+let index = '../../api/index';
+if (!fs.existsSync(index)) {
+  //DEV
+  index = '../../dist/index';
+}
+
+const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
 
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 
