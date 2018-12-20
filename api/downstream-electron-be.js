@@ -23,14 +23,17 @@ let DownstreamElectronBE;
  *
  * @example
  * //somewhere in the main process
+ * const { BrowserWindow, app } = require('electron');
  * const downstreamElectron = require('downstream-electron');
+ *
  * const userSettings = {
  *   "appDir": "/Users/admin/myApp",
  *   "settingsName": "settings",
  *   "publicName": "public",
  *   "downloadsName": "movies"
  * };
- * const downstreamInstance;
+ *
+ * let downstreamInstance;
  * function createWindow() {
  *   downstreamInstance = downstreamElectron.init(userSettings);
  *   const win = new BrowserWindow({
@@ -44,11 +47,17 @@ let DownstreamElectronBE;
  *   win.loadURL('file://index.html');
  *   win.webContents.openDevTools();
  * }
+ *
  * function onWillQuit() {
  *  downstreamInstance.stop();
  * }
+ *
  * app.on('ready', createWindow);
  * app.on('will-quit', onWillQuit);
+ * app.on('window-all-closed', function () {
+ *  console.log("window-all-closed");
+ *  app.quit();
+ * });
  */
 DownstreamElectronBE = function () {
   this._offlineContentPort = appSettings.getSettings().offlineContentPortStart;
