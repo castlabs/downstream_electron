@@ -43,6 +43,6 @@ function onWillQuit() {
 app.on('ready', createWindow);
 app.on('will-quit', onWillQuit);
 app.on('window-all-closed', function () {
-  console.log("window-all-closed");
+  console.log('window-all-closed');
   app.quit();
 });
