@@ -14,12 +14,12 @@ https://github.com/castlabs/electron-releases
 
 ## Development
 
-Remove `dist/` directory if exists.
-
-1. `npm install`
-2. `npm start`
+1. *(optional)* `npm run clean`
+2. `npm install`
+3. `npm start`
 
 ## Build
+
 1. `npm install`
 2. `npm run build`
 3. `npm start`

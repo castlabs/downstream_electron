@@ -9,6 +9,8 @@ var fork = require('child_process').fork;
 const appSettings = require("../app-settings");
 const {app} = require('electron');
 
+const CHILD_SCRIPT_FILENAME = 'startServer.js';
+
 /**
  * Offline content server
  * @param {object} offlineController : offline controller
@@ -34,15 +36,20 @@ function OfflineContentServer (offlineController, downloadController, maxOffline
 OfflineContentServer.prototype._startServer = function (port, callback) {
   var self = this;
 
-  let serverPath = path.join(app.getAppPath(), 'node_modules/downstream-electron/api/server');
-  if (!fs.existsSync(serverPath)) {
-    serverPath = path.join(app.getAppPath(), 'dist');
+  // NOTE: this is so ugly FIXME
+  let serverPath = path.join(app.getAppPath(), 'node_modules/downstream-electron');
+  if (!fs.existsSync(path.join(serverPath, CHILD_SCRIPT_FILENAME))) {
+    serverPath = path.join(app.getAppPath(), 'node_modules/downstream-electron/api/server');
+    if (!fs.existsSync(path.join(serverPath, CHILD_SCRIPT_FILENAME))) {
+      serverPath = app.getAppPath();
+      if (!fs.existsSync(path.join(serverPath, CHILD_SCRIPT_FILENAME))) {
+        serverPath = __dirname;
+      }
+    }
   }
-  if (!fs.existsSync(serverPath)) {
-    serverPath = __dirname;
-  }
+
   console.log('Server Path:', serverPath);
-  let script = path.join(serverPath, 'startServer.js');
+  let script = path.join(serverPath, CHILD_SCRIPT_FILENAME);
   console.log('Script for server:', script);
 
   //  FOR DEBUG PURPOSE self.childProcess = fork(script ,[],{execArgv:['--inspect=5860']});

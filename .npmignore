@@ -1,0 +1,6 @@
+*
+!*.js
+
+webpack.config.js
+app.js
+.*

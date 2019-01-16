@@ -2,7 +2,7 @@ const { BrowserWindow, app } = require('electron');
 const fs = require('fs');
 
 // TESTING PRODUCTION
-let index = './dist/index';
+let index = './index';
 if (!fs.existsSync(index)) {
   //DEV
   index = './api/index';
@@ -43,6 +43,6 @@ function onWillQuit() {
 app.on('ready', createWindow);
 app.on('will-quit', onWillQuit);
 app.on('window-all-closed', function () {
-  console.log("window-all-closed");
+  console.log('window-all-closed');
   app.quit();
 });
