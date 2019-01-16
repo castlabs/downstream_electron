@@ -24,7 +24,21 @@ https://github.com/castlabs/electron-releases
 2. `npm run build`
 3. `npm start`
 
-## Documentation 
+## Examples
+
+1. `npm install`
+2. `npm start -- example=`*name*
+
+- (*default*) Example: **main**
+
+Extended example showing most of the features of the **downstream_electron** library
+
+- Example: **drm**
+
+Basic example presenting usage of DRM protected stream with **downstream_electron** library
+
+## Documentation
+
 Documentation is available publicly at 
 https://castlabs.github.io/downstream_electron/
 
@@ -32,17 +46,21 @@ https://castlabs.github.io/downstream_electron/
 2. Open `jsdoc/index.html` in any browser
 3. If you want to generate docs with private methods run `npm run jsdoc_prv`
 
-## ESLint 
+## ESLint
+
 1. `npm run eslint`
 
 ## Debugging in intellij / webstorm
+
 1. Create new node.js configuration
 2. Node interpreter: `/node_modules/.bin/electron`
 3. Javascript file: `index.js`
 
 ## More information
+
 https://castlabs.com/open-source/downstream/
 
 ## License
+
 Copyright (C) 2017 Castlabs GmbH.
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
