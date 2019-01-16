@@ -19,15 +19,13 @@
     "files"
   ],
   "main": "app.js",
-  "files": [
-    "dist/"
-  ],
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {
     "build": "webpack",
     "package": "npm pack",
     "prepack": "./bin/prepack.sh",
     "postpack": "./bin/postpack.sh",
+    "clean": "./bin/clean.sh",
     "eslint": "./node_modules/.bin/eslint api",
     "jsdoc": "./node_modules/.bin/jsdoc api -r --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
     "jsdoc_prv": "./node_modules/.bin/jsdoc api -r -p --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
@@ -40,7 +38,7 @@
   "author": "castlabs GmbH",
   "maintainers": [
     {
-      "name": "Bartłomiej Makowski",
+      "name": "Bartlomiej Makowski",
       "email": "bartek.makowski@gmail.com"
     },
     {
