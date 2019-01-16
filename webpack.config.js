@@ -14,9 +14,9 @@ externals["electron"] = true;
 
 const PATHS = {
   api: path.join(__dirname, "api"),
-  build: path.join(__dirname, "dist"),
+  build: path.join(__dirname, ""),
   documentation: path.join(__dirname, "out"),
-  publicPath: "dist/"
+  publicPath: ""
 };
 
 const date = new Date().toISOString().replace(/T/g, " ").replace(/Z/g, "");

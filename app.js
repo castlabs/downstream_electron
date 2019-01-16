@@ -2,7 +2,7 @@ const { BrowserWindow, app } = require('electron');
 const fs = require('fs');
 
 // TESTING PRODUCTION
-let index = './dist/index';
+let index = './index';
 if (!fs.existsSync(index)) {
   //DEV
   index = './api/index';

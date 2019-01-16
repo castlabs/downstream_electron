@@ -32,10 +32,10 @@ process.argv.forEach(function (val, index, array) {
 });
 
 // TESTING PRODUCTION
-let index = '../../api/index';
+let index = '../../index';
 if (!fs.existsSync(index)) {
   //DEV
-  index = '../../dist/index';
+  index = '../../api/index';
 }
 
 const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
