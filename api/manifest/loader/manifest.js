@@ -53,7 +53,7 @@ const Manifest = (function () {
     const _this = this;
     return new Promise(function (resolve, reject) {
       if (!url || !localPath) {
-        reject();
+        reject('wrong parameter');
         return;
       }
       ManifestLocalLoader(localPath).then(function (str) {
