@@ -49,6 +49,19 @@ const Manifest = (function () {
     });
   };
 
+Manifest.prototype.loadWithManifest = function (url, manifest) {
+    const _this = this;
+    return new Promise(function (resolve, reject) {
+        _this._setUpUrl(url);
+        _this.manifestXML = new ManifestXML_1.ManifestXML();
+        _this.manifestXML.parse(manifest, function () {
+            resolve();
+        }, function (e) {
+            reject(e);
+            throw new Error("Manifest parsing error");
+        });
+    });
+};
   Manifest.prototype.loadFromLocal = function (localPath, url) {
     const _this = this;
     return new Promise(function (resolve, reject) {
