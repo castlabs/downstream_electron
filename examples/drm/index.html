@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Electron API</title>
-    <script src="load-manifests-examples.js"></script>
     <script src="index.js"></script>
     <style>
         #status {
@@ -64,17 +63,16 @@
 
     </style>
 </head>
+
 <body>
 
-<h3 id="header">getList, getListWithInfo, info, getOfflineLink, create, start, stop, stopAll, resume, remove, removeAll, subscribe,
-    unsubsribe, createPersistent, removePersistent</h3>
-<div id="mainActions"></div>
-<h4 id="contentHeader" class="header"></h4>
-<div id="contentActions" class="actions"></div>
-<div id="contentStatus" class="statusMain"></div>
-<div id="contentSubscribe" class="subscribe"></div>
-<div id="contentMain"></div>
-<div id="contentActions2" class="actions"></div>
+    <h3 id="header">Simple DRM example</h3>
+    <div id="videoOfflineWrapper">
+        <video id="videoOffline" crossOrigin="anonymous" hidden controls style="padding: 10px; width: 430px; height: 300px;">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+    <div id="mainActions"></div>
 
 </body>
 

@@ -428,7 +428,8 @@ function playVideo(link, offlineSessionId, playerUrl) {
     show: true,
     resizable: true,
     webPreferences: {
-      plugins: true
+      plugins: true,
+      nodeIntegration: true
     }
   });
   playerWindow.loadURL(playerUrl);
@@ -436,6 +437,7 @@ function playVideo(link, offlineSessionId, playerUrl) {
   playerWindow.webContents.on('did-finish-load', function (evt, args) {
     playerWindow.webContents.send('startPlaybackStream', {
       url: link,
+      configuration: {},
       offlineSessionId: offlineSessionId
     });
   });

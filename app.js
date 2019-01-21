@@ -43,7 +43,8 @@ function createWindow () {
     height: 700,
     resizable: true,
     webPreferences: {
-      plugins: true
+      plugins: true,
+      nodeIntegration: true
     }
   });
 
@@ -60,4 +61,21 @@ app.on('will-quit', onWillQuit);
 app.on('window-all-closed', function () {
   console.log('window-all-closed');
   app.quit();
+});
+
+app.on('widevine-ready', (version, lastVersion) => {
+  if (null !== lastVersion) {
+    console.log('Widevine ' + version + ', upgraded from ' + lastVersion + ', is ready to be used!');
+  } else {
+    console.log('Widevine ' + version + ' is ready to be used!');
+  }
+});
+
+app.on('widevine-update-pending', (currentVersion, pendingVersion) => {
+  console.log('Widevine ' + currentVersion + ' is ready to be upgraded to ' + pendingVersion + '!');
+});
+
+app.on('widevine-error', (error) => {
+  console.log('Widevine installation encounterted an error: ' + error);
+  process.exit(1)
 });

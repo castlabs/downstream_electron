@@ -5,6 +5,7 @@ function addExample (url) {
   const option = $('<option value="' + url + '">' + url + '</option>');
   $('#manifestUrlList').append(option[0]);
 }
+
 function addExamples () {
   const examples = [
     '-',
@@ -13,9 +14,11 @@ function addExamples () {
     'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
     'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest'
   ];
+
   for (let i = 0, j = examples.length; i < j; i++) {
     addExample(examples[i]);
   }
+
   $('#manifestUrlList').on('change', function () {
     if (this.value !== '-') {
       $('#manifestUrl').val(this.value);
