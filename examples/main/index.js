@@ -1,4 +1,5 @@
 'use strict';
+
 window.$ = window.jQuery = require('jquery');
 const { remote } = require('electron');
 const fs = require('fs');
@@ -16,6 +17,7 @@ function FakePersistentPlugin () {
       }, 1000);
     });
   };
+
   this.removePersistentSession = function (sessionId) {
     console.log('remove - call of fake persistent plugin, sessionId', sessionId);
     return new Promise(function (resolve) {
@@ -39,9 +41,7 @@ if (!fs.existsSync(index)) {
 }
 
 const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
-
 const playerUrl = `file://${__dirname}/../../player/index.html`;
-
 const persistentConfig = {};
 
 function showStatusOK(message, contentStatus) {
@@ -72,6 +72,7 @@ function showStats(contentSubscribe, stats) {
         '/span>'));
     }
   }
+  
   const message = new Date().toISOString().replace(/Z|T/g, ' ') + stats.progressPercentage;
   console.log(message);
 }
@@ -427,7 +428,8 @@ function playVideo(link, offlineSessionId, playerUrl) {
     show: true,
     resizable: true,
     webPreferences: {
-      plugins: true
+      plugins: true,
+      nodeIntegration: true
     }
   });
   playerWindow.loadURL(playerUrl);
@@ -435,6 +437,7 @@ function playVideo(link, offlineSessionId, playerUrl) {
   playerWindow.webContents.on('did-finish-load', function (evt, args) {
     playerWindow.webContents.send('startPlaybackStream', {
       url: link,
+      configuration: {},
       offlineSessionId: offlineSessionId
     });
   });

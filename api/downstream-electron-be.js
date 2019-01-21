@@ -41,7 +41,8 @@ let DownstreamElectronBE;
  *     height: 700,
  *     resizable: true,
  *     webPreferences: {
- *       plugins: true
+ *       plugins: true,
+ *       nodeIntegration: true
  *     }
  *   });
  *   win.loadURL('file://index.html');
