@@ -1,3 +1,9 @@
+# 0.3.5
+ * Simple Widevine DRM example
+ * Add a string parameter to let application give the manifest data
+ * Update project structure and upgrade Electron version to 4.0.1 WV VMP by castLabs
+ * Add an error message on loadFromLocal rejection
+
 # 0.3.4
  * Update main process usage documentation
  * Simplify build testing steps
