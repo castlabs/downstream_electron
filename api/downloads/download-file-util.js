@@ -35,17 +35,11 @@ const errors = {
  * @returns {void}
  */
 function checkForLocalFile (fileUrl, callback) {
-  fs.exists(fileUrl, function (exists) {
-    if (exists) {
-      fs.stat(fileUrl, function (error, stat) {
-        if (error) {
-          callback(false)
-        } else {
-          callback(true, stat.size);
-        }
-      });
+  fs.stat(fileUrl, function (error, stat) {
+    if (error) {
+      callback(false)
     } else {
-      callback(false);
+      callback(true, stat.size);
     }
   });
 }

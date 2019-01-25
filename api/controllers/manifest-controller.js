@@ -1,11 +1,9 @@
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
 const XMLSerializer = require('xmldom').XMLSerializer;
-
 const appSettings = require("../app-settings");
 const parseManifestWithChoosenRepresentations = require("../util/parse-manifest-with-choosen-representations");
+const downloadFileUtil = require("../downloads/download-file-util");
 const saveFile = require("../util/save-file");
 const translation = require('../translation/index');
 
@@ -128,7 +126,7 @@ ManifestController.prototype.saveOriginalManifestOnceOnly = function (manifestId
       reject(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
       return;
     }
-    fs.exists(path.resolve(localPath + manifest.getManifestName()), function (exists) {
+    downloadFileUtil.checkForLocalFile((localPath + manifest.getManifestName()), function (exists) {
       if (exists) {
         resolve();
       } else {

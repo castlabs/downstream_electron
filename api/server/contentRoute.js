@@ -1,5 +1,5 @@
 "use strict";
-const fs = require('fs');
+const downloadFileUtil = require("../downloads/download-file-util");
 
 let _promiseCounter = 0;
 let _promisesObj = {};
@@ -98,7 +98,7 @@ function ContentRoute (app, routeName) {
 
     let seekIfNeeded  = function (folder) {
       let file = folder + '/' + manifestId + '/' + req.params[0];
-      fs.exists(file, (exists) => {
+      downloadFileUtil.checkForLocalFile(file, (exists) => {
         if (exists) {
           // fragment exists on disk, let's check if it is not being downloaded
           processCmd('is_downloading', {manifest: manifestId, file: file})
@@ -125,7 +125,7 @@ function ContentRoute (app, routeName) {
       if (info && info.status === 'FINISHED') {
         // if file has status finished, no need to check if fragment is being downloaded
         let file = info.folder + '/' + manifestId + '/' + req.params[0];
-        fs.exists(file, (exists) => {
+        downloadFileUtil.checkForLocalFile(file, (exists) => {
           if (exists) {
             // fragment exists => send data
             sendFile(file)

@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const downloadFileUtil = require("../downloads/download-file-util");
 
 function removeDir (dir, cb, ENOTEMPTY_attempts) {
   ENOTEMPTY_attempts = ENOTEMPTY_attempts || 0;
@@ -21,8 +22,7 @@ function removeDir (dir, cb, ENOTEMPTY_attempts) {
 
   let called, results;
 
-  fs.exists(dir, function existsCallback (exists) {
-
+  downloadFileUtil.checkForLocalFile(dir, function existsCallback (exists) {
     if (!exists) {
       return removeDirCallback(null);
     }

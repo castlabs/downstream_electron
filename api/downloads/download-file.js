@@ -303,10 +303,18 @@ DownloadFile.prototype.start = function () {
         if (fileSize === self.file_size) {
           self.emit("end");
         } else if (fileSize > self.file_size) {
-          fs.unlink(self._destFile);
+          fs.unlink(self._destFile, (err) => {
+            if (err) {
+              throw err;
+            }
+          });
           self._startAllChunks();
         } else if (fileSize < self.file_size && self._chunksNumber > 1) {
-          fs.unlink(self._destFile);
+          fs.unlink(self._destFile, (err) => {
+            if (err) {
+              throw err;
+            }
+          });
           self._startAllChunks();
         } else {
           self._startAllChunks();
