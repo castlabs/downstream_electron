@@ -180,6 +180,9 @@ Download.prototype.start = function () {
       self._onError(err);
       return;
     }
+    // NOTE: domain module is marked to be deprecated in the future,
+    //       we will use it until NodeJS will propose alternative or
+    //       rewrite with promises
     const d = domain.create();
     d.on('error', function (err) {
       let message = '';
@@ -187,7 +190,9 @@ Download.prototype.start = function () {
         message = err.code || err.message || "";
       }
       // this needs to be disposed otherwise it might complain about unhandled error.
-      d.dispose();
+      if (typeof d.dispose === "function") {
+        d.dispose();
+      }
       self._onDomainError({
         message: message
       });
