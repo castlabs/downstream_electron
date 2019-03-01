@@ -485,8 +485,20 @@ DownloadsController.prototype.start = function (manifestId, representations, dow
   }
   representations = representations || {};
   let video = representations.video || [];
+  if (!Array.isArray(video)) {
+    video = [video];
+  }
+
   let audio = representations.audio || [];
+  if (!Array.isArray(audio)) {
+    audio = [audio];
+  }
+
   let text = representations.text || [];
+  if (!Array.isArray(text)) {
+    text = [text];
+  }
+
   const videoR = manifest.getVideoRepresentations();
   const audioR = manifest.getAudioRepresentations();
   const textR = manifest.getTextRepresentations();
