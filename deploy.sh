@@ -37,7 +37,9 @@ fi
 npm version "$version"
 # build again so that it will have correct version inside
 npm run travis-build
+node ./bin/makefile.js prepack
 npm publish || { echo "Publishing failed" ; exit 0 ; }
+node ./bin/makefile.js postpack
 git push origin master
 git push origin --tags
 
