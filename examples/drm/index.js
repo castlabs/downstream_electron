@@ -216,6 +216,17 @@ function onDownloadProgress(err, stats) {
   console.log(stats, err);
 }
 
+function removeUI() {
+  $('#videoOffline').attr('hidden', true);
+  $('#play').remove();
+  $('#remove').remove();
+  $('#removeAll').remove();
+  $('#offline').remove();
+
+  var video = document.querySelector('#videoOffline');
+  video.pause();
+}
+
 function onDownloadFinish(err, info) {
   console.log(info, err);
 
@@ -242,14 +253,21 @@ function onDownloadFinish(err, info) {
   $('#mainActions').append($('<input id="remove" style="margin-right: 5px" type="button" value="Remove">').on('click', function () {
     if (confirm('Do you really want to delete this download? - this cannot be undone')) {
       downstreamElectron.downloads.remove(manifestId).then(function () {
-        $('#videoOffline').attr('hidden', true);
-        $('#play').remove();
-        $('#remove').remove();
-        $('#offline').remove();
-
+        removeUI();
         console.log('removed');
       }, function (err) {
         console.log('remove error', err);
+      });
+    }
+  }));
+
+  $('#mainActions').append($('<input id="removeAll" type="button" value="Remove All">').on('click', function () {
+    if (confirm('Do you really want to remove all downloads? - this cannot be undone')) {
+      downstreamElectron.downloads.removeAll().then(function () {
+        removeUI();
+        console.log('removed');
+      }, function (err) {
+        console.log('remove all error', err);
       });
     }
   }));
@@ -293,8 +311,8 @@ function onSubmit(e) {
     manifestId = result.id;
 
    let representations = {
-      video: result.video[0].id,
-      audio: result.audio[0].id
+      video: [result.video[0].id],
+      audio: [result.audio[0].id]
     };
     console.log(representations);
 
