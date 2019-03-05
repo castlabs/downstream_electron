@@ -167,7 +167,9 @@ function UnsafeInMemoryPersistentPlugin () {
 
   this.removePersistentSession = function (sessionId) {
     return new Promise(function (resolve) {
-      activeSession.remove();
+      if (activeSession !== undefined && activeSession !== null) {
+        activeSession.remove();
+      }
       console.log('remove - persistent plugin, sessionId', sessionId);
       resolve();
     });

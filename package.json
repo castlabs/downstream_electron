@@ -18,13 +18,14 @@
     "storage",
     "files"
   ],
-  "main": "app.js",
+  "main": "api/index.js",
+  "files": [
+    "api"
+  ],
   "homepage": "https://castlabs.com/open-source/downstream/",
   "scripts": {
     "build": "webpack",
     "package": "npm pack",
-    "prepack": "node ./bin/makefile.js prepack",
-    "postpack": "node ./bin/makefile.js postpack",
     "clean": "node ./bin/makefile.js clean",
     "eslint": "./node_modules/.bin/eslint api",
     "jsdoc": "./node_modules/.bin/jsdoc api -r --readme api/README.md --configure jsdoc.conf.json -d jsdoc",
@@ -32,7 +33,7 @@
     "jasmine": "(npm run jasmine_test || true) && npm run jasmine_report",
     "jasmine_test": "./node_modules/jasmine-node/bin/jasmine-node units/ --junitreport --output tmp/units",
     "jasmine_report": "./node_modules/junit-viewer/bin/junit-viewer --results=tmp/units --save=tmp/units_result.html",
-    "start": "electron .",
+    "start": "electron app.js",
     "travis-build": "npm run eslint && npm run jasmine_test && npm run build && npm run jsdoc && true"
   },
   "author": "castlabs GmbH",
