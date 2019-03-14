@@ -1,5 +1,16 @@
 "use strict";
-const downloadFileUtil = require("../downloads/download-file-util");
+
+const fs = require("fs");
+
+function exists (fileUrl, callback) {
+  fs.stat(fileUrl, function (error, stat) {
+    if (error) {
+      callback(false)
+    } else {
+      callback(true, stat.size);
+    }
+  });
+}
 
 let _promiseCounter = 0;
 let _promisesObj = {};
@@ -98,23 +109,23 @@ function ContentRoute (app, routeName) {
 
     let seekIfNeeded  = function (folder) {
       let file = folder + '/' + manifestId + '/' + req.params[0];
-      downloadFileUtil.checkForLocalFile(file, (exists) => {
+      exists(file, (exists) => {
         if (exists) {
           // fragment exists on disk, let's check if it is not being downloaded
           processCmd('is_downloading', {manifest: manifestId, file: file})
-          .then(() => {
+            .then(() => {
             sendFile(file)
           })
-          .catch(function () {
+            .catch(function () {
             return res.status(404).end();
           });
         } else {
           // fragment doesn't on disk, ask to download it
           processCmd('perform_seek', {manifest: manifestId, file: file})
-          .then(() => {
+            .then(() => {
             sendFile(file)
           })
-          .catch(function () {
+            .catch(function () {
             return res.status(404).end();
           });
         }
@@ -125,7 +136,7 @@ function ContentRoute (app, routeName) {
       if (info && info.status === 'FINISHED') {
         // if file has status finished, no need to check if fragment is being downloaded
         let file = info.folder + '/' + manifestId + '/' + req.params[0];
-        downloadFileUtil.checkForLocalFile(file, (exists) => {
+        exists(file, (exists) => {
           if (exists) {
             // fragment exists => send data
             sendFile(file)
@@ -147,11 +158,11 @@ function ContentRoute (app, routeName) {
     } else {
       // no info for manifest id, asks main process to get manifest info
       processCmd('get_info', {manifest: manifestId})
-      .then((result) => {
+        .then((result) => {
         manifestInfo[manifestId] = result;
         getFile( manifestInfo[manifestId]);
       })
-      .catch(function () {
+        .catch(function () {
         delete  manifestInfo[manifestId];
         return res.status(404).send('Cannot find manifest');
       });
