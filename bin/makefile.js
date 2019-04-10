@@ -19,7 +19,7 @@ if (command === 'prepack') {
             return console.log(err);
         }
         var result = data.replace(/api\/index\.js/g, 'index.js');
-        result = result.replace(/"files": \["api"\],\n  /g, '');
+        result = result.replace(/"files": \[\s*"api"\s*\],\s*  /g, '');
 
         fs.writeFile(packageFile, result, 'utf8', function (err) {
             if (err) return console.log(err);
@@ -30,7 +30,7 @@ if (command === 'prepack') {
         if (err) {
             return console.log(err);
         }
-        var result = data.replace(/index.js",/g, 'api/index.js",\n  "files": ["api"],');
+        var result = data.replace(/index.js",/g, 'api/index.js",\n  "files": [\n    "api"\n  ],');
       
         fs.writeFile(packageFile, result, 'utf8', function (err) {
             if (err) return console.log(err);
