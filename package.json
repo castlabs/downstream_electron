@@ -75,7 +75,7 @@
     "fs-extra": "8.1.0",
     "get-folder-size": "^2.0.0",
     "jsonfile": "5.0.0",
-    "mkdirp": "0.5.1",
+    "mkdirp": "^0.5.1",
     "moment": "2.24.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "underscore": "1.9.1",
