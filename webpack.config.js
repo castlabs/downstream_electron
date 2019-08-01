@@ -1,5 +1,5 @@
 const path = require("path");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const webpack = require("webpack");
 const packageJson = require("./package.json");
 
@@ -75,7 +75,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["env"]
+            presets: ["@babel/preset-env"]
           }
         }
       }
@@ -86,7 +86,9 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin([PATHS.build, PATHS.documentation], {
+    new CleanWebpackPlugin({
+      //cleanOnceBeforeBuildPatterns: [PATHS.build, PATHS.documentation],
+      cleanOnceBeforeBuildPatterns: [],
       verbose: true,
       dry: false
     }),
