@@ -8,7 +8,11 @@ env:
   - DONT_INSTALL_ELECTRON=1
 install:
   - npm install --only=dev
-script: npm run travis-build
+before_install:
+  - npm install mkdirp@latest
+script: 
+  - npm run travis-build
+
 #publish doc only after deploy to npm
 #after_success:
 #  - ./push-jsdoc-to-hg-pages-travis.sh
