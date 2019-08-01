@@ -3,7 +3,7 @@ cache:
   directories:
     - "node_modules"
 node_js:
-  - "7"
+  - "8"
 env:
   - DONT_INSTALL_ELECTRON=1
 install:
