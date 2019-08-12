@@ -1,0 +1,29 @@
+{
+  "name": "redux",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "electron": "git+https://github.com/castlabs/electron-releases#v6.0.0-wvvmp"
+  },
+  "dependencies": {
+    "downstream-electron": "git+https://github.com/castlabs/downstream_electron.git",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.0",
+    "react-scripts": "3.1.0",
+    "redux": "^4.0.4",
+    "redux-promise": "^0.6.0",
+    "redux-saga": "^1.0.5",
+    "redux-thunk": "^2.3.0",
+    "rxjs": "^6.5.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}
