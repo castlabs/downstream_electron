@@ -1,9 +1,11 @@
 import React from 'react';
 
 const Footer = () => (
-  <div>
-    <span>Footer</span>
-  </div>
+  <footer className="App-footer">
+    <div>
+      <span>castLabs @ 2019</span>
+    </div>
+  </footer>
 )
 
 export default Footer;

@@ -1,16 +1,18 @@
 .App {
   text-align: center;
+  vertical-align: middle;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+  height: 6vmin;
   pointer-events: none;
+  vertical-align: middle;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,8 +21,10 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 @keyframes App-logo-spin {

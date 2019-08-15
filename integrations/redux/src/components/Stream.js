@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Stream = ({ onClick, completed, text }) => (
   <li
@@ -9,6 +9,10 @@ const Stream = ({ onClick, completed, text }) => (
     }}
   >
     {text}
+    <button>Download</button>
+    <button>Play</button>
+    <button>Play Offline</button>
+    <button>Remove</button>
   </li>
 )
 
@@ -18,4 +22,4 @@ Stream.propTypes = {
   text: PropTypes.string.isRequired
 }
 
-export default Stream
+export default Stream;

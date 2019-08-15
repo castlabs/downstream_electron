@@ -9,6 +9,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'CREATE_PERSISTENT':
             return [
                 ...state,
@@ -18,6 +19,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'GET_FOLDER_INFO':
             return [
                 ...state,
@@ -27,6 +29,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'GET_LIST':
             return [
                 ...state,
@@ -36,6 +39,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'GET_LIST_WITH_INFO':
             return [
                 ...state,
@@ -45,6 +49,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'GET_OFFLINE_LINK':
             return [
                 ...state,
@@ -54,6 +59,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'INFO':
             return [
                 ...state,
@@ -73,6 +79,7 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
         case 'REMOVE_ALL':
             return [
                 ...state,
@@ -82,15 +89,6 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
-        case 'REMOVE_ALL_UNFINISHED':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
 
         case 'REMOVE_ALL_UNFINISHED':
             return [
@@ -102,8 +100,7 @@ const downstream = (state = [], action) => {
                 }
             ]
 
-
-        case 'REMOVE_ALL_UNFINISHED':
+        case 'REMOVE_PERSISTENT':
             return [
                 ...state,
                 {
@@ -113,8 +110,7 @@ const downstream = (state = [], action) => {
                 }
             ]
 
-
-        case 'REMOVE_ALL_UNFINISHED':
+        case 'RESUME':
             return [
                 ...state,
                 {
@@ -124,9 +120,85 @@ const downstream = (state = [], action) => {
                 }
             ]
 
+        case 'SAVE_DATA':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
 
+        case 'SAVE_PERSISTENT':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
 
+        case 'START':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
 
+        case 'STOP':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
+
+        case 'STOP_ALL':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
+
+        case 'SUBSCRIBE':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
+
+        case 'UNSUBSCRIBE':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
+
+        case 'UPDATE_DOWNLOAD_FOLDER':
+            return [
+                ...state,
+                {
+                    id: action.id,
+                    text: action.text,
+                    completed: false
+                }
+            ]
 
         default:
             return state
