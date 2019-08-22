@@ -6,8 +6,25 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 
 let mainWindow;
+let downstreamInstance;
+const downstreamElectron = require('downstream-electron');
+// initialize main process redux store
+require('../src/stores/mainProcess');
+
 
 function createWindow() {
+  // eslint-disable-next-line no-process-env
+  let appDir = path.dirname(process.mainModule.filename) + '/';
+  // head request parameter test
+  let useHeadRequest = true;
+
+  // let useHeadRequest = false;
+  downstreamInstance = downstreamElectron.init({
+    appDir: appDir,
+    numberOfManifestsInParallel: 2,
+    useHeadRequests: useHeadRequest
+  });
+
   mainWindow = new BrowserWindow({
       width: 900, 
       height: 680,
@@ -34,8 +51,12 @@ function createWindow() {
   mainWindow.on('closed', () => mainWindow = null);
 }
 
-app.on('ready', createWindow);
+function onWillQuit() {
+  downstreamInstance.stop();
+}
 
+app.on('ready', createWindow);
+app.on('will-quit', onWillQuit);
 app.on('window-all-closed', () => {
   console.log('window-all-closed');
   app.quit();
