@@ -16,10 +16,10 @@ import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscrib
 const Stream = ({ stream, create, download, play, playOffline, remove }) => (
   <li className="App-list">
     <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
-      {stream.url}
       {stream.downloading &&
         <div className="progress" style={{ width: `${stream.stats.progressPercentage}` }}></div>
       }
+      {stream.url}
     </div>
 
     <div>
@@ -86,7 +86,7 @@ const mapDispatchToProps = dispatch => ({
     );
 
     dispatch(
-      downstreamSubscribe(id, 1000, (error, stats) => {
+      downstreamSubscribe(id, 100, (error, stats) => {
         dispatch(
           downstreamDownloadProgress(id, error, stats)
         );

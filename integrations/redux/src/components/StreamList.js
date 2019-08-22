@@ -43,6 +43,7 @@ const mapStateToProps = state => {
         'url': 'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
         'type': 'DASH',
         'created': false,
+        'downloading': false,
         'downloaded': false
       },
       {
@@ -50,6 +51,7 @@ const mapStateToProps = state => {
         'url': 'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
         'type': 'DASH',
         'created': false,
+        'downloading': false,
         'downloaded': false
       },
       {
@@ -57,6 +59,7 @@ const mapStateToProps = state => {
         'url': 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
         'type': 'SmoothStreaming',
         'created': false,
+        'downloading': false,
         'downloaded': false
       },
       {
@@ -64,13 +67,18 @@ const mapStateToProps = state => {
         'url': 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest',
         'type': 'SmoothStreaming',
         'created': false,
+        'downloading': false,
         'downloaded': false
       }
     ]
   };
 
+  let streams = concatAndDeDuplicateObjects('id', state.downstream, defaultState.streams).filter(stream => {
+    return stream.id;
+  });
+
   return {
-    streams: concatAndDeDuplicateObjects('id', state.downstream, defaultState.streams)
+    streams: streams
   };
 };
 

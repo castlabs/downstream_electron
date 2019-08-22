@@ -1,5 +1,7 @@
 /**
  * 
+ * DOWNstream for Electron - Redux Reducers
+ * 
  */
 
 /**
@@ -32,11 +34,12 @@ function createIfNotExist(state, action) {
 const downstream = (state = [], action) => {
     if (state.MAIN_PROCESS_INIT) {
         state = [];
+    } else {
+        state = createIfNotExist(state, action);
     }
 
     switch (action.type) {
         case 'DOWNSTREAM_CREATE':
-            state = createIfNotExist(state, action);
             if (action.result) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -65,7 +68,6 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_CREATE_PERSISTENT':
-            state = createIfNotExist(state, action);
             if (action.result) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -85,7 +87,6 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_GET_FOLDER_INFO':
-            state = createIfNotExist(state, action);
             if (action.result) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -104,107 +105,37 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_GET_LIST':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_GET_LIST_WITH_INFO':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_GET_OFFLINE_LINK':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_INFO':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_REMOVE':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_REMOVE_ALL':
             return [];
 
         case 'DOWNSTREAM_REMOVE_ALL_UNFINISHED':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_REMOVE_PERSISTENT':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_RESUME':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_SAVE_DATA':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_SAVE_PERSISTENT':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_START':
             state = createIfNotExist(state, action);
@@ -226,34 +157,13 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_STOP':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_STOP_ALL':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_SUBSCRIBE':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_DOWNLOAD_PROGRESS':
             state = createIfNotExist(state, action);
@@ -298,27 +208,13 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_UNSUBSCRIBE':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         case 'DOWNSTREAM_UPDATE_DOWNLOAD_FOLDER':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            break;
 
         default:
-            return state
+            return state;
     }
 
     return state;

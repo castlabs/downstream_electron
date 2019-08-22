@@ -10,10 +10,12 @@ import { downstreamRemoveAll } from './../actions/downstream';
 /**
  * 
  */
-const Footer = ({ removeAll }) => (
+const Footer = ({ removeAll, visible }) => (
   <footer className="App-footer">
     <div>
-      <button className="App-button-bottom" onClick={() => removeAll()}>Remove All Downloaded</button>
+      {visible &&
+        <button className="App-button-bottom" onClick={() => removeAll()}>Remove All Downloaded</button>
+      }
       <span>castLabs @ 2019</span>
     </div>
   </footer>
@@ -23,8 +25,25 @@ const Footer = ({ removeAll }) => (
  * 
  */
 Footer.propTypes = {
-  removeAll: PropTypes.func.isRequired
+  removeAll: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired
 };
+
+/**
+ * 
+ * @param {*} state 
+ */
+const mapStateToProps = state => {
+  let visible = false;
+  if (state.downstream && state.downstream.length > 0) {
+    visible = true;
+  }
+
+  return ({
+    visible: visible
+  });
+}
+
 
 /**
  * 
@@ -38,6 +57,6 @@ const mapDispatchToProps = dispatch => ({
  * 
  */
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Footer);
