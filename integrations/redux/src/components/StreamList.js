@@ -35,7 +35,6 @@ StreamList.propTypes = {
  * @param {*} state 
  */
 const mapStateToProps = state => {
-  // TODO: read default state also from downstream and merge
   let defaultState = {
     streams: [
       {
@@ -48,7 +47,7 @@ const mapStateToProps = state => {
       },
       {
         'id': '000001',
-        'url': 'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
+        'url': 'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
         'type': 'DASH',
         'created': false,
         'downloading': false,
@@ -61,19 +60,11 @@ const mapStateToProps = state => {
         'created': false,
         'downloading': false,
         'downloaded': false
-      },
-      {
-        'id': '000003',
-        'url': 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest',
-        'type': 'SmoothStreaming',
-        'created': false,
-        'downloading': false,
-        'downloaded': false
       }
     ]
   };
 
-  let streams = concatAndDeDuplicateObjects('id', state.downstream, defaultState.streams);
+  let streams = concatAndRemoveDuplicateObjects(defaultState.streams, state.downstream);
 
   return {
     streams: streams
@@ -82,10 +73,26 @@ const mapStateToProps = state => {
 
 /**
  * 
- * @param {*} p 
- * @param  {...any} arrs 
+ * @param {*} defaultState 
+ * @param {*} updatedState 
  */
-let concatAndDeDuplicateObjects = (p, ...arrs) => [].concat(...arrs).reduce((a, b) => !a.filter(c => b[p] === c[p]).length ? [...a, b] : a, []);
+let concatAndRemoveDuplicateObjects = (defaultState, updatedState) => {
+  return defaultState.map(stream => {
+    let updated = updatedState.filter(u => {
+      return stream.id === u.id;
+    })[0];
+
+    if (updated === null || typeof updated === 'undefined') {
+      return stream;
+    }
+
+    Object.keys(updated).forEach(key => {
+      stream[key] = (typeof updated[key] === 'undefined' ? stream[key] : updated[key]);
+    });
+
+    return stream;
+  });
+}
 
 /**
  * 

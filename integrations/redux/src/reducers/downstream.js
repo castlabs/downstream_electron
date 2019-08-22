@@ -107,6 +107,15 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_GET_LIST':
+            if (action.result) {
+                return action.result.map(download => {
+                    return {
+                        id: download
+                    };
+                });
+            } else if (action.error) {
+                return state.error;
+            }
             break;
 
         case 'DOWNSTREAM_GET_LIST_WITH_INFO':
@@ -132,24 +141,97 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_GET_OFFLINE_LINK':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        offlineLink: action.result.offlineLink,
+                        persistent: action.result.persistent,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_INFO':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        url: action.result.manifest.url,
+                        video: action.result.manifestInfo.video,
+                        audio: action.result.manifestInfo.audio,
+                        text: action.result.manifestInfo.text,
+                        protections: action.result.manifestInfo.protections,
+                        persistent: action.result.manifestInfo.persistent,
+                        created: true,
+                        downloading: false,
+                        downloaded: (action.result.status === 'FINISHED' ? true : false),
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_REMOVE':
-            break;
+            return state.filter(stream => {
+                return stream.id !== action.id;
+            });
 
         case 'DOWNSTREAM_REMOVE_ALL':
-            return [];
+            return state.filter(stream => {
+                return !stream.id;
+            });
 
         case 'DOWNSTREAM_REMOVE_ALL_UNFINISHED':
-            break;
+            return state.filter(stream => {
+                return !stream.id;
+            });
 
         case 'DOWNSTREAM_REMOVE_PERSISTENT':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        persistentConfig: '',
+                        sessionId: '',
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        persistentConfig: '',
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_RESUME':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: true,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_SAVE_DATA':
@@ -159,7 +241,6 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_START':
-            state = createIfNotExist(state, action);
             if (action.result) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -178,16 +259,60 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_STOP':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: false,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_STOP_ALL':
+            if (action.result) {
+                return state.map(stream => {
+                    return {
+                        ...stream,
+                        downloading: false,
+                        lastError: ''
+                    }
+                });
+            } else if (action.error) {
+                return state.map(stream => {
+                    return {
+                        ...stream,
+                        lastError: action.error
+                    }
+                });
+            }
             break;
 
         case 'DOWNSTREAM_SUBSCRIBE':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        subscribed: true,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        subscribed: false,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_DOWNLOAD_PROGRESS':
-            state = createIfNotExist(state, action);
             if (action.stats) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -207,7 +332,6 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_DOWNLOAD_FINISHED':
-            state = createIfNotExist(state, action);
             if (action.info) {
                 return state.map(stream =>
                     stream.id === action.id ? {
@@ -229,6 +353,20 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_UNSUBSCRIBE':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        subscribed: false,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_UPDATE_DOWNLOAD_FOLDER':

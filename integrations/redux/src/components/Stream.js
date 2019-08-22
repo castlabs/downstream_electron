@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { playStream, playOfflineStream } from './../actions/react';
-import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished } from './../actions/downstream';
+import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished, downstreamInfo, downstreamGetOfflineLink } from './../actions/downstream';
 
 
 /**
  * 
  * @param {*} param0 
  */
-const Stream = ({ stream, create, download, play, playOffline, remove }) => (
+const Stream = ({ stream, create, download, play, playOffline, remove, info, ping }) => (
   <li className="App-list">
     <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
       {stream.downloading &&
@@ -34,11 +34,15 @@ const Stream = ({ stream, create, download, play, playOffline, remove }) => (
       <button className="App-button" onClick={() => play(stream.url)}>Play</button>
 
       {(stream.created && stream.downloaded && !stream.downloading) &&
-        <button className="App-button" onClick={() => playOffline(stream.url)}>Play Offline</button>
+        <button className="App-button" onClick={() => playOffline(stream.offlineLink)}>Play Offline</button>
       }
 
       {(stream.created && stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => remove(stream.id)}>Remove</button>
+      }
+
+      {stream.created &&
+        <button className="App-button" onClick={() => info(stream.id)}>Info</button>
       }
     </div>
   </li>
@@ -53,7 +57,8 @@ Stream.propTypes = {
   download: PropTypes.func.isRequired,
   play: PropTypes.func.isRequired,
   playOffline: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired
+  remove: PropTypes.func.isRequired,
+  info: PropTypes.func.isRequired
 };
 
 /**
@@ -86,11 +91,14 @@ const mapDispatchToProps = dispatch => ({
     );
 
     dispatch(
-      downstreamSubscribe(id, 100, (error, stats) => {
+      downstreamSubscribe(id, 1000, (error, stats) => {
         dispatch(
           downstreamDownloadProgress(id, error, stats)
         );
       }, (error, info) => {
+        dispatch(
+          downstreamGetOfflineLink(id)
+        );
         dispatch(
           downstreamDownloadFinished(id, error, info)
         );
@@ -99,7 +107,8 @@ const mapDispatchToProps = dispatch => ({
   },
   play: url => dispatch(playStream(url)),
   playOffline: url => dispatch(playOfflineStream(url)),
-  remove: id => dispatch(downstreamRemove(id))
+  remove: id => dispatch(downstreamRemove(id)),
+  info: id => dispatch(downstreamInfo(id))
 });
 
 /**

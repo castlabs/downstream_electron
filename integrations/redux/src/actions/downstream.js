@@ -60,9 +60,11 @@ export const downstreamGetOfflineLink = id => ({
 
 /**
  * 
+ * @param {*} id 
  */
-export const downstreamInfo = () => ({
-    type: 'DOWNSTREAM_INFO'
+export const downstreamInfo = id => ({
+    type: 'DOWNSTREAM_INFO',
+    id
 });
 
 /**
