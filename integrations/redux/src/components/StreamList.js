@@ -73,9 +73,7 @@ const mapStateToProps = state => {
     ]
   };
 
-  let streams = concatAndDeDuplicateObjects('id', state.downstream, defaultState.streams).filter(stream => {
-    return stream.id;
-  });
+  let streams = concatAndDeDuplicateObjects('id', state.downstream, defaultState.streams);
 
   return {
     streams: streams

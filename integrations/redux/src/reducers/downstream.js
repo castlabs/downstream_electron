@@ -35,12 +35,14 @@ const downstream = (state = [], action) => {
     if (state.MAIN_PROCESS_INIT) {
         state = [];
     } else {
-        state = createIfNotExist(state, action);
+        state = createIfNotExist(state, action).filter(stream => {
+            return stream.id;
+        });
     }
 
     switch (action.type) {
         case 'DOWNSTREAM_CREATE':
-            if (action.result) {
+            if (action.result || (action.error && action.error.code === 22)) {
                 return state.map(stream =>
                     stream.id === action.id ? {
                         ...stream,
@@ -48,10 +50,10 @@ const downstream = (state = [], action) => {
                         completed: false,
                         created: true,
                         downloading: false,
-                        protections: action.result.protections,
-                        video: action.result.video,
-                        audio: action.result.audio,
-                        text: action.result.text,
+                        protections: (action.result ? action.result.protections : stream.protections),
+                        video: (action.result ? action.result.video : stream.video),
+                        audio: (action.result ? action.result.audio : stream.audio),
+                        text: (action.result ? action.result.text : stream.text),
                         lastError: ''
                     } : stream)
             } else if (action.error) {
@@ -108,6 +110,25 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_GET_LIST_WITH_INFO':
+            if (action.result) {
+                return action.result.map(download => {
+                    return {
+                        id: download.manifestInfo.id,
+                        url: download.manifest.url,
+                        video: download.manifestInfo.video,
+                        audio: download.manifestInfo.audio,
+                        text: download.manifestInfo.text,
+                        protections: download.manifestInfo.protections,
+                        persistent: download.manifestInfo.persistent,
+                        created: true,
+                        downloading: false,
+                        downloaded: (download.status === 'FINISHED' ? true : false),
+                        lastError: ''
+                    };
+                });
+            } else if (action.error) {
+                return state.error;
+            }
             break;
 
         case 'DOWNSTREAM_GET_OFFLINE_LINK':

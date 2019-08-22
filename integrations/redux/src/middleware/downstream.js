@@ -70,6 +70,8 @@ export const downstreamMiddleware = store => next => action => {
         //
         case 'DOWNSTREAM_GET_LIST':
             downstreamElectron.downloads.getList().then((result) => {
+                console.log(result);
+
                 defaultSuccessHandler(next, action, result);
             }, (error) => {
                 defaultErrorHandler(next, action, error);

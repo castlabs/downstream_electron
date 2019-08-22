@@ -5,7 +5,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { downstreamReducer } from '../reducers';
 import { downstreamMiddleware } from '../middleware/downstream';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
-import thunk from 'redux-thunk'
+import { downstreamGetListWithInfo } from './../actions/downstream';
+import thunk from 'redux-thunk';
 
 
 //
@@ -30,3 +31,5 @@ export const downstreamStore = createStore(
 
 //
 replayActionRenderer(downstreamStore);
+// get stored movies just after init
+downstreamStore.dispatch(downstreamGetListWithInfo());
