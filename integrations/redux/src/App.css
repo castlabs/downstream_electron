@@ -3,6 +3,10 @@
   vertical-align: middle;
 }
 
+.App-stream-header {
+  margin-left: 20px;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 6vmin;
@@ -21,10 +25,43 @@
   color: white;
 }
 
+.App-list {
+  list-style-type: none;
+}
+
 .App-footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  margin-left: 10px;
+}
+
+.App-button-bottom {
+  position: fixed;
+  bottom: 30px;
+  width: 150px;
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: rgb(66, 184, 221);
+  margin-left: -10px;
+}
+
+.App-button {
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: rgb(66, 184, 221);
+}
+
+.App-url {
+  margin-top: 40px;
+  width: 90%;
+  background-color: #282c34ad;
+  color: white;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 @keyframes App-logo-spin {
