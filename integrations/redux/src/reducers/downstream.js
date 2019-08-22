@@ -2,11 +2,11 @@
  * 
  */
 
- /**
-  * 
-  * @param {*} state 
-  * @param {*} action 
-  */
+/**
+ * 
+ * @param {*} state 
+ * @param {*} action 
+ */
 function createIfNotExist(state, action) {
     let stream = state.find(s => {
         return s.id === action.id;
@@ -207,14 +207,23 @@ const downstream = (state = [], action) => {
             ]
 
         case 'DOWNSTREAM_START':
-            return [
-                ...state,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            state = createIfNotExist(state, action);
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: true,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: false,
+                        lastError: action.error
+                    } : stream)
+            }
+            break;
 
         case 'DOWNSTREAM_STOP':
             return [
@@ -245,6 +254,48 @@ const downstream = (state = [], action) => {
                     completed: false
                 }
             ]
+
+        case 'DOWNSTREAM_DOWNLOAD_PROGRESS':
+            state = createIfNotExist(state, action);
+            if (action.stats) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: true,
+                        stats: action.stats,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: false,
+                        lastError: action.error
+                    } : stream)
+            }
+            break;
+
+        case 'DOWNSTREAM_DOWNLOAD_FINISHED':
+            state = createIfNotExist(state, action);
+            if (action.info) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: false,
+                        downloaded: true,
+                        info: action.info,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        downloading: false,
+                        downloaded: false,
+                        lastError: action.error
+                    } : stream)
+            }
+            break;
 
         case 'DOWNSTREAM_UNSUBSCRIBE':
             return [

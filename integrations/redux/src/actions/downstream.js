@@ -174,6 +174,32 @@ export const downstreamSubscribe = (id, timeout, onProgress, onFinish) => ({
 /**
  * 
  * @param {*} id 
+ * @param {*} error 
+ * @param {*} stats 
+ */
+export const downstreamDownloadProgress = (id, error, stats) => ({
+    type: 'DOWNSTREAM_DOWNLOAD_PROGRESS',
+    id: id,
+    error: error,
+    stats: stats
+});
+
+/**
+ * 
+ * @param {*} id 
+ * @param {*} error 
+ * @param {*} info 
+ */
+export const downstreamDownloadFinished = (id, error, info) => ({
+    type: 'DOWNSTREAM_DOWNLOAD_FINISHED',
+    id: id,
+    error: error,
+    info: info
+});
+
+/**
+ * 
+ * @param {*} id 
  */
 export const downstreamUnsubscribe = id => ({
     type: 'DOWNSTREAM_UNSUBSCRIBE',

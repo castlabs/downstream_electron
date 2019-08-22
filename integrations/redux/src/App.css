@@ -27,6 +27,7 @@
 
 .App-list {
   list-style-type: none;
+  margin-left: -11px;
 }
 
 .App-footer {
@@ -62,6 +63,26 @@
   padding: 1em 1.5em;
   text-decoration: none;
   text-transform: uppercase;
+  position: relative;
+}
+
+.App-url-downloaded {
+  margin-top: 40px;
+  width: 90%;
+  background-color: #3e7a0cc9;
+  color: white;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #3e7a0cc9;
+  transition: width .2s ease-in;
 }
 
 @keyframes App-logo-spin {

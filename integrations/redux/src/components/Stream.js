@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { playStream, playOfflineStream } from './../actions/react';
-import { downstreamCreate, downstreamCreatePersistent, downstreamGetFolderInfo, downstreamGetList, downstreamStart, downstreamRemove } from './../actions/downstream';
+import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished } from './../actions/downstream';
 
 
 /**
@@ -15,24 +15,29 @@ import { downstreamCreate, downstreamCreatePersistent, downstreamGetFolderInfo, 
  */
 const Stream = ({ stream, create, download, play, playOffline, remove }) => (
   <li className="App-list">
-    <div className="App-url">{stream.url}</div>
+    <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
+      {stream.url}
+      {stream.downloading &&
+        <div className="progress" style={{ width: `${stream.stats.progressPercentage}` }}></div>
+      }
+    </div>
 
     <div>
-      {(!stream.created && !stream.downloaded) &&
+      {(!stream.created && !stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => create(stream.id, stream.url)}>Create</button>
       }
 
-      {(stream.created && !stream.downloaded) &&
+      {(stream.created && !stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => download(stream.id, stream.video, stream.audio, stream.text)}>Download</button>
       }
 
       <button className="App-button" onClick={() => play(stream.url)}>Play</button>
 
-      {(stream.created && stream.downloaded) &&
+      {(stream.created && stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => playOffline(stream.url)}>Play Offline</button>
       }
 
-      {(stream.created && stream.downloaded) &&
+      {(stream.created && stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => remove(stream.id)}>Remove</button>
       }
     </div>
@@ -76,31 +81,21 @@ const mapDispatchToProps = dispatch => ({
       text: text.map(t => t.id)
     };
 
-    console.log(representations);
-
     dispatch(
       downstreamStart(id, representations)
     );
 
-    /*
     dispatch(
-      downstreamCreatePersistent(id, {
-        pssh: id
+      downstreamSubscribe(id, 1000, (error, stats) => {
+        dispatch(
+          downstreamDownloadProgress(id, error, stats)
+        );
+      }, (error, info) => {
+        dispatch(
+          downstreamDownloadFinished(id, error, info)
+        );
       })
     );
-    */
-
-    /*
-    dispatch(
-      downstreamGetFolderInfo(id)
-    );
-    */
-
-    /*
-    dispatch(
-      downstreamGetList()
-    );
-    */
   },
   play: url => dispatch(playStream(url)),
   playOffline: url => dispatch(playOfflineStream(url)),
