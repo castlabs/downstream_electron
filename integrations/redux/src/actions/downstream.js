@@ -3,108 +3,190 @@
  * 
  */
 
-export const create = id => ({
-    type: 'CREATE',
-    id: id
+/**
+ * 
+ * @param {*} id 
+ * @param {*} url 
+ */
+export const downstreamCreate = (id, url) => ({
+    type: 'DOWNSTREAM_CREATE',
+    id: id,
+    url: url
 });
 
-export const createPersistent = id => ({
-    type: 'CREATE_PERSISTENT',
-    id: id
+/**
+ * 
+ * @param {*} id 
+ * @param {*} persistentConfig 
+ */
+export const downstreamCreatePersistent = (id, persistentConfig) => ({
+    type: 'DOWNSTREAM_CREATE_PERSISTENT',
+    id: id,
+    persistentConfig: persistentConfig
 });
 
-export const getFolderInfo = id => ({
-    type: 'GET_FOLDER_INFO',
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamGetFolderInfo = id => ({
+    type: 'DOWNSTREAM_GET_FOLDER_INFO',
     id
 });
 
-export const getList = id => ({
-    type: 'GET_LIST',
+/**
+ * 
+ */
+export const downstreamGetList = () => ({
+    type: 'DOWNSTREAM_GET_LIST'
+});
+
+/**
+ * 
+ */
+export const downstreamGetListWithInfo = () => ({
+    type: 'DOWNSTREAM_GET_LIST_WITH_INFO'
+});
+
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamGetOfflineLink = id => ({
+    type: 'DOWNSTREAM_GET_OFFLINE_LINK',
     id
 });
 
-export const getListWithInfo = id => ({
-    type: 'GET_LIST_WITH_INFO',
+/**
+ * 
+ */
+export const downstreamInfo = () => ({
+    type: 'DOWNSTREAM_INFO'
+});
+
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamRemove = id => ({
+    type: 'DOWNSTREAM_REMOVE',
     id
 });
 
-export const getOfflineLink = id => ({
-    type: 'GET_OFFLINE_LINK',
+/**
+ * 
+ */
+export const downstreamRemoveAll = () => ({
+    type: 'DOWNSTREAM_REMOVE_ALL'
+});
+
+/**
+ * 
+ */
+export const downstreamRemoveAllUnfinished = () => ({
+    type: 'DOWNSTREAM_REMOVE_ALL_UNFINISHED'
+});
+
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamRemovePersistent = id => ({
+    type: 'DOWNSTREAM_REMOVE_PERSISTENT',
     id
 });
 
-export const info = id => ({
-    type: 'INFO',
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamResume = id => ({
+    type: 'DOWNSTREAM_RESUME',
     id
 });
 
-export const remove = id => ({
-    type: 'REMOVE',
+/**
+ * 
+ * @param {*} id 
+ * @param {*} data 
+ */
+export const downstreamSaveData = (id, data) => ({
+    type: 'DOWNSTREAM_SAVE_DATA',
+    id: id,
+    data: data
+});
+
+/**
+ * 
+ * @param {*} id 
+ * @param {*} persistent 
+ */
+export const downstreamSavePersistent = (id, persistent) => ({
+    type: 'DOWNSTREAM_SAVE_PERSISTENT',
+    id: id,
+    persistent: persistent
+});
+
+/**
+ * 
+ * @param {*} id 
+ * @param {*} representations 
+ * @param {*} customFolder 
+ */
+export const downstreamStart = (id, representations, customFolder) => ({
+    type: 'DOWNSTREAM_START',
+    id: id,
+    representations: representations,
+    customFolder: customFolder
+});
+
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamStop = id => ({
+    type: 'DOWNSTREAM_STOP',
     id
 });
 
-export const removeAll = id => ({
-    type: 'REMOVE_ALL',
+/**
+ * 
+ */
+export const downstreamStopAll = () => ({
+    type: 'DOWNSTREAM_STOP_ALL'
+});
+
+/**
+ * 
+ * @param {*} id 
+ * @param {*} timeout 
+ * @param {*} onProgress 
+ * @param {*} onFinish 
+ */
+export const downstreamSubscribe = (id, timeout, onProgress, onFinish) => ({
+    type: 'DOWNSTREAM_SUBSCRIBE',
+    id: id,
+    timeout: timeout,
+    onProgress: onProgress,
+    onFinish: onFinish
+});
+
+/**
+ * 
+ * @param {*} id 
+ */
+export const downstreamUnsubscribe = id => ({
+    type: 'DOWNSTREAM_UNSUBSCRIBE',
     id
 });
 
-export const removeAllUnfinished = id => ({
-    type: 'REMOVE_ALL_UNFINISHED',
-    id
-});
-
-export const removePersistent = id => ({
-    type: 'REMOVE_PERSISTENT',
-    id
-});
-
-export const resume = id => ({
-    type: 'RESUME',
-    id
-});
-
-export const saveData = id => ({
-    type: 'SAVE_DATA',
-    id
-});
-
-export const savePersistent = id => ({
-    type: 'SAVE_PERSISTENT',
-    id
-});
-
-export const start = id => ({
-    type: 'START',
-    id
-});
-
-export const stop = id => ({
-    type: 'STOP',
-    id
-});
-
-export const stopAll = id => ({
-    type: 'STOP_ALL',
-    id
-});
-
-export const subscribe = id => ({
-    type: 'SUBSCRIBE',
-    id
-});
-
-export const unsubscribe = id => ({
-    type: 'UNSUBSCRIBE',
-    id
-});
-
-export const updateDownloadFolder = id => ({
+/**
+ * 
+ * @param {*} id 
+ * @param {*} path 
+ */
+export const downstreamUpdateDownloadFolder = (id, path) => ({
     type: 'UPDATE_DOWNLOAD_FOLDER',
-    id
+    id: id,
+    path: path
 });
-
-export const Filters = {
-  FILTER_A: 'FILTER_A',
-  FILTER_B: 'FILTER_B',
-  FILTER_C: 'FILTER_C'
-};
