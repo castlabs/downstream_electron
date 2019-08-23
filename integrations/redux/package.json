@@ -28,7 +28,8 @@
     "react-redux": "^7.1.0",
     "react-scripts": "3.1.0",
     "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "shaka-player": "^2.5.4"
   },
   "scripts": {
     "start": "rescripts start",
