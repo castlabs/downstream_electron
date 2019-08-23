@@ -13,7 +13,7 @@ import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscrib
  * 
  * @param {*} param0 
  */
-const Stream = ({ stream, create, download, play, playOffline, remove, info, ping }) => (
+const Stream = ({ stream, create, download, play, playOffline, remove, info }) => (
   <li className="App-list">
     <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
       {stream.downloading &&
@@ -65,9 +65,9 @@ Stream.propTypes = {
  * 
  * @param {*} state 
  */
-const mapStateToProps = state => ({
-  state: state
-});
+const mapStateToProps = state => {
+  return state;
+};
 
 /**
  * 
@@ -93,6 +93,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(
       downstreamSubscribe(id, 1000, (error, stats) => {
         dispatch(
+          // NOTE: this does not have to be done with Redux action
           downstreamDownloadProgress(id, error, stats)
         );
       }, (error, info) => {

@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Stream from './Stream';
 import { connect } from 'react-redux';
+import { defaultState } from '../stores/rendererProcess';
 
 /**
  * 
@@ -35,36 +36,7 @@ StreamList.propTypes = {
  * @param {*} state 
  */
 const mapStateToProps = state => {
-  let defaultState = {
-    streams: [
-      {
-        'id': '000000',
-        'url': 'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
-        'type': 'DASH',
-        'created': false,
-        'downloading': false,
-        'downloaded': false
-      },
-      {
-        'id': '000001',
-        'url': 'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
-        'type': 'DASH',
-        'created': false,
-        'downloading': false,
-        'downloaded': false
-      },
-      {
-        'id': '000002',
-        'url': 'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
-        'type': 'SmoothStreaming',
-        'created': false,
-        'downloading': false,
-        'downloaded': false
-      }
-    ]
-  };
-
-  let streams = concatAndRemoveDuplicateObjects(defaultState.streams, state.downstream);
+  let streams = concatAndRemoveDuplicateObjects(defaultState.streams.slice(), state.downstream);
 
   return {
     streams: streams
@@ -77,7 +49,16 @@ const mapStateToProps = state => {
  * @param {*} updatedState 
  */
 let concatAndRemoveDuplicateObjects = (defaultState, updatedState) => {
-  return defaultState.map(stream => {
+  if (updatedState.length === 0) {
+    defaultState.forEach(stream => {
+      stream.created = false;
+      stream.downloaded = false;
+      stream.downloading = false;
+    });
+    return defaultState;
+  }
+
+  let state = defaultState.map(stream => {
     let updated = updatedState.filter(u => {
       return stream.id === u.id;
     })[0];
@@ -92,6 +73,22 @@ let concatAndRemoveDuplicateObjects = (defaultState, updatedState) => {
 
     return stream;
   });
+
+  return state.map((stream => {
+    if (typeof stream.created === 'undefined') {
+      stream.created = false;
+    }
+
+    if (typeof stream.downloading === 'undefined') {
+      stream.downloading = false;
+    }
+
+    if (typeof stream.downloaded === 'undefined') {
+      stream.downloaded = false;
+    }
+
+    return stream;
+  }));
 }
 
 /**

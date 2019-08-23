@@ -47,9 +47,7 @@ const downstream = (state = [], action) => {
                     stream.id === action.id ? {
                         ...stream,
                         url: action.url,
-                        completed: false,
                         created: true,
-                        downloading: false,
                         protections: (action.result ? action.result.protections : stream.protections),
                         video: (action.result ? action.result.video : stream.video),
                         audio: (action.result ? action.result.audio : stream.audio),
@@ -61,9 +59,7 @@ const downstream = (state = [], action) => {
                     stream.id === action.id ? {
                         ...stream,
                         url: action.url,
-                        completed: false,
                         created: false,
-                        downloading: false,
                         lastError: action.error
                     } : stream)
             }
@@ -120,23 +116,30 @@ const downstream = (state = [], action) => {
 
         case 'DOWNSTREAM_GET_LIST_WITH_INFO':
             if (action.result) {
-                return action.result.map(download => {
+                let newState = state.slice();
+                action.result.forEach(download => {
+                    newState = newState.map(stream =>
+                        stream.id === download.manifestInfo.id ? {
+                            ...stream,
+                            url: download.manifest.url,
+                            video: download.manifestInfo.video,
+                            audio: download.manifestInfo.audio,
+                            text: download.manifestInfo.text,
+                            protections: download.manifestInfo.protections,
+                            persistent: download.manifestInfo.persistent,
+                            created: true,
+                            downloaded: (download.status === 'FINISHED' ? true : false),
+                            lastError: ''
+                        } : stream);
+                });
+                return newState;
+            } else if (action.error) {
+                return state.map(stream => {
                     return {
-                        id: download.manifestInfo.id,
-                        url: download.manifest.url,
-                        video: download.manifestInfo.video,
-                        audio: download.manifestInfo.audio,
-                        text: download.manifestInfo.text,
-                        protections: download.manifestInfo.protections,
-                        persistent: download.manifestInfo.persistent,
-                        created: true,
-                        downloading: false,
-                        downloaded: (download.status === 'FINISHED' ? true : false),
-                        lastError: ''
+                        ...stream,
+                        lastError: action.error
                     };
                 });
-            } else if (action.error) {
-                return state.error;
             }
             break;
 
@@ -184,9 +187,23 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_REMOVE':
-            return state.filter(stream => {
-                return stream.id !== action.id;
-            });
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        created: false,
+                        downloading: false,
+                        downloaded: false,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
+            break;
 
         case 'DOWNSTREAM_REMOVE_ALL':
             return state.filter(stream => {

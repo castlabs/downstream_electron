@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -6,6 +9,9 @@ import { downstreamStore } from './stores/rendererProcess';
 import { Provider } from 'react-redux';
 import App from './App';
 
+/**
+ * 
+ */
 ReactDOM.render(
     <Provider store={downstreamStore}>
         <App />
