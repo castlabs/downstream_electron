@@ -1,0 +1,95 @@
+.App {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.App-stream-header {
+  margin-left: 20px;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 6vmin;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-list {
+  list-style-type: none;
+  margin-left: -11px;
+}
+
+.App-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.App-button-bottom {
+  position: fixed;
+  bottom: 30px;
+  width: 150px;
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: rgb(66, 184, 221);
+  margin-left: -10px;
+}
+
+.App-button {
+  color: white;
+  border-radius: 4px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  background: rgb(66, 184, 221);
+}
+
+.App-url {
+  margin-top: 40px;
+  width: 90%;
+  background-color: #282c34ad;
+  color: white;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.App-url-downloaded {
+  margin-top: 40px;
+  width: 90%;
+  background-color: #3e7a0cc9;
+  color: white;
+  padding: 1em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #3e7a0cc9;
+  transition: width .1s ease-out;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

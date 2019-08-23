@@ -1,0 +1,74 @@
+{
+  "name": "redux",
+  "author": {
+    "name": "Bartek Makowski",
+    "email": "bartek.makowski@castlabs.com",
+    "url": "https://castlabs.com"
+  },
+  "version": "0.1.0",
+  "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
+  "devDependencies": {
+    "@rescripts/cli": "^0.0.11",
+    "@rescripts/rescript-env": "^0.0.10",
+    "concurrently": "^4.1.1",
+    "electron": "git+https://github.com/castlabs/electron-releases#v6.0.0-wvvmp",
+    "electron-builder": "^21.2.0",
+    "electron-devtools-installer": "^2.2.4",
+    "typescript": "^3.5.3",
+    "wait-on": "^3.3.0"
+  },
+  "dependencies": {
+    "downstream-electron": "git+https://github.com/castlabs/downstream_electron.git",
+    "electron-is-dev": "^1.1.0",
+    "electron-redux": "^1.4.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.0",
+    "react-scripts": "3.1.0",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "shaka-player": "^2.5.4"
+  },
+  "scripts": {
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
+    "dev": "concurrently --kill-others \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "prepack": "npm run build",
+    "pack": "electron-builder build --mac --win --publish never",
+    "dist": "npm run pack && electron-builder"
+  },
+  "build": {
+    "appId": "com.castlabs.DOWNstream.redux",
+    "productName": "DOWNstream Redux",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

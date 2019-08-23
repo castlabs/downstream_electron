@@ -58,7 +58,6 @@ gh-pages
 # folder where offline settings are being kept
 .settings
 settings
-public
 *.zip
 # Documentation
 jsdoc

@@ -37,6 +37,25 @@ Extended example showing most of the features of the **downstream_electron** lib
 
 Basic example presenting usage of DRM protected stream with **downstream_electron** library
 
+## Integrations
+
+### Redux
+
+Directory `integrations/redux` contains a full example of integration **downstream_electron**
+with React & Redux frameworks.
+
+#### Development
+
+1. `cd integrations/redux`
+2. `npm install`
+3. `npm run dev`
+
+#### Release
+
+1. `cd integrations/redux`
+2. `npm install`
+3. `npm run dist`
+
 ## Documentation
 
 Documentation is available publicly at 
