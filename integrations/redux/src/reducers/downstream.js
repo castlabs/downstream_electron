@@ -187,7 +187,7 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_REMOVE':
-            if (action.result) {
+            if (!action.error) {
                 return state.map(stream =>
                     stream.id === action.id ? {
                         ...stream,
@@ -195,12 +195,6 @@ const downstream = (state = [], action) => {
                         downloading: false,
                         downloaded: false,
                         lastError: ''
-                    } : stream)
-            } else if (action.error) {
-                return state.map(stream =>
-                    stream.id === action.id ? {
-                        ...stream,
-                        lastError: action.error
                     } : stream)
             }
             break;
@@ -235,11 +229,23 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_RESUME':
-            if (action.result) {
+            if (!action.error) {
                 return state.map(stream =>
                     stream.id === action.id ? {
                         ...stream,
                         downloading: true,
+                        stopped: false,
+                        lastError: ''
+                    } : stream)
+            }
+            break;
+
+        case 'DOWNSTREAM_SAVE_DATA':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        data: action.result.data,
                         lastError: ''
                     } : stream)
             } else if (action.error) {
@@ -251,10 +257,21 @@ const downstream = (state = [], action) => {
             }
             break;
 
-        case 'DOWNSTREAM_SAVE_DATA':
-            break;
-
         case 'DOWNSTREAM_SAVE_PERSISTENT':
+            if (action.result) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        persistent: action.result.persistent,
+                        lastError: ''
+                    } : stream)
+            } else if (action.error) {
+                return state.map(stream =>
+                    stream.id === action.id ? {
+                        ...stream,
+                        lastError: action.error
+                    } : stream)
+            }
             break;
 
         case 'DOWNSTREAM_START':
@@ -276,36 +293,25 @@ const downstream = (state = [], action) => {
             break;
 
         case 'DOWNSTREAM_STOP':
-            if (action.result) {
+            if (!action.result) {
                 return state.map(stream =>
                     stream.id === action.id ? {
                         ...stream,
                         downloading: false,
+                        stopped: true,
                         lastError: ''
-                    } : stream)
-            } else if (action.error) {
-                return state.map(stream =>
-                    stream.id === action.id ? {
-                        ...stream,
-                        lastError: action.error
                     } : stream)
             }
             break;
 
         case 'DOWNSTREAM_STOP_ALL':
-            if (action.result) {
+            if (!action.error) {
                 return state.map(stream => {
                     return {
                         ...stream,
                         downloading: false,
+                        stopped: true,
                         lastError: ''
-                    }
-                });
-            } else if (action.error) {
-                return state.map(stream => {
-                    return {
-                        ...stream,
-                        lastError: action.error
                     }
                 });
             }

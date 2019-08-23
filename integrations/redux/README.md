@@ -2,6 +2,10 @@
 
 Integration support `npm` and `yarn` managers.
 
+## Integration
+
+Example has enabled Redux Dev Tools & React Dev Tools integrations.
+
 ### Redux
 
 Directory `integrations/redux` contains a full example of integration **downstream_electron**

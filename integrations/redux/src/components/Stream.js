@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { playStream, playOfflineStream } from './../actions/react';
-import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished, downstreamInfo, downstreamGetOfflineLink } from './../actions/downstream';
+import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished, downstreamInfo, downstreamGetOfflineLink, downstreamStop, downstreamResume, downstreamUnsubscribe } from './../actions/downstream';
 
 
 /**
  * 
  * @param {*} param0 
  */
-const Stream = ({ stream, create, download, play, playOffline, remove, info }) => (
+const Stream = ({ stream, create, download, stop, resume, play, playOffline, remove, info }) => (
   <li className="App-list">
     <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
       {stream.downloading &&
@@ -27,7 +27,7 @@ const Stream = ({ stream, create, download, play, playOffline, remove, info }) =
         <button className="App-button" onClick={() => create(stream.id, stream.url)}>Create</button>
       }
 
-      {(stream.created && !stream.downloaded && !stream.downloading) &&
+      {(stream.created && !stream.downloaded && !stream.downloading && !stream.stopped) &&
         <button className="App-button" onClick={() => download(stream.id, stream.video, stream.audio, stream.text)}>Download</button>
       }
 
@@ -39,6 +39,14 @@ const Stream = ({ stream, create, download, play, playOffline, remove, info }) =
 
       {(stream.created && stream.downloaded && !stream.downloading) &&
         <button className="App-button" onClick={() => remove(stream.id)}>Remove</button>
+      }
+
+      {stream.downloading &&
+        <button className="App-button" onClick={() => stop(stream.id)}>Stop</button>
+      }
+
+      {stream.stopped &&
+        <button className="App-button" onClick={() => resume(stream.id)}>Resume</button>
       }
 
       {stream.created &&
@@ -57,6 +65,8 @@ Stream.propTypes = {
   download: PropTypes.func.isRequired,
   play: PropTypes.func.isRequired,
   playOffline: PropTypes.func.isRequired,
+  stop: PropTypes.func.isRequired,
+  resume: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
   info: PropTypes.func.isRequired
 };
@@ -97,9 +107,11 @@ const mapDispatchToProps = dispatch => ({
           downstreamDownloadProgress(id, error, stats)
         );
       }, (error, info) => {
-        dispatch(
-          downstreamGetOfflineLink(id)
-        );
+        if (!error) {
+          dispatch(
+            downstreamGetOfflineLink(id)
+          );
+        }
         dispatch(
           downstreamDownloadFinished(id, error, info)
         );
@@ -108,6 +120,31 @@ const mapDispatchToProps = dispatch => ({
   },
   play: url => dispatch(playStream(url)),
   playOffline: url => dispatch(playOfflineStream(url)),
+  stop: id => {
+    dispatch(downstreamUnsubscribe(id));
+    dispatch(downstreamStop(id));
+  },
+  resume: id => {
+    dispatch(
+      downstreamSubscribe(id, 1000, (error, stats) => {
+        dispatch(
+          // NOTE: this does not have to be done with Redux action
+          downstreamDownloadProgress(id, error, stats)
+        );
+      }, (error, info) => {
+        if (!error) {
+          dispatch(
+            downstreamGetOfflineLink(id)
+          );
+        }
+        dispatch(
+          downstreamDownloadFinished(id, error, info)
+        );
+      })
+    );
+
+    dispatch(downstreamResume(id));
+  },
   remove: id => dispatch(downstreamRemove(id)),
   info: id => dispatch(downstreamInfo(id))
 });
