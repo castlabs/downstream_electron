@@ -1,3 +1,13 @@
+# 0.4.0
+ * Monitor key session state and detect downloaded stream with persistent license
+ * Node.js v10 LTS Support
+ * Packaging and production-ready libraries
+ * Fix video, audio and text representations parsing
+ * DRM example improvements
+ * Do not require objects from main process in child process
+ * Update Electron version
+ * Redux integration
+
 # 0.3.5
  * Simple Widevine DRM example
  * Add a string parameter to let application give the manifest data
