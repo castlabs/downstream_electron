@@ -7,6 +7,7 @@
  * Do not require objects from main process in child process
  * Update Electron version
  * Redux integration
+ * Change CI to GitHub Actions
 
 # 0.3.5
  * Simple Widevine DRM example
