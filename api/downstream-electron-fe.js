@@ -47,13 +47,13 @@ function clonePersistentConfig (config) {
   // deep clone the config
   const clonedConfig = JSON.parse(JSON.stringify(config));
   if (typeof config.serverCertificate !== 'undefined') {
-    config.serverCertificate = typeof config.serverCertificate;
+    clonedConfig.serverCertificate = typeof config.serverCertificate;
   }
   if (typeof config.licenseRequest === 'function') {
-    config.licenseRequest = config.licenseRequest;
+    clonedConfig.licenseRequest = config.licenseRequest;
   }
   if (typeof config.licenseResponse === 'function') {
-    config.licenseResponse = config.licenseResponse;
+    clonedConfig.licenseResponse = config.licenseResponse;
   }
 
   return clonedConfig;
