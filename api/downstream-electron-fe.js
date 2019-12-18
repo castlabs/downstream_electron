@@ -46,15 +46,17 @@ function bindAll (scope) {
 function clonePersistentConfig (config) {
   // deep clone the config
   const clonedConfig = JSON.parse(JSON.stringify(config));
-  if (typeof args[1].serverCertificate !== 'undefined') {
-    config.serverCertificate = typeof args[1].serverCertificate;
+  if (typeof config.serverCertificate !== 'undefined') {
+    config.serverCertificate = typeof config.serverCertificate;
   }
-  if (typeof args[1].licenseRequest === 'function') {
-    config.licenseRequest = args[1].licenseRequest;
+  if (typeof config.licenseRequest === 'function') {
+    config.licenseRequest = config.licenseRequest;
   }
-  if (typeof args[1].licenseResponse === 'function') {
-    config.licenseResponse = args[1].licenseResponse;
+  if (typeof config.licenseResponse === 'function') {
+    config.licenseResponse = config.licenseResponse;
   }
+
+  return clonedConfig;
 }
 
 /**
