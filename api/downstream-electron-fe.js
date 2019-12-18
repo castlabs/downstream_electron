@@ -101,7 +101,11 @@ DownstreamElectronFE.prototype.downloads = {};
  */
 DownstreamElectronFE.prototype.downloads.createPersistent = function (args, resolve, reject) {
   const manifestId = args[0];
-  const config = args[1];
+  // deep clone the config
+  const config = JSON.parse(JSON.stringify(args[1]));
+  if (typeof args[1].licenseRequest === 'function') {
+    config.licenseRequest = args[1].licenseRequest;
+  }
   const forced = args[2];
   const scope = this;
   if (this._persistent) {
@@ -117,6 +121,7 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
         if (!config.pssh) {
           config.pssh = getWidevinePSSH(info);
         }
+
         scope._persistent.createPersistentSession(config).then(function (persistentSessionId) {
           scope.downloads.savePersistent(manifestId, persistentSessionId).then(function () {
             if (existingPersistentSessionId) {
