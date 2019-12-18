@@ -43,6 +43,20 @@ function bindAll (scope) {
   }
 }
 
+function clonePersistentConfig (config) {
+  // deep clone the config
+  const clonedConfig = JSON.parse(JSON.stringify(config);
+  if (typeof args[1].serverCertificate !== 'undefined') {
+    config.serverCertificate = typeof args[1].serverCertificate;
+  }
+  if (typeof args[1].licenseRequest === 'function') {
+    config.licenseRequest = args[1].licenseRequest;
+  }
+  if (typeof args[1].licenseResponse === 'function') {
+    config.licenseResponse = args[1].licenseResponse;
+  }
+}
+
 /**
  * @constructor
  * @namespace DownstreamElectronFE
@@ -101,11 +115,7 @@ DownstreamElectronFE.prototype.downloads = {};
  */
 DownstreamElectronFE.prototype.downloads.createPersistent = function (args, resolve, reject) {
   const manifestId = args[0];
-  // deep clone the config
-  const config = JSON.parse(JSON.stringify(args[1]));
-  if (typeof args[1].licenseRequest === 'function') {
-    config.licenseRequest = args[1].licenseRequest;
-  }
+  const config = clonePersistentConfig(args[1]);
   const forced = args[2];
   const scope = this;
   if (this._persistent) {
