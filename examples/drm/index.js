@@ -154,7 +154,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
   );
 }
 
-function UnsafeInMemoryPersistentPlugin () {
+function FakePersistentPlugin () {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - persistent plugin', persistentConfig);
     return new Promise(function (resolve) {
@@ -187,7 +187,7 @@ if (!fs.existsSync(index)) {
   index = '../../api/index';
 }
 
-const downstreamElectron = require(index).init(window, new UnsafeInMemoryPersistentPlugin());
+const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
