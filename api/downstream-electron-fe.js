@@ -47,7 +47,7 @@ function clonePersistentConfig (config) {
   // deep clone the config
   const clonedConfig = JSON.parse(JSON.stringify(config));
   if (typeof config.serverCertificate !== 'undefined') {
-    clonedConfig.serverCertificate = typeof config.serverCertificate;
+    clonedConfig.serverCertificate = config.serverCertificate;
   }
   if (typeof config.licenseRequest === 'function') {
     clonedConfig.licenseRequest = config.licenseRequest;
