@@ -25,6 +25,7 @@ const SegmentInformation = (function () {
     if (baseUrl) {
       this.baseUrl = baseUrl;
     }
+
     if (bandwidth) {
       this.bandwidth = bandwidth;
     }
@@ -86,12 +87,6 @@ const SegmentInformation = (function () {
 
       case CREATE_URL.FROM_TEMPLATE:
         this.createFragmentsFromTemplate();
-        initSegment = this.createInitSegment(this.segmentTemplate.attributes.getNamedItem("initialization").nodeValue);
-        this.mediaUrls.unshift(new MediaUrl_1.MediaUrl(this.baseUrl, initSegment, this.mimeType));
-        break;
-
-      case CREATE_URL.FROM_TIMELINE:
-        this.createFragmentUrlsFromTimeline(this.timelineItemList);
         initSegment = this.createInitSegment(this.segmentTemplate.attributes.getNamedItem("initialization").nodeValue);
         this.mediaUrls.unshift(new MediaUrl_1.MediaUrl(this.baseUrl, initSegment, this.mimeType));
         break;
