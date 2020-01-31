@@ -4,7 +4,10 @@ const MediaUrl = (function () {
     if (url_domain === void 0) {
       url_domain = '';
     }
-    this.baseURL = baseURL;
+    this.baseURL = '';
+    if (baseURL.startsWith('http') === false) {
+      this.baseURL = baseURL;
+    }
     this.mediaFile = (mediaFile.indexOf('/') !== -1) ? this.truncateMediaFilePath(mediaFile) : mediaFile;
     this.url_domain = url_domain;
     this.mimeType = mimeType;
