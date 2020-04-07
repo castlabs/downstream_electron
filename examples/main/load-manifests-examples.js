@@ -12,7 +12,8 @@ function addExamples () {
     'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
     'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
     'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
-    'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest'
+    'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest',
+    'https://media.axprod.net/TestVectors/v7-Clear/Manifest.mpd'
   ];
 
   for (let i = 0, j = examples.length; i < j; i++) {

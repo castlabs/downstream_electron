@@ -114,7 +114,7 @@ Download.prototype._onDomainError = function (data) {
   const message = data.message || "";
 
   if (self._dl) {
-    if (message === 'net::ERR_NETWORK_CHANGED') {
+    if (message === 'net::ERR_NETWORK_CHANGED' || message === 'net::ERR_SPDY_PROTOCOL_ERROR' || message === 'net::ERR_HTTP2_PROTOCOL_ERROR') {
       // network changed during download, retry download
       self.stop(() => {
         self.start();
