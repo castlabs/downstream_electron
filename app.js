@@ -24,6 +24,8 @@ process.argv.forEach(function (val, index, array) {
 
 const exampleFile = `file://${__dirname}/examples/${example}/index.html`;
 const path = require('path');
+// default value of allowRendererProcessReuse false is deprecated
+app.allowRendererProcessReuse = true;
 
 function createWindow () {
   // eslint-disable-next-line no-process-env
