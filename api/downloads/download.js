@@ -17,7 +17,7 @@ const STATUSES = require("./statuses");
  * @param {object} options - options chosen for whole manifest, like number of chunks, retry,
  * @constructor
  */
-function Download (params, options) {
+function Download(params, options) {
   this._defaults = {};
   this._defaults.threads = appSettings.getSettings().downloadingThreadsRules.threads;
   this.status = STATUSES.CREATED;
@@ -38,7 +38,7 @@ function Download (params, options) {
     writeProgress: 0
   };
   _.bindAll(this, "_onError", "_onEnd", "_onData", "_updateStats", "_attachEvents", "_removeEvents",
-      "_removeEventsOnStop");
+    "_removeEventsOnStop");
 
   this.events = new EventEmitter();
 }
@@ -63,7 +63,11 @@ Download.prototype._createLocalPath = function (callback) {
   let folders = this.localUrl.split("/");
   folders = folders.slice(0, folders.length - 1);
   folders = folders.join("/");
-  mkdirp(folders, callback);
+  mkdirp(folders).then(function (value) {
+    callback();
+  }, function (error) {
+    callback();
+  });
 };
 
 /**
@@ -213,7 +217,7 @@ Download.prototype.start = function () {
  * @returns {void}
  */
 Download.prototype.createDownloader = function (remoteUrl, localUrl, options) {
-  if ( this._options.useHeadRequests ) {
+  if (this._options.useHeadRequests) {
     return new DownloadFile(remoteUrl, localUrl, options);
   } else {
     return new DownloadFileNoHead(remoteUrl, localUrl, options);
