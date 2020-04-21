@@ -12,7 +12,7 @@ const LinkSave = require('../manifest/json/link-save');
  * @param {object} items - storage items
  * @constructor
  */
-function FlushItem(manifestId, storageKey, items) {
+function FlushItem (manifestId, storageKey, items) {
   this.manifestId = manifestId;
   this.storageKey = storageKey;
   this.items = items;
@@ -30,7 +30,7 @@ FlushItem.prototype._saveToDisk = function (resolve, reject) {
   const path = appSettings.getSettings().settingsFolder + this.manifestId + "/";
   const file = "" + this.storageKey + ".json";
   const fileUrl = path + file;
-  mkdirp(path).then(function (value) {
+  mkdirp(path).then(function () {
     let data = convertStorage(self.storageKey, self.items);
     jsonfile.writeFile(fileUrl, data, function (err) {
       if (!err) {
@@ -60,7 +60,7 @@ module.exports = FlushItem;
  * @param {object} items - storage items
  * @returns {*} data to be stored
  */
-const convertStorage = function convertStorage(storageKey, items) {
+const convertStorage = function convertStorage (storageKey, items) {
   let itemsA = [];
   let data;
   //only for downloading we want to have an array

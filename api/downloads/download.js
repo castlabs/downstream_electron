@@ -17,7 +17,7 @@ const STATUSES = require("./statuses");
  * @param {object} options - options chosen for whole manifest, like number of chunks, retry,
  * @constructor
  */
-function Download(params, options) {
+function Download (params, options) {
   this._defaults = {};
   this._defaults.threads = appSettings.getSettings().downloadingThreadsRules.threads;
   this.status = STATUSES.CREATED;
@@ -63,10 +63,10 @@ Download.prototype._createLocalPath = function (callback) {
   let folders = this.localUrl.split("/");
   folders = folders.slice(0, folders.length - 1);
   folders = folders.join("/");
-  mkdirp(folders).then(function (value) {
+  mkdirp(folders).then(function () {
     callback();
   }, function (error) {
-    callback();
+    callback(error);
   });
 };
 
