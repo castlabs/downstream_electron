@@ -9,6 +9,10 @@ const translation = require("./translation/index");
 
 let downstreamElectronFE;
 
+function serialize (obj) {
+  return JSON.stringify(obj);
+}
+
 function getWidevinePSSH (info) {
   const manifestProtections = info.manifestInfo.protections;
   let videoRepresentation = manifestProtections.video[0] || {};
@@ -247,7 +251,7 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
   request.promiseId = promiseId;
   request.method = method;
   request.windowId = this._windowId;
-  request.args = args;
+  request.args = serialize(args);
   this._send(request);
   return promise;
 };
@@ -388,7 +392,7 @@ DownstreamElectronFE.prototype._removeSubscribers = function () {
     }
   }
   request.method = 'removeSubscribers';
-  request.args = [subscribersId];
+  request.args = serialize([subscribersId]);
 
   this._send(request);
 };

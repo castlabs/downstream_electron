@@ -56,7 +56,7 @@
     "babel-loader": "8.1.0",
     "babel-preset-env": "1.7.0",
     "clean-webpack-plugin": "3.0.0",
-    "electron": "git+https://github.com/castlabs/electron-releases.git#v8.2.3-wvvmp",
+    "electron": "git+https://github.com/castlabs/electron-releases.git#v9.1.1-wvvmp",
     "eslint": "^6.8.0",
     "jasmine-node": "3.0.0",
     "jquery": "3.5.0",

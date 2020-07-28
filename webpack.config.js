@@ -66,6 +66,7 @@ module.exports = {
     chunkFilename: "[id].chunk.js",
     libraryTarget: "umd"
   },
+  devtool: 'eval-source-map',
 
   module: {
     rules: [

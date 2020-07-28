@@ -13,6 +13,14 @@ const Server = require('./server/server.js');
 
 let DownstreamElectronBE;
 
+function deserialize (serializedJavascript) {
+  try {
+    return JSON.parse(serializedJavascript);
+  } catch (err) {
+    return {};
+  }
+}
+
 /**
  * @constructor
  * @namespace DownstreamElectronBE
@@ -182,7 +190,7 @@ DownstreamElectronBE.prototype._getMethod = function (methodName) {
  */
 DownstreamElectronBE.prototype._onApiRequest = function (evt, data, target) {
   const promiseId = data.promiseId;
-  const argsObj = data.args || {};
+  const argsObj = deserialize(data.args) || {};
   const method = data.method;
   const windowId = data.windowId;
   target = windowId;
