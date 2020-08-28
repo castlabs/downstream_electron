@@ -22,7 +22,7 @@
   "files": [
     "api"
   ],
-  "homepage": "https://castlabs.com/open-source/downstream/",
+  "homepage": "https://castlabs.com/resources/downstream/",
   "scripts": {
     "update": "ncu -u",
     "build": "webpack",

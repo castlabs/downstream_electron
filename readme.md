@@ -77,7 +77,7 @@ https://castlabs.github.io/downstream_electron/
 
 ## More information
 
-https://castlabs.com/open-source/downstream/
+https://castlabs.com/resources/downstream/
 
 ## License
 
