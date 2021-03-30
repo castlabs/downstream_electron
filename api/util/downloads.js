@@ -91,6 +91,11 @@ downloadUtil.getDownloadLinks = function getDownloadLinks (manifestId, localPath
         localUrl = utilUrl.joinPathWithFile(localPath, mediaBaseUrl, mediaFile);
       }
 
+      // filter query string from localUrl
+      let index = localUrl.lastIndexOf('?')
+      if (index > -1) {
+        localUrl = localUrl.substr(0, index);
+      }
       if ((!downloadedHash[localUrl]) || (!downloadedHash[localUrl] && downloadedHash[localUrl].remoteUrl !== remoteUrl)) {
         if (!links[k]) {
           links[k] = [];
