@@ -1,4 +1,9 @@
 "use strict";
+const BASE64 = require('base64-js');
+const pssh = require("./pssh");
+const MPEG_DASH_PROTECTION_SCHEME_ID_URI = 'urn:mpeg:dash:mp4protection:2011';
+const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
+
 const __extends = (this && this.__extends) || function (d, b) {
       for (let p in b) {
         if (b.hasOwnProperty(p)) {
@@ -35,15 +40,41 @@ const AdaptationSetNode = (function (_super) {
     }
 
     const contentProtections = this.currentNode.getElementsByTagName('ContentProtection');
+
+    let KID;
+    // find CENC KEY ID if there is some
+    for (let i = 0; i < contentProtections.length; i++) {
+      let attrs = contentProtections[i].attributes;
+      let schemeIdUri = attrs.getNamedItem("schemeIdUri");
+      if (schemeIdUri && schemeIdUri.value.toLowerCase() === MPEG_DASH_PROTECTION_SCHEME_ID_URI) {
+        if (attrs.getNamedItem("cenc:default_KID")) {
+          KID = attrs.getNamedItem("cenc:default_KID").value;
+          // Get KID (base64 decoded) as byte array
+          KID = BASE64.toByteArray(KID);
+          break;
+        }
+      }
+    }
+
     for (let i = 0; i < contentProtections.length; i++) {
       const attrs = contentProtections[i].attributes;
-      const cenc = contentProtections[i].getElementsByTagName("cenc:pssh");
-      if (attrs.getNamedItem("schemeIdUri") && cenc.length) {
-        const contentProtection = {
-          schemeIdUri: attrs.getNamedItem("schemeIdUri").value,
-          cencPSSH: cenc[0].childNodes[0].data
-        };
-        this.contentProtections.push(contentProtection);
+      if (attrs.getNamedItem("schemeIdUri")) {
+        const scheme = attrs.getNamedItem("schemeIdUri").value.toLowerCase();
+        const cenc = contentProtections[i].getElementsByTagName("cenc:pssh");
+        if (cenc.length) {
+          const contentProtection = {
+            schemeIdUri: scheme,
+            cencPSSH: cenc[0].childNodes[0].data
+          };
+          this.contentProtections.push(contentProtection);
+        } else if (KID && scheme === WIDEVINE_SCHEME_ID_URI) {
+          const psshWV = pssh.createWidevinePssh(KID);
+          const contentProtection = {
+            schemeIdUri: scheme,
+            cencPSSH: psshWV
+          };
+          this.contentProtections.push(contentProtection);
+        }
       }
     }
   };
@@ -54,7 +85,7 @@ const AdaptationSetNode = (function (_super) {
 
   AdaptationSetNode.prototype.getWidevineProtection = function () {
     return this.contentProtections.filter(function (item) {
-      return item.schemeIdUri === "urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed";
+      return item.schemeIdUri && item.schemeIdUri.toLowerCase() === WIDEVINE_SCHEME_ID_URI;
     });
   };
 
