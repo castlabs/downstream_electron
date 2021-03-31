@@ -73,6 +73,12 @@ const SegmentInformation = (function () {
         }
         break;
 
+      case CREATE_URL.FROM_TIMELINE:
+        initSegment = this.createInitSegment(this.segmentTemplate.attributes.getNamedItem("initialization").nodeValue);
+        this.mediaUrls.unshift(new MediaUrl_1.MediaUrl(this.baseUrl, initSegment, this.mimeType));
+        this.createFragmentUrlsFromTimeline(this.timelineItemList);
+        break;
+
       case CREATE_URL.FROM_SEGMENT_BASE:
         try {
           hasFileExtension = (this.baseUrl.indexOf('.') !== -1) ? true : false;
