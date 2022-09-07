@@ -22,22 +22,22 @@ module.exports = function (api, onSuccess, onFailure) {
         }
       }
       Promise.all(promises)
-          .then(function () {
-            let promises = [];
-            for (let i = 0, j = manifestIds.length; i < j; i++) {
-              promises.push(api.offlineController.removePromise(manifestIds[i]));
-            }
-            Promise.all(promises)
-                .then(function () {
-                  api.subscribersController.unsubscribe(manifestIds);
-                  api.manifestController.removeFromCache(manifestIds);
-                  onSuccess(manifestIds);
-                }, function (err) {
-                  onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_UNFINISHED_FAILED), err);
-                });
-          }, function (err) {
-            onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_UNFINISHED_FAILED), err);
-          });
+        .then(function () {
+          let promises = [];
+          for (let i = 0, j = manifestIds.length; i < j; i++) {
+            promises.push(api.offlineController.removePromise(manifestIds[i]));
+          }
+          Promise.all(promises)
+            .then(function () {
+              api.subscribersController.unsubscribe(manifestIds);
+              api.manifestController.removeFromCache(manifestIds);
+              onSuccess(manifestIds);
+            }, function (err) {
+              onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_UNFINISHED_FAILED), err);
+            });
+        }, function (err) {
+          onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_UNFINISHED_FAILED), err);
+        });
     }
   });
 };

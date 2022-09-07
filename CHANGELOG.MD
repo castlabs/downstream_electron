@@ -1,3 +1,11 @@
+# 0.5.0
+ * Added Node.js v14 LTS Support
+ * Added Electron 9 support
+ * Updated dependencies
+ * Removed UglifyJs and use TerserJs as a default minimizer
+ * Moved from `master` branch to `main` branch
+ * Fixed manifest saving issue (only `undefined` string was stored)
+
 # 0.4.0
  * Monitor key session state and detect downloaded stream with persistent license
  * Node.js v10 LTS Support

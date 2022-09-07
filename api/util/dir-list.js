@@ -8,7 +8,7 @@ const path = require("path");
  * @param {boolean} includeFiles - if files should be included
  * @returns {Promise} promise
  */
-function filterDirItem (dir, itemName, includeFolders, includeFiles) {
+function filterDirItem(dir, itemName, includeFolders, includeFiles) {
   const folderPath = path.resolve(dir + "/" + itemName);
   return new Promise(function (resolve, reject) {
     fs.stat(folderPath, function (err, stat) {
@@ -37,7 +37,7 @@ function filterDirItem (dir, itemName, includeFolders, includeFiles) {
  * @param {boolean} includeFiles - if files should be included
  * @returns {Promise} promise
  */
-function dirList (dir, includeFolders, includeFiles) {
+function dirList(dir, includeFolders, includeFiles) {
   if (typeof includeFolders === "undefined") {
     includeFolders = true;
   }
@@ -62,8 +62,8 @@ function dirList (dir, includeFolders, includeFiles) {
           resolve(results.filter(function (folderName) {
             return typeof folderName !== "undefined"
           }));
-        }, function (err) {
-          reject(err);
+        }, function (promiseError) {
+          reject(promiseError);
         });
       }
     });
