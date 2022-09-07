@@ -9,19 +9,19 @@ if ! git diff-index --quiet HEAD --; then
 fi
 
 branch=`git rev-parse --abbrev-ref HEAD`
-if [ "$branch" != "master" ]; then
-  echo "You need to be on master branch"
+if [ "$branch" != "main" ]; then
+  echo "You need to be on main branch"
   exit 0
 fi
 
-git fetch public master
+git fetch public main
 git fetch public --tags
 
-master_rev=`git rev-parse origin/master`
-local_master_rev=`git rev-parse HEAD`
+main_rev=`git rev-parse origin/main`
+local_main_rev=`git rev-parse HEAD`
 
-if [ "$master_rev" != "$local_master_rev" ]; then
-  echo "Please sync your local repo with remote master"
+if [ "$main_rev" != "$local_main_rev" ]; then
+  echo "Please sync your local repo with remote main"
   exit 0
 fi
 
@@ -40,7 +40,7 @@ npm run travis-build
 node ./bin/makefile.js prepack
 npm publish || { echo "Publishing failed" ; exit 0 ; }
 node ./bin/makefile.js postpack
-git push origin master
+git push origin main
 git push origin --tags
 
 echo "Publish to npm DONE with $version ";
