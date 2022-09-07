@@ -479,6 +479,7 @@ DownloadsController.prototype.start = function (manifestId, representations, dow
   const self = this;
   this.downloadStats.start();
   const manifest = this._manifestController.getManifestById(manifestId);
+
   if (!manifest) {
     onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
     return;

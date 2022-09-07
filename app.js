@@ -27,12 +27,12 @@ const path = require('path');
 // default value of allowRendererProcessReuse false is deprecated
 app.allowRendererProcessReuse = true;
 
-function createWindow () {
+function createWindow() {
   // eslint-disable-next-line no-process-env
   let appDir = path.dirname(process.mainModule.filename) + '/';
   // head request parameter test
   let useHeadRequest = true;
-  
+
   // let useHeadRequest = false;
   downstreamInstance = downstreamElectron.init({
     appDir: appDir,
@@ -47,6 +47,8 @@ function createWindow () {
     webPreferences: {
       plugins: true,
       nodeIntegration: true,
+      // NOTE: is disabled by default since Electron 9
+      enableRemoteModule: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
       webSecurity: false

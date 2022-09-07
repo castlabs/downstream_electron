@@ -39,7 +39,7 @@ banner.push("WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or imp
 banner.push("See the License for the specific language governing permissions and");
 banner.push("limitations under the License.");
 banner = banner.join("\n");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -67,6 +67,8 @@ module.exports = {
     libraryTarget: "umd"
   },
 
+  devtool: 'eval-source-map',
+
   module: {
     rules: [
       {
@@ -92,19 +94,16 @@ module.exports = {
       verbose: true,
       dry: false
     }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.BannerPlugin({
       banner: banner
     })
   ],
 
   optimization: {
+    minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          warnings: true,
-        },
-      }),
+      new TerserPlugin(
+      )
     ],
   },
 

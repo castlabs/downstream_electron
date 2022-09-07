@@ -26,14 +26,14 @@ function OfflineController (manifestController) {
 OfflineController.prototype.getManifestsList = function (callback) {
   dirList(appSettings.getSettings().settingsFolder, true, false)
     .then(function (settingsFolderList) {
-    let manifestList = [];
-    for (let i = 0, j = settingsFolderList.length; i < j; i++) {
-      manifestList.push(settingsFolderList[i]);
-    }
-    callback(null, manifestList);
-  }, function (err) {
-    callback(err)
-  });
+      let manifestList = [];
+      for (let i = 0, j = settingsFolderList.length; i < j; i++) {
+        manifestList.push(settingsFolderList[i]);
+      }
+      callback(null, manifestList);
+    }, function (err) {
+      callback(err);
+    });
 };
 
 /**
@@ -60,8 +60,8 @@ OfflineController.prototype.getManifestsListWithInfo = function (callback, full)
           }
         }
         callback(null, newResults);
-      }, function (err) {
-        callback(err);
+      }, function (promisesError) {
+        callback(promisesError);
       });
     }
   });
@@ -218,7 +218,7 @@ OfflineController.prototype.getManifestDataFile = function (manifestId, callback
  */
 OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure) {
   const settingsFolder = appSettings.getSettings().settingsFolder + manifestId;
-  this.getManifestDataFile( manifestId, function (info) {
+  this.getManifestDataFile(manifestId, function (info) {
     if (!info) {
       // no manifest data found for manifest, the download has not been started => just remove settings
       rmdir(settingsFolder, function (err) {
@@ -232,7 +232,7 @@ OfflineController.prototype.remove = function (manifestId, onSuccess, onFailure)
       let folder = info.folder;
       if (!folder) {
         // use default download folder path
-        folder =  path.resolve(appSettings.getSettings().downloadsFolderPath);
+        folder = path.resolve(appSettings.getSettings().downloadsFolderPath);
       }
       const downloadsFolder = folder + '/' + manifestId;
       rmdir(downloadsFolder, function (err) {
@@ -311,7 +311,7 @@ OfflineController.prototype.restoreLocalManifest = function (manifestId, onSucce
     representations.audio = info.manifest.audio;
     representations.text = info.manifest.text;
     self._manifestController.saveManifestWithChosenRepresentations(manifestId, representations)
-        .then(onSuccess, onFailure);
+      .then(onSuccess, onFailure);
   });
 };
 
