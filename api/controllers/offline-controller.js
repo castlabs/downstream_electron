@@ -14,7 +14,7 @@ const STATUSES = require("../downloads/statuses");
  * @param {ManifestController} manifestController - reference to existing manifest controller
  * @constructor
  */
-function OfflineController(manifestController) {
+function OfflineController (manifestController) {
   this._manifestController = manifestController;
 }
 
@@ -77,7 +77,7 @@ OfflineController.prototype.getManifestsListWithInfo = function (callback, full)
 OfflineController.prototype.getManifestInfo = function (manifestId, callback, full) {
   const self = this;
 
-  function addManifestInfoAndContinue(info) {
+  function addManifestInfoAndContinue (info) {
     const manifestName = info.manifest.name;
     const manifestUrl = info.manifest.url;
     const manifestLocalUrl = path.resolve(appSettings.getSettings().settingsFolder + "/" + manifestId + "/" + manifestName);
