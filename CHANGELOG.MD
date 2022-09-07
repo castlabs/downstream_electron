@@ -5,6 +5,7 @@
  * Removed UglifyJs and use TerserJs as a default minimizer
  * Moved from `master` branch to `main` branch
  * Fixed manifest saving issue (only `undefined` string was stored)
+ * Dropped Node.js v8 support
 
 # 0.4.0
  * Monitor key session state and detect downloaded stream with persistent license
