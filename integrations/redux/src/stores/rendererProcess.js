@@ -36,7 +36,7 @@ export const defaultState = {
     streams: [
         {
             'id': '000000',
-            'url': 'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
+            'url': 'https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd',
             'type': 'DASH',
             'created': false,
             'downloading': false,

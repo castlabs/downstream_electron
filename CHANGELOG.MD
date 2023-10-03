@@ -1,3 +1,7 @@
+# 0.6.0
+ * Updated Electron version to 26.2.2
+ * Updated dependencies
+
 # 0.5.0
  * Added Node.js v14 LTS Support
  * Added Electron 9 support

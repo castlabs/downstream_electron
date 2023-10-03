@@ -2,18 +2,17 @@
 'use strict';
 const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 
-const remote = require('electron').remote;
 const ipcRenderer = require('electron').ipcRenderer;
 
 const translation = require("./translation/index");
 
 let downstreamElectronFE;
 
-function serialize (obj) {
+function serialize(obj) {
   return JSON.stringify(obj);
 }
 
-function getWidevinePSSH (info) {
+function getWidevinePSSH(info) {
   const manifestProtections = info.manifestInfo.protections;
   let videoRepresentation = manifestProtections.video[0] || {};
   if (manifestProtections.video && info.manifest.video) {
@@ -34,20 +33,20 @@ function getWidevinePSSH (info) {
   return widevinePSSH;
 }
 
-function bind (scope, f) {
-  return function bindF () {
+function bind(scope, f) {
+  return function bindF() {
     f.apply(scope, arguments);
   };
 }
 
-function bindAll (scope) {
+function bindAll(scope) {
   for (let i = 1, j = arguments.length; i < j; i++) {
     let fName = arguments[i];
     scope[fName] = bind(scope, scope[fName]);
   }
 }
 
-function clonePersistentConfig (config) {
+function clonePersistentConfig(config) {
   // deep clone the config
   const clonedConfig = JSON.parse(JSON.stringify(config));
   if (typeof config.serverCertificate !== 'undefined') {
@@ -73,11 +72,17 @@ function clonePersistentConfig (config) {
  * this a bridge class for [DownstreamElectronBE]{@link DownstreamElectronBE}
  * all methods described in ({@link DownstreamElectronFE.downloads})
  */
-function DownstreamElectronFE (window, persistent) {
+function DownstreamElectronFE(window, persistent) {
+  // console.log(BrowserWindow.getAllWindows());
+
+  /*
   let currentWindow = remote.getCurrentWindow();
   if (currentWindow) {
     this._windowId = currentWindow.id;
   }
+  */
+  this._windowId = 1;
+
   this._promisesObj = {};
   this._subscribersId = {};
   this._promiseCounter = 0;
@@ -285,7 +290,7 @@ DownstreamElectronFE.prototype._beforeUnload = function () {
  * void}
  */
 DownstreamElectronFE.prototype._createApiMethods = function (namespace, methods) {
-  function apiFunction (scope, name, originalMethod) {
+  function apiFunction(scope, name, originalMethod) {
     return function () {
       return scope._apiCall(name, arguments, originalMethod);
     };
@@ -293,7 +298,7 @@ DownstreamElectronFE.prototype._createApiMethods = function (namespace, methods)
 
   this[namespace] = this[namespace] || {};
 
-  function createApiMethod (scope, namespace, name) {
+  function createApiMethod(scope, namespace, name) {
     let originalMethod;
     if (typeof scope[namespace][name] === 'function') {
       originalMethod = scope[namespace][name];
@@ -352,7 +357,7 @@ DownstreamElectronFE.prototype._processApi = function (obj, evt) {
   const result = evt.result;
   const promiseObj = this._promisesObj[promiseId + ''];
 
-  function resolve (result) {
+  function resolve(result) {
     promiseObj.resolve(result);
     this._removeLocalSubscribersForDefinedMethods(promiseObj.method, promiseObj.args[0] || result);
   }
@@ -370,7 +375,7 @@ DownstreamElectronFE.prototype._processApi = function (obj, evt) {
     if (evt.subscribersId) {
       this._saveSubscribersId(promiseObj, evt.subscribersId);
     }
-    delete(this._promisesObj[promiseId]);
+    delete (this._promisesObj[promiseId]);
   } else if (evt.subscriberId) {
     this._executeSubscriber(evt.subscriberId, evt.err, result, evt.subscriberFinished);
   } else {
@@ -416,11 +421,11 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
     });
   }
 
-  function removeSubscribers (subscriberKey) {
+  function removeSubscribers(subscriberKey) {
     for (let i = 0, j = manifestId.length; i < j; i++) {
       if (typeof self._subscribersId[subscriberKey].manifestId === 'string') {
         if (self._subscribersId[subscriberKey].manifestId === manifestId[i]) {
-          delete(self._subscribersId[subscriberKey]);
+          delete (self._subscribersId[subscriberKey]);
           break;
         }
       } else {
@@ -429,7 +434,7 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
           self._subscribersId[subscriberKey].manifestId.splice(pos, 1);
         }
         if (!self._subscribersId[subscriberKey].manifestId.length) {
-          delete(self._subscribersId[subscriberKey]);
+          delete (self._subscribersId[subscriberKey]);
           break;
         }
       }

@@ -6,7 +6,7 @@ const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
 // fake persistent plugin - needed for easier testing
-function FakePersistentPlugin () {
+function FakePersistentPlugin() {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - call of fake persistent plugin, persistentConfig', persistentConfig);
     return new Promise(function (resolve) {
@@ -72,7 +72,7 @@ function showStats(contentSubscribe, stats) {
         '/span>'));
     }
   }
-  
+
   const message = new Date().toISOString().replace(/Z|T/g, ' ') + stats.progressPercentage;
   console.log(message);
 }
@@ -156,6 +156,8 @@ function addStartActions(manifestId) {
     let count = representations.video.length + representations.audio.length + representations.text.length;
     if (count > 0) {
       let customFolder = document.getElementById('customDownloadFolder').value;
+      console.log(downstreamElectron);
+      console.log(downstreamElectron.downloads);
       downstreamElectron.downloads.start(manifestId, representations, customFolder).then(function () {
         clearContent();
         showStatusOK('start');
@@ -170,8 +172,8 @@ function addStartActions(manifestId) {
   }));
   $('#contentActions').append($('<input type="button" value="Select Default">').on('click', function () {
     let checkBoxes = $('input[type="checkbox"]');
-    let videos = checkBoxes.filter(function (i, checkBox) {return checkBox.name === 'video';});
-    let rest = checkBoxes.filter(function (i, checkBox) {return checkBox.name !== 'video';});
+    let videos = checkBoxes.filter(function (i, checkBox) { return checkBox.name === 'video'; });
+    let rest = checkBoxes.filter(function (i, checkBox) { return checkBox.name !== 'video'; });
     // sort as best in the beginning;
     videos.sort(function (a, b) {
       let valA = parseInt(a.getAttribute('data-bandwidth'), 10);
@@ -342,7 +344,7 @@ function addItemActions(manifestId,
       showFolderInfo(result, contentMain);
       downstreamElectron.downloads.info(manifestId).then(function (result) {
         addItemActions(manifestId, contentActions, contentHeader, contentMain, contentSubscribe, contentStatus,
-                       getHeaderInfo(result));
+          getHeaderInfo(result));
         showStatusOK('folderInfo', contentStatus);
       }, function (err) {
         showStatusError('info', err, contentStatus);
@@ -597,7 +599,7 @@ function addMainActions() {
 function addStressTest() {
   let manifests = [];
   for (let i = 0, j = 10; i < j; i++) {
-    manifests.push('http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd');
+    manifests.push('https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd');
     manifests.push('http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd');
   }
 
@@ -658,9 +660,9 @@ function addStressTest() {
           return 0;
         });
 
-        let video = result.video.map(function (item) {return item.id;});
-        let audio = result.audio.map(function (item) {return item.id;});
-        let text = result.text.map(function (item) {return item.id;});
+        let video = result.video.map(function (item) { return item.id; });
+        let audio = result.audio.map(function (item) { return item.id; });
+        let text = result.text.map(function (item) { return item.id; });
 
         // leave only one representation
         video.splice(1);
@@ -778,28 +780,28 @@ function clearContent(name) {
   $(contentSubscribe).html('');
 }
 
-function _convertToKB (value, precision) {
+function _convertToKB(value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneKB = 1024;
   return (Math.round((value * a) / oneKB) / a) + "kB";
 };
 
-function _convertToMB (value, precision) {
+function _convertToMB(value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneMB = 1024 * 1024;
   return (Math.round((value * a) / oneMB) / a) + "MB";
 };
 
-function _convertToGB (value, precision) {
+function _convertToGB(value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneGB = 1024 * 1024 * 1024;
   return (Math.round((value * a) / oneGB) / a) + "GB";
 };
 
-function _convertToBytes (value, precision, precision2, precision3) {
+function _convertToBytes(value, precision, precision2, precision3) {
   precision2 = typeof precision2 !== "undefined" ? precision2 : precision;
   precision3 = typeof precision3 !== "undefined" ? precision3 : precision;
   if (value < 100000) {

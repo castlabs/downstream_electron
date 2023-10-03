@@ -24,7 +24,7 @@ const downloadFileUtil = require("../downloads/download-file-util");
  * @param {OfflineController} offlineController - existing offline controller
  * @constructor
  */
-function DownloadsController (manifestController, offlineController) {
+function DownloadsController(manifestController, offlineController) {
   this._manifestsDownloadOrder = [];
   this._manifestsDownloadOrderObj = {};
   this._manifestController = manifestController;
@@ -476,6 +476,7 @@ DownloadsController.prototype.performSeek = function (manifestId, localFile, cal
  * @returns {void}
  */
 DownloadsController.prototype.start = function (manifestId, representations, downloadFolder, onSuccess, onFailure, fromResumed, oldstatus) {
+  console.log("TRIGGERED");
   const self = this;
   this.downloadStats.start();
   const manifest = this._manifestController.getManifestById(manifestId);
@@ -512,7 +513,7 @@ DownloadsController.prototype.start = function (manifestId, representations, dow
   const manifestUrl = manifest.getManifestUrl();
   const manifestName = manifest.getManifestName();
 
-  function getManifestBaseUrl (xml, manifestUrlDomain) {
+  function getManifestBaseUrl(xml, manifestUrlDomain) {
     let manifestBaseUrl;
     const MPD = xml.getElementsByTagName("MPD")[0];
     if (MPD) {
