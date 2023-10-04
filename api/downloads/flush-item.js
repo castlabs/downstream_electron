@@ -1,5 +1,5 @@
 "use strict";
-const { mkdirp } = require('mkdirp');
+const {mkdirp} = require('mkdirp');
 
 const appSettings = require('../app-settings');
 const jsonfile = require('jsonfile');
@@ -12,7 +12,7 @@ const LinkSave = require('../manifest/json/link-save');
  * @param {object} items - storage items
  * @constructor
  */
-function FlushItem(manifestId, storageKey, items) {
+function FlushItem (manifestId, storageKey, items) {
   this.manifestId = manifestId;
   this.storageKey = storageKey;
   this.items = items;
@@ -60,7 +60,7 @@ module.exports = FlushItem;
  * @param {object} items - storage items
  * @returns {*} data to be stored
  */
-const convertStorage = function convertStorage(storageKey, items) {
+const convertStorage = function convertStorage (storageKey, items) {
   let itemsA = [];
   let data;
   //only for downloading we want to have an array

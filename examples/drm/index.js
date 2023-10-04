@@ -1,9 +1,9 @@
 'use strict';
 
 window.$ = window.jQuery = require('jquery');
-const { remote } = require('electron');
+const { BrowserWindow } = require('@electron/remote');
 const fs = require('fs');
-const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/angel-one-widevine/dash.mpd';
+const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
 const videoType = 'video/mp4;codecs="avc1.42c01e"';
@@ -21,8 +21,8 @@ function _base64ToArrayBuffer(base64) {
 function _rawToArrayBuffer(raw) {
   var len = raw.length;
   var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++)        {
-      bytes[i] = raw.charCodeAt(i);
+  for (var i = 0; i < len; i++) {
+    bytes[i] = raw.charCodeAt(i);
   }
   return bytes.buffer;
 }
@@ -46,7 +46,7 @@ function _keySystemConfig() {
 }
 
 function _handleKeyStatusesChange(event) {
-  event.target.keyStatuses.forEach(function(status, keyId) {
+  event.target.keyStatuses.forEach(function (status, keyId) {
     switch (status) {
       case "usable":
         console.log('SESSION USABLE');
@@ -60,7 +60,7 @@ function _handleKeyStatusesChange(event) {
         console.log('SESSION PENDING');
         break;
       default:
-        // Do something with |keyId| and |status|.
+      // Do something with |keyId| and |status|.
     }
   })
 }
@@ -69,21 +69,21 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
 
   function _handleMessage(event) {
     console.log('message', event);
-  
+
     var request = event.message;
     var xmlhttp = new XMLHttpRequest();
-  
+
     xmlhttp.keySession = event.target;
     xmlhttp.open('POST', licenseUrl);
-  
-    xmlhttp.onload = function(e) {
+
+    xmlhttp.onload = function (e) {
       var license = xmlhttp.response;
       xmlhttp.keySession.update(license).catch(function (error) {
         console.log('update() failed', error);
       });
       resolve(xmlhttp.keySession.sessionId);
     }
-  
+
     xmlhttp.responseType = "arraybuffer";
     xmlhttp.send(request);
   }
@@ -91,13 +91,13 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
   function _startSession(mediaKeys) {
     var keySession = mediaKeys.createSession('persistent-license');
     activeSession = keySession;
-    
+
     keySession.addEventListener('message', _handleMessage, false);
     keySession.addEventListener('keystatuseschange', _handleKeyStatusesChange, false);
 
     if (session != null) {
       keySession.load(session).then(
-        function(loaded) {
+        function (loaded) {
           if (!loaded) {
             console.log('No stored session with the ID ' + session + ' was found.');
             // The application should remove its record of |sessionId|.
@@ -116,7 +116,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
   }
 
   navigator.requestMediaKeySystemAccess('com.widevine.alpha', _keySystemConfig()).then(
-    function(keySystemAccess) {
+    function (keySystemAccess) {
       console.log('keySystemAccess', keySystemAccess, keySystemAccess.getConfiguration().sessionTypes);
 
       var video = document.querySelector('#videoOffline');
@@ -130,9 +130,9 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
       );
 
       promise.then(
-        function(createdMediaKeys) {
+        function (createdMediaKeys) {
           console.log('createdMediaKeys', createdMediaKeys);
-          
+
           if (video.mediaKeys) {
             return video.mediaKeys;
           }
@@ -143,7 +143,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
       );
 
       promise.then(
-        function(createdMediaKeys) {
+        function (createdMediaKeys) {
           return _startSession(createdMediaKeys);
         }
       ).catch(
@@ -151,14 +151,16 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
           'Unable to create or initialize key session')
       );
     }
+  ).catch(
+    console.error.bind(console, 'Unable to create MediaKeySystemAccess')
   );
 }
 
-function FakePersistentPlugin () {
+function FakePersistentPlugin() {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - persistent plugin', persistentConfig);
     return new Promise(function (resolve) {
-      _createOrLoadMediaSession(function(sessionId) {
+      _createOrLoadMediaSession(function (sessionId) {
         //activeSession.close();
         resolve(sessionId);
       }, persistentConfig.pssh, null);
@@ -192,14 +194,18 @@ const playerUrl = `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
 function playVideo(link, offlineSessionId, playerUrl, config) {
-  let playerWindow = new remote.BrowserWindow({
+  let playerWindow = new BrowserWindow({
     width: 860,
     height: 600,
     show: true,
     resizable: true,
     webPreferences: {
       plugins: true,
-      nodeIntegration: true
+      nodeIntegration: true,
+      // NOTE: !WARNING! use with caution it allows app to download content
+      //                 from any URL
+      webSecurity: false,
+      contextIsolation: false
     }
   });
 
@@ -236,32 +242,32 @@ function onDownloadFinish(err, info) {
   $('#mainActions').append($('<input id="offline" style="margin-right: 5px" type="button" value="Play Offline">').on('click', function () {
     videoPath = info.manifest.files[0].localUrl;
     audioPath = info.manifest.files[1].localUrl;
-  
+
     var ms = new MediaSource;
     var video = document.querySelector('#videoOffline');
-  
-    ms.addEventListener('sourceopen', function() {
+
+    ms.addEventListener('sourceopen', function () {
       console.log('sourceopen');
-    
+
       var videoSourceBuffer = ms.addSourceBuffer(videoType);
       videoSourceBuffer.appendBuffer(fs.readFileSync(videoPath).buffer);
-  
+
       var audioSourceBuffer = ms.addSourceBuffer(audioType);
       audioSourceBuffer.appendBuffer(fs.readFileSync(audioPath).buffer);
 
       downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
         console.log(result);
-  
+
         if (activeSession !== null) {
           var video = document.querySelector('#videoOffline');
           video.play();
         } else {
-          _createOrLoadMediaSession(function(sessionId) {
+          _createOrLoadMediaSession(function (sessionId) {
             var video = document.querySelector('#videoOffline');
             video.play();
           }, null, result.persistent);
         }
-  
+
       }, function (err) {
         console.log('play offline error', err);
       });
@@ -301,7 +307,7 @@ function onDownloadFinish(err, info) {
     });
   }));
 
-  $('#videoOffline').removeAttr('hidden'); 
+  $('#videoOffline').removeAttr('hidden');
 }
 
 function onSubmit(e) {
@@ -312,7 +318,7 @@ function onSubmit(e) {
     console.log(result);
     manifestId = result.id;
 
-   let representations = {
+    let representations = {
       video: [result.video[0].id],
       audio: [result.audio[0].id]
     };
@@ -342,7 +348,7 @@ function onSubmit(e) {
   return false;
 }
 
-function addForm () {
+function addForm() {
   $("<form id='form'></form>").insertAfter($("#header"));
   $("#form").append($("<table style='width: 600px'><tr>"));
   $("#form").append($("<td><span style='margin-right: 5px'>Manifest Url</span></td>"));

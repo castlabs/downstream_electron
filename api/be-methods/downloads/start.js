@@ -10,7 +10,7 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, repres
     return;
   }
 
-  function start() {
+  function start () {
     api.downloadsController.storage.getItem(manifestId).then(function (result) {
       if (result) {
         onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
