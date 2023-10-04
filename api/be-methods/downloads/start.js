@@ -4,7 +4,6 @@ const translation = require("../../translation/index");
 const canCreateManifest = require("../../util/can-create-manifest");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId, representations, downloadFolder) {
-  console.log("BLAH !!!");
   const manifest = api.manifestController.getManifestById(manifestId);
   if (!manifest) {
     onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));

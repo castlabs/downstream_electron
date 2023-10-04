@@ -3,7 +3,7 @@ const _ = require("underscore");
 const domain = require('domain');
 const DownloadFileNoHead = require("./download-file-no-head");
 const DownloadFile = require("./download-file");
-const mkdirp = require("mkdirp");
+const { mkdirp } = require("mkdirp");
 
 const appSettings = require("../app-settings");
 const EventEmitter = require("events").EventEmitter;
@@ -17,7 +17,7 @@ const STATUSES = require("./statuses");
  * @param {object} options - options chosen for whole manifest, like number of chunks, retry,
  * @constructor
  */
-function Download (params, options) {
+function Download(params, options) {
   this._defaults = {};
   this._defaults.threads = appSettings.getSettings().downloadingThreadsRules.threads;
   this.status = STATUSES.CREATED;
