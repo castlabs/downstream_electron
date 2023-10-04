@@ -1,7 +1,7 @@
 'use strict';
 
 window.$ = window.jQuery = require('jquery');
-const { remote } = require('electron');
+const { BrowserWindow, dialog } = require('@electron/remote');
 const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
@@ -223,7 +223,7 @@ function addStartActions(manifestId) {
 
   //Update download folder
   $('#contentActions').append($('<input type="button" value="Update Download Folder">').on('click', function () {
-    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    const pathArray = dialog.showOpenDialog({ properties: ['openDirectory'] });
     let path = pathArray ? pathArray[0] : undefined;
     if (path) {
       downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
@@ -406,7 +406,7 @@ function addItemActions(manifestId,
 
   //Update download folder
   $(contentActions).append($('<input type="button" value="Update Download Folder">').on('click', function () {
-    const pathArray = remote.dialog.showOpenDialog({ properties: ['openDirectory'] });
+    const pathArray = dialog.showOpenDialog({ properties: ['openDirectory'] });
     let path = pathArray ? pathArray[0] : undefined;
     if (path) {
       downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
@@ -422,14 +422,15 @@ function addItemActions(manifestId,
 }
 
 function playVideo(link, offlineSessionId, playerUrl) {
-  let playerWindow = new remote.BrowserWindow({
+  let playerWindow = new BrowserWindow({
     width: 860,
     height: 600,
     show: true,
     resizable: true,
     webPreferences: {
       plugins: true,
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
   playerWindow.loadURL(playerUrl);
