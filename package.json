@@ -69,6 +69,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.11",
     "base64-js": "1.5.1",
     "biguint-format": "1.0.2",
     "cors": "2.8.5",

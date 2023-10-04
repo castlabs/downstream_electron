@@ -1,6 +1,8 @@
 const { BrowserWindow, app } = require('electron');
 const fs = require('fs');
 
+require('@electron/remote/main').initialize();
+
 // TESTING PRODUCTION
 let index = './index';
 if (!fs.existsSync(index)) {
@@ -48,10 +50,10 @@ function createWindow() {
       plugins: true,
       nodeIntegration: true,
       // NOTE: is disabled by default since Electron 9
-      enableRemoteModule: true,
+      // enableRemoteModule: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false,
+      // webSecurity: false,
       contextIsolation: false
     }
   });
@@ -66,9 +68,13 @@ function onWillQuit() {
 
 app.on('ready', createWindow);
 app.on('will-quit', onWillQuit);
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   console.log('window-all-closed');
   app.quit();
+});
+
+app.on('browser-window-created', (_, window) => {
+  require("@electron/remote/main").enable(window.webContents);
 });
 
 app.on('widevine-ready', (version, lastVersion) => {

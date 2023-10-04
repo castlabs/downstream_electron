@@ -73,16 +73,10 @@ function clonePersistentConfig(config) {
  * all methods described in ({@link DownstreamElectronFE.downloads})
  */
 function DownstreamElectronFE(window, persistent) {
-  // console.log(BrowserWindow.getAllWindows());
-
-  /*
-  let currentWindow = remote.getCurrentWindow();
+  let currentWindow = require('@electron/remote').getCurrentWindow();
   if (currentWindow) {
     this._windowId = currentWindow.id;
   }
-  */
-  this._windowId = 1;
-
   this._promisesObj = {};
   this._subscribersId = {};
   this._promiseCounter = 0;
