@@ -156,8 +156,6 @@ function addStartActions(manifestId) {
     let count = representations.video.length + representations.audio.length + representations.text.length;
     if (count > 0) {
       let customFolder = document.getElementById('customDownloadFolder').value;
-      console.log(downstreamElectron);
-      console.log(downstreamElectron.downloads);
       downstreamElectron.downloads.start(manifestId, representations, customFolder).then(function () {
         clearContent();
         showStatusOK('start');

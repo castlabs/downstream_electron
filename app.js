@@ -49,11 +49,9 @@ function createWindow() {
     webPreferences: {
       plugins: true,
       nodeIntegration: true,
-      // NOTE: is disabled by default since Electron 9
-      // enableRemoteModule: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      // webSecurity: false,
+      webSecurity: false,
       contextIsolation: false
     }
   });

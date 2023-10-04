@@ -4,13 +4,14 @@ const translation = require("../../translation/index");
 const canCreateManifest = require("../../util/can-create-manifest");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId, representations, downloadFolder) {
+  console.log("BLAH !!!");
   const manifest = api.manifestController.getManifestById(manifestId);
   if (!manifest) {
     onFailure(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
     return;
   }
 
-  function start () {
+  function start() {
     api.downloadsController.storage.getItem(manifestId).then(function (result) {
       if (result) {
         onFailure(translation.getError(translation.e.downloads.ALREADY_STARTED, manifestId));
