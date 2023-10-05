@@ -14,7 +14,8 @@ with React & Redux frameworks.
 #### Development
 
 1. `npm install`
-2. `npm run dev`
+2. `npm run postainstall`
+3. `npm run dev`
 
 or
 
@@ -24,7 +25,8 @@ or
 #### Release
 
 1. `npm install`
-2. `npm run dist`
+2. `npm run postinstall`
+3. `npm run dist`
 
 or
 

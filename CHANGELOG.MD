@@ -6,6 +6,10 @@
  * Dropped Node.js v14 support
  * Added Node.js v16 LTS Support
  * Added Node.js v18 LTS Support
+ * Migrated to castLabs Electron Components API
+ * Updated `main` and `drm` examples
+ * Moved from deprecated, build-in `remote` to `@electron/remote` replacement
+ * Updated `redux` integration
 
 # 0.5.0
  * Added Node.js v14 LTS Support
