@@ -1,36 +1,25 @@
 /**
  * 
  */
-import { createStore, applyMiddleware, compose } from 'redux';
-import { downstreamReducer } from '../reducers';
-import { downstreamMiddleware } from '../middleware/downstream';
-import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
-import { downstreamGetListWithInfo, downstreamCreate, downstreamGetOfflineLink } from './../actions/downstream';
+import {configureStore} from '@reduxjs/toolkit';
+import {downstreamReducer} from '../reducers';
+import {downstreamMiddleware} from '../middleware/downstream';
+import {downstreamGetListWithInfo, downstreamCreate, downstreamGetOfflineLink} from './../actions/downstream';
 import thunk from 'redux-thunk';
 
 
 //
-const initialState = getInitialStateRenderer();
-//
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const initialState = {
+    'downstream': {
+        'MAIN_PROCESS_INIT': true
+    }
+};
 
-/**
- * 
- */
-export const downstreamStore = createStore(
-    downstreamReducer,
+export const downstreamStore = configureStore({
+    reducer: downstreamReducer,
     initialState,
-    composeEnhancers(
-        applyMiddleware(
-            forwardToMain,
-            thunk,
-            downstreamMiddleware
-        )
-    )
-);
-
-//
-replayActionRenderer(downstreamStore);
+    middleware: [thunk, downstreamMiddleware]
+});
 
 export const defaultState = {
     streams: [

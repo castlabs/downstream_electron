@@ -6,7 +6,7 @@ const fakePersistentSessionId = 'fake_';
 /**
  * 
  */
-function FakePersistentPlugin() {
+function FakePersistentPlugin () {
     this.createPersistentSession = (persistentConfig) => {
         console.log('create - call of fake persistent plugin, persistentConfig', persistentConfig);
         return new Promise((resolve) => {
@@ -231,7 +231,7 @@ export const downstreamMiddleware = store => next => action => {
  * @param {*} action 
  * @param {*} result 
  */
-function defaultSuccessHandler(next, action, result) {
+function defaultSuccessHandler (next, action, result) {
     action.result = result;
     next(action);
 }
@@ -242,7 +242,7 @@ function defaultSuccessHandler(next, action, result) {
  * @param {*} action 
  * @param {*} error 
  */
-function defaultErrorHandler(next, action, error) {
+function defaultErrorHandler (next, action, error) {
     action.error = error;
     next(action);
 }

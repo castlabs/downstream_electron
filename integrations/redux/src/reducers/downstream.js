@@ -9,7 +9,7 @@
  * @param {*} state 
  * @param {*} action 
  */
-function createIfNotExist(state, action) {
+function createIfNotExist (state, action) {
     let stream = state.find(s => {
         return s.id === action.id;
     });

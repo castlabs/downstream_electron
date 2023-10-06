@@ -1,4 +1,5 @@
 const {BrowserWindow, app, components} = require('electron');
+require('@electron/remote/main').initialize();
 
 const path = require('path');
 const isDev = require('electron-is-dev');
@@ -6,8 +7,6 @@ const isDev = require('electron-is-dev');
 let mainWindow;
 let downstreamInstance;
 const downstreamElectron = require('downstream-electron');
-// initialize main process redux store
-require('../src/stores/mainProcess');
 
 
 function createWindow () {
@@ -75,4 +74,8 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+app.on('browser-window-created', (_, window) => {
+  require("@electron/remote/main").enable(window.webContents);
 });
