@@ -1,5 +1,7 @@
-const { BrowserWindow, app } = require('electron');
+const {BrowserWindow, app, components} = require('electron');
 const fs = require('fs');
+
+require('@electron/remote/main').initialize();
 
 // TESTING PRODUCTION
 let index = './index';
@@ -27,7 +29,7 @@ const path = require('path');
 // default value of allowRendererProcessReuse false is deprecated
 app.allowRendererProcessReuse = true;
 
-function createWindow() {
+function createWindow () {
   // eslint-disable-next-line no-process-env
   let appDir = path.dirname(process.mainModule.filename) + '/';
   // head request parameter test
@@ -47,11 +49,10 @@ function createWindow() {
     webPreferences: {
       plugins: true,
       nodeIntegration: true,
-      // NOTE: is disabled by default since Electron 9
-      enableRemoteModule: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false
+      webSecurity: false,
+      contextIsolation: false
     }
   });
 
@@ -59,30 +60,23 @@ function createWindow() {
   win.webContents.openDevTools();
 }
 
-function onWillQuit() {
+function onWillQuit () {
   downstreamInstance.stop();
 }
 
-app.on('ready', createWindow);
+app.whenReady().then(async () => {
+  await components.whenReady();
+  console.log('components ready:', components.status());
+  createWindow();
+});
+
 app.on('will-quit', onWillQuit);
-app.on('window-all-closed', function () {
+
+app.on('window-all-closed', () => {
   console.log('window-all-closed');
   app.quit();
 });
 
-app.on('widevine-ready', (version, lastVersion) => {
-  if (null !== lastVersion) {
-    console.log('Widevine ' + version + ', upgraded from ' + lastVersion + ', is ready to be used!');
-  } else {
-    console.log('Widevine ' + version + ' is ready to be used!');
-  }
-});
-
-app.on('widevine-update-pending', (currentVersion, pendingVersion) => {
-  console.log('Widevine ' + currentVersion + ' is ready to be upgraded to ' + pendingVersion + '!');
-});
-
-app.on('widevine-error', (error) => {
-  console.log('Widevine installation encounterted an error: ' + error);
-  process.exit(1)
+app.on('browser-window-created', (_, window) => {
+  require("@electron/remote/main").enable(window.webContents);
 });

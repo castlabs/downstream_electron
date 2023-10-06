@@ -3,21 +3,21 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-import { playStream, playOfflineStream } from './../actions/react';
-import { downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished, downstreamInfo, downstreamGetOfflineLink, downstreamStop, downstreamResume, downstreamUnsubscribe } from './../actions/downstream';
+import {playStream, playOfflineStream} from './../actions/react';
+import {downstreamCreate, downstreamStart, downstreamRemove, downstreamSubscribe, downstreamDownloadProgress, downstreamDownloadFinished, downstreamInfo, downstreamGetOfflineLink, downstreamStop, downstreamResume, downstreamUnsubscribe} from './../actions/downstream';
 
 
 /**
  * 
  * @param {*} param0 
  */
-const Stream = ({ stream, create, download, stop, resume, play, playOffline, remove, info }) => (
+const Stream = ({stream, create, download, stop, resume, play, playOffline, remove, info}) => (
   <li className="App-list">
     <div className={stream.downloaded ? 'App-url-downloaded' : 'App-url'}>
       {stream.downloading &&
-        <div className="progress" style={{ width: `${stream.stats.progressPercentage}` }}></div>
+        <div className="progress" style={{width: `${stream.stats.progressPercentage}`}}></div>
       }
       {stream.url}
     </div>
@@ -90,11 +90,15 @@ const mapDispatchToProps = dispatch => ({
     );
   },
   download: (id, video, audio, text) => {
+    console.log("DOWNLOAD", id, video, audio, text);
+
     let representations = {
       video: video.map(v => v.id),
       audio: audio.map(a => a.id),
       text: text.map(t => t.id)
     };
+
+    console.log("REPRESENTATION", representations);
 
     dispatch(
       downstreamStart(id, representations)

@@ -9,7 +9,7 @@
  * @param {*} state 
  * @param {*} action 
  */
-function createIfNotExist(state, action) {
+function createIfNotExist (state, action) {
     let stream = state.find(s => {
         return s.id === action.id;
     });
@@ -39,6 +39,8 @@ const downstream = (state = [], action) => {
             return stream.id;
         });
     }
+
+    console.log("STATE ->", state, "ACTION ->", action);
 
     switch (action.type) {
         case 'DOWNSTREAM_CREATE':

@@ -75,6 +75,10 @@ https://castlabs.github.io/downstream_electron/
 2. Node interpreter: `/node_modules/.bin/electron`
 3. Javascript file: `index.js`
 
+## Known issues
+
+- Electron installation in macOS (https://github.com/castlabs/electron-releases/issues/144) - we recommend to use one of the workaround mentioned in the GitHub issue.
+
 ## More information
 
 https://castlabs.com/resources/downstream/

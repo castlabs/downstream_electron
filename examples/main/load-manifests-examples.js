@@ -1,15 +1,15 @@
 'use strict';
 window.$ = window.jQuery = require('jquery');
 
-function addExample (url) {
+function addExample(url) {
   const option = $('<option value="' + url + '">' + url + '</option>');
   $('#manifestUrlList').append(option[0]);
 }
 
-function addExamples () {
+function addExamples() {
   const examples = [
     '-',
-    'http://demo.unified-streaming.com/video/ateam/ateam.ism/ateam.mpd',
+    'https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd',
     'http://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
     'http://playready.directtaps.net/smoothstreaming/SSWSS720H264/SuperSpeedway_720.ism/Manifest',
     'http://playready.directtaps.net/smoothstreaming/SSWSS720H264PR/SuperSpeedway_720.ism/Manifest',
@@ -29,7 +29,7 @@ function addExamples () {
   });
 }
 
-function addForm () {
+function addForm() {
   $("<form id='form'></form>").insertAfter($("#header"));
   $("#form").append($("<span>Custom manifest id (leave empty for auto)</span>"));
   $("#form").append($("<input type='text' style='width: 200px' id='customManifestId'>"));
@@ -43,7 +43,7 @@ function addForm () {
   $("#form").append($("<select type='text' style='width: 500px' id='manifestUrlList'></select>"));
 }
 
-function onLoad () {
+function onLoad() {
   addForm();
   addExamples();
 }

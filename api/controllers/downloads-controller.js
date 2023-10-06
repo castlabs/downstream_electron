@@ -1,7 +1,7 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 "use strict";
 const _ = require("underscore");
-const mkdirp = require("mkdirp");
+const {mkdirp} = require("mkdirp");
 
 const appSettings = require("../app-settings");
 const translation = require("../translation/index");

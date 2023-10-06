@@ -1,5 +1,5 @@
 "use strict";
-const mkdirp = require('mkdirp');
+const {mkdirp} = require('mkdirp');
 
 const appSettings = require('../app-settings');
 const jsonfile = require('jsonfile');

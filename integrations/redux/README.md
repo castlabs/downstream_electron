@@ -30,3 +30,7 @@ or
 
 1. `yarn install`
 2. `yarn dist`
+
+## Known issues
+
+There is a known issue with Electron installation in macOS. We recommend to use `yarn` for this Electron release.

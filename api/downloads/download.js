@@ -3,7 +3,7 @@ const _ = require("underscore");
 const domain = require('domain');
 const DownloadFileNoHead = require("./download-file-no-head");
 const DownloadFile = require("./download-file");
-const mkdirp = require("mkdirp");
+const {mkdirp} = require("mkdirp");
 
 const appSettings = require("../app-settings");
 const EventEmitter = require("events").EventEmitter;
