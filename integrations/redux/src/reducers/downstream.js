@@ -40,6 +40,8 @@ const downstream = (state = [], action) => {
         });
     }
 
+    console.log("STATE ->", state, "ACTION ->", action);
+
     switch (action.type) {
         case 'DOWNSTREAM_CREATE':
             if (action.result || (action.error && action.error.code === 22)) {

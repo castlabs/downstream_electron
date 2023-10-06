@@ -1,12 +1,12 @@
 'use strict';
 
 window.$ = window.jQuery = require('jquery');
-const { BrowserWindow, dialog } = require('@electron/remote');
+const {BrowserWindow, dialog} = require('@electron/remote');
 const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
 // fake persistent plugin - needed for easier testing
-function FakePersistentPlugin() {
+function FakePersistentPlugin () {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - call of fake persistent plugin, persistentConfig', persistentConfig);
     return new Promise(function (resolve) {
@@ -44,7 +44,7 @@ const downstreamElectron = require(index).init(window, new FakePersistentPlugin(
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
-function showStatusOK(message, contentStatus) {
+function showStatusOK (message, contentStatus) {
   contentStatus = contentStatus || '#contentStatus';
   message = new Date().toISOString().replace(/Z|T/g, ' ') + message + ' SUCCESS';
   $(contentStatus).html(message);
@@ -53,7 +53,7 @@ function showStatusOK(message, contentStatus) {
   console.log(message);
 }
 
-function showStatusError(message, err, contentStatus) {
+function showStatusError (message, err, contentStatus) {
   contentStatus = contentStatus || '#contentStatus';
   message = new Date().toISOString().replace(/Z|T/g, ' ') + message + ' FAILED';
   $(contentStatus).html(message + '<br>' + (err ? JSON.stringify(err) : ''));
@@ -62,7 +62,7 @@ function showStatusError(message, err, contentStatus) {
   console.log(message, err);
 }
 
-function showStats(contentSubscribe, stats) {
+function showStats (contentSubscribe, stats) {
   $(contentSubscribe).html('');
   for (let key in stats) {
     if (stats.hasOwnProperty(key)) {
@@ -77,16 +77,16 @@ function showStats(contentSubscribe, stats) {
   console.log(message);
 }
 
-function getHeaderInfo(result) {
+function getHeaderInfo (result) {
   let header = new Date(result.manifest.ts);
   header += '<br/>' + result.manifest.url;
   return header;
 }
 
-function getItemInfo(result) {
+function getItemInfo (result) {
   let info = {};
 
-  function getChosenRepresentations(userR, manifestR) {
+  function getChosenRepresentations (userR, manifestR) {
     let hash = {};
     let chosenRepresentations = [];
     userR = userR || [];
@@ -122,7 +122,7 @@ function getItemInfo(result) {
   return html;
 }
 
-function getItemFolderInfo(result) {
+function getItemFolderInfo (result) {
   let info = {};
 
   info.folder = result.folder;
@@ -137,19 +137,19 @@ function getItemFolderInfo(result) {
   return html;
 }
 
-function getContentName(contentMain) {
+function getContentName (contentMain) {
   return '#' + $(contentMain).attr('id').replace('Main', '');
 }
 
-function showInfo(info, container) {
+function showInfo (info, container) {
   $(container).html(getItemInfo(info));
 }
 
-function showFolderInfo(info, container) {
+function showFolderInfo (info, container) {
   $(container).html(getItemFolderInfo(info))
 }
 
-function addStartActions(manifestId) {
+function addStartActions (manifestId) {
   //START
   $('#contentActions').append($('<input type="button" value="Start">').on('click', function () {
     let representations = getSelectedRepresentations();
@@ -170,8 +170,8 @@ function addStartActions(manifestId) {
   }));
   $('#contentActions').append($('<input type="button" value="Select Default">').on('click', function () {
     let checkBoxes = $('input[type="checkbox"]');
-    let videos = checkBoxes.filter(function (i, checkBox) { return checkBox.name === 'video'; });
-    let rest = checkBoxes.filter(function (i, checkBox) { return checkBox.name !== 'video'; });
+    let videos = checkBoxes.filter(function (i, checkBox) {return checkBox.name === 'video';});
+    let rest = checkBoxes.filter(function (i, checkBox) {return checkBox.name !== 'video';});
     // sort as best in the beginning;
     videos.sort(function (a, b) {
       let valA = parseInt(a.getAttribute('data-bandwidth'), 10);
@@ -223,7 +223,7 @@ function addStartActions(manifestId) {
 
   //Update download folder
   $('#contentActions').append($('<input type="button" value="Update Download Folder">').on('click', function () {
-    const pathArray = dialog.showOpenDialog({ properties: ['openDirectory'] });
+    const pathArray = dialog.showOpenDialog({properties: ['openDirectory']});
     let path = pathArray ? pathArray[0] : undefined;
     if (path) {
       downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
@@ -239,7 +239,7 @@ function addStartActions(manifestId) {
   $('#contentActions').clone(true).appendTo($('#contentActions2'));
 }
 
-function checkForMissingSubscribers(contentSubscribe, manifestId) {
+function checkForMissingSubscribers (contentSubscribe, manifestId) {
   if (!$(contentSubscribe).parents().length) {
     downstreamElectron.downloads.unsubscribe(manifestId).then(function () {
       showStatusOK('removing previous subscribers -> ' + manifestId);
@@ -250,7 +250,7 @@ function checkForMissingSubscribers(contentSubscribe, manifestId) {
   }
 }
 
-function removeFadeOut(contentName) {
+function removeFadeOut (contentName) {
   $(contentName).parent().fadeOut(600, function () {
     let mainParent = $(contentName).parent().parent();
     $(contentName).parent().remove();
@@ -258,7 +258,7 @@ function removeFadeOut(contentName) {
   });
 }
 
-function addItemActions(manifestId,
+function addItemActions (manifestId,
   contentActions,
   contentHeader,
   contentMain,
@@ -275,14 +275,14 @@ function addItemActions(manifestId,
   $(contentActions).append($('<input type="button" value="Subscribe">').on('click', function () {
     $(contentSubscribe).html('');
 
-    function onProgress(err, stats) {
+    function onProgress (err, stats) {
       if (checkForMissingSubscribers(contentSubscribe, manifestId)) {
         return;
       }
       showStats(contentSubscribe, stats);
     }
 
-    function onFinish(err, info) {
+    function onFinish (err, info) {
       if (checkForMissingSubscribers(contentSubscribe, manifestId)) {
         return;
       }
@@ -406,7 +406,7 @@ function addItemActions(manifestId,
 
   //Update download folder
   $(contentActions).append($('<input type="button" value="Update Download Folder">').on('click', function () {
-    const pathArray = dialog.showOpenDialog({ properties: ['openDirectory'] });
+    const pathArray = dialog.showOpenDialog({properties: ['openDirectory']});
     let path = pathArray ? pathArray[0] : undefined;
     if (path) {
       downstreamElectron.downloads.updateDownloadFolder(manifestId, path).then(function (result) {
@@ -421,7 +421,7 @@ function addItemActions(manifestId,
 
 }
 
-function playVideo(link, offlineSessionId, playerUrl) {
+function playVideo (link, offlineSessionId, playerUrl) {
   let playerWindow = new BrowserWindow({
     width: 860,
     height: 600,
@@ -430,6 +430,10 @@ function playVideo(link, offlineSessionId, playerUrl) {
     webPreferences: {
       plugins: true,
       nodeIntegration: true,
+      nodeIntegration: true,
+      // NOTE: !WARNING! use with caution it allows app to download content
+      //                 from any URL
+      webSecurity: false,
       contextIsolation: false
     }
   });
@@ -444,7 +448,7 @@ function playVideo(link, offlineSessionId, playerUrl) {
   });
 }
 
-function getSelectedRepresentations() {
+function getSelectedRepresentations () {
   let representations = {};
   representations.video = [];
   $('input[type="checkbox"][name="video"]:checked').each(function () {
@@ -461,16 +465,16 @@ function getSelectedRepresentations() {
   return representations;
 }
 
-function createCheckBoxes(items, name) {
-  function getBandwidth(item) {
+function createCheckBoxes (items, name) {
+  function getBandwidth (item) {
     return item.bandwidth;
   }
 
-  function getValue(item) {
+  function getValue (item) {
     return item.id;
   }
 
-  function getDescription(item) {
+  function getDescription (item) {
     let description = '';
     for (let key in item) {
       if (item.hasOwnProperty(key)) {
@@ -480,7 +484,7 @@ function createCheckBoxes(items, name) {
     return description;
   }
 
-  function createElement(item) {
+  function createElement (item) {
     return $('<label style="display:block;"><input type="checkbox" data-bandwidth="' + getBandwidth(
       item) + '" name="' + name + '" value="' + getValue(item) + '" > ' + getDescription(item) + ' </label>');
   }
@@ -491,7 +495,7 @@ function createCheckBoxes(items, name) {
   }
 }
 
-function addDownloadItem(result, container) {
+function addDownloadItem (result, container) {
   let manifestId = result.manifestInfo.id;
   let contentHeader = $('<h4 id="' + manifestId + 'Header" class="header"></h4>');
   let contentActions = $('<div id="' + manifestId + 'Actions" class="actions"></div>');
@@ -513,7 +517,7 @@ function addDownloadItem(result, container) {
   $(container).append(li);
 }
 
-function addDownloadsList(results) {
+function addDownloadsList (results) {
   results.sort(function (a, b) {
     if (a.manifest.ts > b.manifest.ts) {
       return -1;
@@ -531,18 +535,18 @@ function addDownloadsList(results) {
   $('#contentMain').append(list);
 }
 
-function onRemoveAllUnfinished(results) {
+function onRemoveAllUnfinished (results) {
   for (let i = 0, j = results.length; i < j; i++) {
     let contentMain = '#' + results[i] + 'Main';
     removeFadeOut(contentMain);
   }
 }
 
-function updateListHeader(numberOfItems) {
+function updateListHeader (numberOfItems) {
   $('#contentHeader').html('Showing available downloads -> ' + numberOfItems);
 }
 
-function addMainActions() {
+function addMainActions () {
   //GET ALL
   $('#mainActions').append($('<input type="button" value="getList">').on('click', function () {
     clearContent();
@@ -595,7 +599,7 @@ function addMainActions() {
   addStressTest();
 }
 
-function addStressTest() {
+function addStressTest () {
   let manifests = [];
   for (let i = 0, j = 10; i < j; i++) {
     manifests.push('https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd');
@@ -608,11 +612,11 @@ function addStressTest() {
     $('#mainActions').after(container);
   }
 
-  function showStatsStress(manifestId, contentSubscribe, stats) {
+  function showStatsStress (manifestId, contentSubscribe, stats) {
     $(contentSubscribe).html('');
     $(contentSubscribe).append(manifestId + ' -> ');
 
-    function showStat(key) {
+    function showStat (key) {
       $(contentSubscribe).append(key + ': ');
       $(contentSubscribe).append(stats[key]);
     }
@@ -621,12 +625,12 @@ function addStressTest() {
     showStat('speedBytes');
   }
 
-  function onStart(manifestId, itemContainer) {
-    function onProgress(err, stats) {
+  function onStart (manifestId, itemContainer) {
+    function onProgress (err, stats) {
       showStatsStress(manifestId, itemContainer, stats);
     }
 
-    function onFinish(err, info) {
+    function onFinish (err, info) {
       if (info.status === 'FINISHED') {
         showStatusOK('DOWNLOAD ' + manifestId, itemContainer);
       } else if (info.status !== 'STOPPED') {
@@ -641,7 +645,7 @@ function addStressTest() {
     });
   }
 
-  function start(url) {
+  function start (url) {
     let itemContainer = $('<div></div>');
     container.append(itemContainer);
     return new Promise(function (resolve, reject) {
@@ -659,15 +663,15 @@ function addStressTest() {
           return 0;
         });
 
-        let video = result.video.map(function (item) { return item.id; });
-        let audio = result.audio.map(function (item) { return item.id; });
-        let text = result.text.map(function (item) { return item.id; });
+        let video = result.video.map(function (item) {return item.id;});
+        let audio = result.audio.map(function (item) {return item.id;});
+        let text = result.text.map(function (item) {return item.id;});
 
         // leave only one representation
         video.splice(1);
 
         let customFolder = document.getElementById('customDownloadFolder').value;
-        downstreamElectron.downloads.start(manifestId, { video: video, audio: audio, text: text }, customFolder).then(function () {
+        downstreamElectron.downloads.start(manifestId, {video: video, audio: audio, text: text}, customFolder).then(function () {
           onStart(manifestId, itemContainer);
           resolve(manifestId);
         }, function (err) {
@@ -680,8 +684,8 @@ function addStressTest() {
     });
   }
 
-  function subscribeAll(manifestIds) {
-    function onProgress(err, stats) {
+  function subscribeAll (manifestIds) {
+    function onProgress (err, stats) {
       let speed = stats.reduce(function (a, b) {
         return a + b.speed;
       }, 0);
@@ -689,7 +693,7 @@ function addStressTest() {
       console.log(speed.toFixed(2) + 'MB');
     }
 
-    function onFinish(err, infos) {
+    function onFinish (err, infos) {
       console.log('finished', infos);
     }
 
@@ -724,7 +728,7 @@ function addStressTest() {
         return result.manifestInfo.id;
       });
 
-      function resume(manifestId) {
+      function resume (manifestId) {
         return new Promise(function (resolve, reject) {
           downstreamElectron.downloads.resume(manifestId).then(function () {
             let itemContainer = $('<div></div>');
@@ -763,7 +767,7 @@ function addStressTest() {
   }));
 }
 
-function clearContent(name) {
+function clearContent (name) {
   name = name || '#content';
   const contentMain = name + 'Main';
   const contentActions = name + 'Actions';
@@ -779,28 +783,28 @@ function clearContent(name) {
   $(contentSubscribe).html('');
 }
 
-function _convertToKB(value, precision) {
+function _convertToKB (value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneKB = 1024;
   return (Math.round((value * a) / oneKB) / a) + "kB";
 };
 
-function _convertToMB(value, precision) {
+function _convertToMB (value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneMB = 1024 * 1024;
   return (Math.round((value * a) / oneMB) / a) + "MB";
 };
 
-function _convertToGB(value, precision) {
+function _convertToGB (value, precision) {
   precision = typeof precision !== "undefined" ? precision : 0;
   const a = Math.pow(10, precision);
   const oneGB = 1024 * 1024 * 1024;
   return (Math.round((value * a) / oneGB) / a) + "GB";
 };
 
-function _convertToBytes(value, precision, precision2, precision3) {
+function _convertToBytes (value, precision, precision2, precision3) {
   precision2 = typeof precision2 !== "undefined" ? precision2 : precision;
   precision3 = typeof precision3 !== "undefined" ? precision3 : precision;
   if (value < 100000) {
@@ -812,7 +816,7 @@ function _convertToBytes(value, precision, precision2, precision3) {
   }
 };
 
-function onSubmit(e) {
+function onSubmit (e) {
   e.preventDefault();
   let value = document.getElementById('manifestUrl').value;
   let customManifestId = document.getElementById('customManifestId').value;
@@ -830,7 +834,7 @@ function onSubmit(e) {
   return false;
 }
 
-function onLoad() {
+function onLoad () {
   document.getElementById('form').addEventListener('submit', onSubmit);
   addMainActions();
 }

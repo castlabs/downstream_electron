@@ -7,7 +7,6 @@ import {downstreamMiddleware} from '../middleware/downstream';
 import {downstreamGetListWithInfo, downstreamCreate, downstreamGetOfflineLink} from './../actions/downstream';
 import thunk from 'redux-thunk';
 
-
 //
 const initialState = {
     'downstream': {

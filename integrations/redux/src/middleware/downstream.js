@@ -39,6 +39,8 @@ const downstreamElectron = require('downstream-electron').init(window, new FakeP
  * @param {*} store 
  */
 export const downstreamMiddleware = store => next => action => {
+    console.log(next);
+
     switch (action.type) {
         //
         case 'DOWNSTREAM_CREATE':
