@@ -19,14 +19,11 @@
     "storage",
     "files"
   ],
-  "main": "api/index.js",
-  "files": [
-    "api"
-  ],
+  "main": "index.js",
   "homepage": "https://castlabs.com/resources/downstream/",
   "scripts": {
     "update": "ncu -u",
-    "build": "webpack",
+    "build": "NODE_OPTIONS=\"--openssl-legacy-provider\" && webpack",
     "package": "npm pack",
     "clean": "node ./bin/makefile.js clean",
     "eslint": "./node_modules/.bin/eslint api",
