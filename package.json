@@ -19,7 +19,7 @@
     "storage",
     "files"
   ],
-  "main": "index.js",
+  "main": "index",
   "homepage": "https://castlabs.com/resources/downstream/",
   "scripts": {
     "update": "ncu -u",
