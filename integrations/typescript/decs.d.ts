@@ -1,0 +1,1 @@
+declare module "downstream-electron/downstream-electron-be"
