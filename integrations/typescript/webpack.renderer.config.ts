@@ -13,14 +13,8 @@ export const rendererConfig: Configuration = {
     rules,
   },
   plugins,
+  target: 'electron-renderer',
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
-    /*
-    fallback: {
-      "fs": false,
-      "os": false,
-      "path": false
-    }
-    */
   },
 };

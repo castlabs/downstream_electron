@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@electron/remote": "^2.1.0",
-    "downstream-electron": "git+https://github.com/mackode/downstream_electron.git#feature/DFE-38-typescript-electron-forge",
+    "downstream-electron": "git+https://github.com/castlabs/downstream_electron.git",
     "electron-squirrel-startup": "^1.0.0"
   }
 }

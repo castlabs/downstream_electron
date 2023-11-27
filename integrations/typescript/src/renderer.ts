@@ -60,8 +60,7 @@ class FakePersistentPlugin {
 
 const downstreamInstance = downstreamElectron.init(window, new FakePersistentPlugin());
 
-/*
-downstreamElectron.downloads.create('https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd', '').then(function (result: any) {
+downstreamInstance.downloads.create('https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd', '').then(function (result: any) {
     console.log(result);
     let manifestId = result.id;
 
@@ -77,8 +76,8 @@ downstreamElectron.downloads.create('https://storage.googleapis.com/shaka-demo-a
     //     console.log('persistent error', err);
     // });
 
-    downstreamElectron.downloads.start(result.id, representations).then(function () {
-        downstreamElectron.downloads.subscribe(result.id, 1000, () => {
+    downstreamInstance.downloads.start(result.id, representations).then(function () {
+        downstreamInstance.downloads.subscribe(result.id, 1000, () => {
 
         }, () => {
 
@@ -94,6 +93,5 @@ downstreamElectron.downloads.create('https://storage.googleapis.com/shaka-demo-a
 }, function (err: any) {
     console.log(err);
 });
-*/
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');

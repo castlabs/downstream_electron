@@ -19,12 +19,7 @@
     "storage",
     "files"
   ],
-  "main": "index",
-  "build": {
-    "extraResources": [
-      "./node_modules/@electron/remote/**"
-    ]
-  },
+  "main": "index.js",
   "homepage": "https://castlabs.com/resources/downstream/",
   "scripts": {
     "update": "ncu -u",
