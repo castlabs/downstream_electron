@@ -58,7 +58,7 @@ class FakePersistentPlugin {
 
 }
 
-// const downstreamInstance = downstreamElectron.init(window, new FakePersistentPlugin());
+const downstreamInstance = downstreamElectron.init(window, new FakePersistentPlugin());
 
 /*
 downstreamElectron.downloads.create('https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd', '').then(function (result: any) {
