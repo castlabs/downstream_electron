@@ -20,6 +20,11 @@
     "files"
   ],
   "main": "index",
+  "build": {
+    "extraResources": [
+      "./node_modules/@electron/remote/**"
+    ]
+  },
   "homepage": "https://castlabs.com/resources/downstream/",
   "scripts": {
     "update": "ncu -u",
