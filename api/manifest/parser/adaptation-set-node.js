@@ -1,21 +1,21 @@
 "use strict";
-const BASE64 = require('base64-js');
+const BASE64 = require("base64-js");
 const pssh = require("./pssh");
 const MPEG_DASH_PROTECTION_SCHEME_ID_URI = 'urn:mpeg:dash:mp4protection:2011';
 const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 
 const __extends = (this && this.__extends) || function (d, b) {
-      for (let p in b) {
-        if (b.hasOwnProperty(p)) {
-          d[p] = b[p];
-        }
-      }
-      function __ () {
-        this.constructor = d;
-      }
+  for (let p in b) {
+    if (b.hasOwnProperty(p)) {
+      d[p] = b[p];
+    }
+  }
+  function __ () {
+    this.constructor = d;
+  }
 
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 const ManifestNode_1 = require("./manifest-node");
 const RepresentationNode_1 = require("./representation-node");
 const AdaptationSetNode = (function (_super) {

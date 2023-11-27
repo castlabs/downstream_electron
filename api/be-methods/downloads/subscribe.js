@@ -1,7 +1,7 @@
 "use strict";
 
-const translation = require('../../translation/index');
-const Subscriber = require("../../util/subscriber");
+const translation = window.require("../../translation/index");
+const Subscriber = window.require("../../util/subscriber");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestIds, timeout) {
   if (typeof manifestIds === 'string') {

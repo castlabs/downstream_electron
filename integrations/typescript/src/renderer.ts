@@ -29,7 +29,36 @@
 import './index.css';
 import * as downstreamElectron from 'downstream-electron/downstream-electron-fe';
 
-const downstreamInstance = downstreamElectron.init(window);
+class FakePersistentPlugin {
+    createPersistentSession(persistentConfig: any): void {
+        console.log('create - persistent plugin', persistentConfig);
+        /*
+    
+    return new Promise(function (resolve) {
+        _createOrLoadMediaSession(function (sessionId) {
+            //activeSession.close();
+            resolve(sessionId);
+        }, persistentConfig.pssh, null);
+    });
+    */
+    }
+
+    removePersistentSession(sessionId: string): void {
+        console.log(sessionId);
+        /*
+        return new Promise(function (resolve) {
+            if (activeSession !== undefined && activeSession !== null) {
+                activeSession.remove();
+            }
+            console.log('remove - persistent plugin, sessionId', sessionId);
+            resolve();
+        });
+        */
+    }
+
+}
+
+// const downstreamInstance = downstreamElectron.init(window, new FakePersistentPlugin());
 
 /*
 downstreamElectron.downloads.create('https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd', '').then(function (result: any) {

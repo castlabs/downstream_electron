@@ -1,5 +1,5 @@
 const fs = require("fs");
-const appSettings = require('../app-settings');
+const appSettings = window.require("../app-settings");
 
 /**
  *

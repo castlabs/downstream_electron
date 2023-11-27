@@ -1,6 +1,5 @@
 "use strict";
-
-const net = require('net');
+const net = window.require("net");
 
 module.exports = function (port, fn) {
   const tester = net.createServer().once('error', function (err) {

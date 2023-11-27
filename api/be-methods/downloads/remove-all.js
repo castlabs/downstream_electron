@@ -1,6 +1,6 @@
 "use strict";
 
-const translation = require('../../translation/index');
+const translation = window.require("../../translation/index");
 
 module.exports = function (api, onSuccess, onFailure) {
   api.offlineController.getManifestsListWithInfo(function (err, manifests) {
@@ -15,18 +15,18 @@ module.exports = function (api, onSuccess, onFailure) {
         promises.push(api.downloadsController.removePromise(manifestIds[i]));
       }
       Promise.all(promises)
-          .then(function () {
-            api.offlineController.removeAllPromise()
-                .then(function () {
-                  api.subscribersController.unsubscribeAll();
-                  api.manifestController.removeFromCacheAll();
-                  onSuccess(manifests);
-                }, function (err) {
-                  onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_FAILED), err);
-                });
-          }, function (err) {
-            onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_FAILED), err);
-          });
+        .then(function () {
+          api.offlineController.removeAllPromise()
+            .then(function () {
+              api.subscribersController.unsubscribeAll();
+              api.manifestController.removeFromCacheAll();
+              onSuccess(manifests);
+            }, function (err) {
+              onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_FAILED), err);
+            });
+        }, function (err) {
+          onFailure(translation.getError(translation.e.downloads.REMOVING_ALL_FAILED), err);
+        });
     }
   });
 };

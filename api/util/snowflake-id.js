@@ -1,6 +1,6 @@
 "use strict";
-const FlakeIdGen = require('flake-idgen');
-const intFormat = require('biguint-format');
+const FlakeIdGen = require("flake-idgen");
+const intFormat = require("biguint-format");
 const generator = new FlakeIdGen;
 const SnowflakeId = (function () {
   function SnowflakeId () {

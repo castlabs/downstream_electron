@@ -1,7 +1,7 @@
 "use strict";
-const appSettings = require('../../app-settings');
-const translation = require('../../translation/index');
-const FlushItem = require("../../downloads/flush-item");
+const appSettings = window.require("../../app-settings");
+const translation = window.require("../../translation/index");
+const FlushItem = window.require("../../downloads/flush-item");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId, persistent) {
   api.offlineController.getManifestInfo(manifestId, function (err) {
@@ -10,11 +10,11 @@ module.exports = function (api, onSuccess, onFailure, target, manifestId, persis
     } else {
       const flushItem = new FlushItem(manifestId, appSettings.getSettings().stores.PERSISTENT, persistent);
       flushItem.save()
-          .then(function () {
-            onSuccess();
-          }, function (err) {
-            onFailure(translation.getError(translation.e.downloads.SAVING_PERSISTENT_FAILED, manifestId), err);
-          });
+        .then(function () {
+          onSuccess();
+        }, function (err) {
+          onFailure(translation.getError(translation.e.downloads.SAVING_PERSISTENT_FAILED, manifestId), err);
+        });
     }
   });
 

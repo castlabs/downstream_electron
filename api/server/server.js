@@ -2,12 +2,12 @@
 /*eslint no-sync: ["off"]*/
 "use strict";
 
-const isPortTaken = window.require('../util/is-port-taken');
-const path = window.require('path');
-const fs = window.require('fs');
-var fork = window.require('child_process').fork;
+const isPortTaken = window.require("../util/is-port-taken");
+const path = window.require("path");
+const fs = window.require("fs");
+var fork = window.require("child_process").fork;
 const appSettings = window.require("../app-settings");
-const {app} = window.require('electron');
+const {app} = window.require("electron");
 
 const CHILD_SCRIPT_FILENAME = 'startServer.js';
 

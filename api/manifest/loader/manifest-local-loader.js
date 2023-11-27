@@ -1,6 +1,6 @@
 "use strict";
-const fs = window.require('fs');
-const path = window.require('path');
+const fs = window.require("fs");
+const path = window.require("path");
 
 /**
  * @param {string} url - local url

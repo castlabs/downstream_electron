@@ -1,7 +1,7 @@
 "use strict";
 
-const translation = require('../../translation/index');
-const STATUSES = require("../../downloads/statuses");
+const translation = window.require("../../translation/index");
+const STATUSES = window.require("../../downloads/statuses");
 
 module.exports = function (api, onSuccess, onFailure) {
   api.offlineController.getManifestsListWithInfo(function (err, results) {
@@ -20,11 +20,11 @@ module.exports = function (api, onSuccess, onFailure) {
       }
       if (manifestIds.length > 0) {
         Promise.all(promises)
-            .then(function () {
-              onSuccess(manifestIds);
-            }, function (err) {
-              onFailure(translation.getError(translation.e.downloads.STOPPING_ALL_FAILED), err);
-            });
+          .then(function () {
+            onSuccess(manifestIds);
+          }, function (err) {
+            onFailure(translation.getError(translation.e.downloads.STOPPING_ALL_FAILED), err);
+          });
       } else {
         onFailure(translation.getError(translation.e.downloads.ALREADY_STOPPED_ALL));
       }

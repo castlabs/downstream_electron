@@ -1,6 +1,6 @@
 "use strict";
 const AdaptationSetNode_1 = require("./adaptation-set-node");
-const DOMParser = require('xmldom').DOMParser;
+const DOMParser = require("xmldom").DOMParser;
 const ManifestXML = (function () {
   function ManifestXML () {
   }
@@ -9,7 +9,7 @@ const ManifestXML = (function () {
     if (typeof onSuccess === "function" && typeof onError === "function") {
       parser = new DOMParser({
         errorHandler: {
-          warning: function () {},
+          warning: function () { },
           error: onError, fatalError: onError
         }
       });
@@ -78,8 +78,8 @@ const ManifestXML = (function () {
     }
     repArray.forEach(function (item) {
       const markForDownload = (item.attributes.getNamedItem("markForDownload") &&
-          item.attributes.getNamedItem("markForDownload").value == 'true')
-          ? true : false;
+        item.attributes.getNamedItem("markForDownload").value == 'true')
+        ? true : false;
       if (!markForDownload) {
         item.parentNode.removeChild(item);
       }

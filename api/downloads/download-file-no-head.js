@@ -1,9 +1,9 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
-const fs = require("fs");
-const {net} = require('electron');
-const EventEmitter = require("events").EventEmitter;
-const util = require("util");
-const downloadFileUtil = require("./download-file-util");
+const fs = window.require("fs");
+const {net} = window.require("electron");
+const EventEmitter = window.require("events").EventEmitter;
+const util = window.require("util");
+const downloadFileUtil = window.require("./download-file-util");
 
 /**
  *
@@ -23,7 +23,7 @@ util.inherits(DownloadFileNoHead, EventEmitter);
 
 DownloadFileNoHead.prototype._reset = function (callback) {
   const self = this;
-  callback = callback || function () {};
+  callback = callback || function () { };
 
   self._closeStreamAndRequest(function () {
     self._resetValues();
@@ -127,7 +127,7 @@ DownloadFileNoHead.prototype._closeStreamAndRequest = function (callback) {
       self.fileStream.destroy();
       delete self.fileStream;
     }
-    delete(self._req);
+    delete (self._req);
     callback();
   }
 
