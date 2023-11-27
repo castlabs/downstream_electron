@@ -1,9 +1,9 @@
 "use strict";
-const {mkdirp} = window.require("mkdirp");
+const {mkdirp} = require('mkdirp');
 
-const appSettings = require("../app-settings");
-const jsonfile = require("jsonfile");
-const LinkSave = require("../manifest/json/link-save");
+const appSettings = require('../app-settings');
+const jsonfile = require('jsonfile');
+const LinkSave = require('../manifest/json/link-save');
 
 /**
  *

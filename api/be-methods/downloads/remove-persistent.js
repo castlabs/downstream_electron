@@ -1,7 +1,7 @@
 "use strict";
-const appSettings = window.require("../../app-settings");
-const translation = window.require("../../translation/index");
-const removeDir = window.require("../../util/remove-dir");
+const appSettings = require('../../app-settings');
+const translation = require('../../translation/index');
+const removeDir = require("../../util/remove-dir");
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId) {
   api.offlineController.getManifestInfo(manifestId, function (err, info) {

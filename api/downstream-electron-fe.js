@@ -2,9 +2,9 @@
 'use strict';
 const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 
-const ipcRenderer = window.require("electron").ipcRenderer;
+const ipcRenderer = require('electron').ipcRenderer;
 
-const translation = window.require("./translation/index");
+const translation = require("./translation/index");
 
 let downstreamElectronFE;
 
@@ -261,7 +261,7 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
  * @returns {void}
  */
 DownstreamElectronFE.prototype._attachEvents = function () {
-  const ipcRenderer = window.require('electron').ipcRenderer;
+  const ipcRenderer = require('electron').ipcRenderer;
   ipcRenderer.on('downstreamElectronFE', this._processApi);
   this._window.addEventListener('beforeunload', this._beforeUnload);
 };
@@ -369,7 +369,7 @@ DownstreamElectronFE.prototype._processApi = function (obj, evt) {
     if (evt.subscribersId) {
       this._saveSubscribersId(promiseObj, evt.subscribersId);
     }
-    delete (this._promisesObj[promiseId]);
+    delete(this._promisesObj[promiseId]);
   } else if (evt.subscriberId) {
     this._executeSubscriber(evt.subscriberId, evt.err, result, evt.subscriberFinished);
   } else {
@@ -419,7 +419,7 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
     for (let i = 0, j = manifestId.length; i < j; i++) {
       if (typeof self._subscribersId[subscriberKey].manifestId === 'string') {
         if (self._subscribersId[subscriberKey].manifestId === manifestId[i]) {
-          delete (self._subscribersId[subscriberKey]);
+          delete(self._subscribersId[subscriberKey]);
           break;
         }
       } else {
@@ -428,7 +428,7 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
           self._subscribersId[subscriberKey].manifestId.splice(pos, 1);
         }
         if (!self._subscribersId[subscriberKey].manifestId.length) {
-          delete (self._subscribersId[subscriberKey]);
+          delete(self._subscribersId[subscriberKey]);
           break;
         }
       }

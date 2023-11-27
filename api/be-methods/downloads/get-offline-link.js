@@ -1,5 +1,5 @@
 "use strict";
-const translation = window.require("../../translation/index");
+const translation = require('../../translation/index');
 
 module.exports = function (api, onSuccess, onFailure, target, manifestId) {
   api.offlineController.getManifestInfo(manifestId, function (err, info) {

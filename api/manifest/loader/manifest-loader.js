@@ -1,9 +1,9 @@
 "use strict";
-const {net} = window.require("electron");
-const appSettings = window.require("../../app-settings");
+const {net} = require('electron');
+const appSettings = require('../../app-settings');
 
 const ManifestLoader = (function () {
-  function ManifestLoader () { }
+  function ManifestLoader () {}
 
   ManifestLoader.prototype.load = function (url) {
     return this.sendXMLHttpRequest(url);
@@ -30,7 +30,7 @@ const ManifestLoader = (function () {
 
         let error;
         if (response.statusCode >= 400) {
-          error = response.statusMessage;
+            error = response.statusMessage;
         }
 
         if (!error) {
@@ -42,7 +42,7 @@ const ManifestLoader = (function () {
             resolve({response: body, url: url});
           });
         } else {
-          reject(new Error("MANIFEST LOAD FAILURE " + error));
+            reject(new Error("MANIFEST LOAD FAILURE " + error));
         }
       });
       req.end();

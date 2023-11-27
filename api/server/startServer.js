@@ -1,12 +1,10 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 
 (function () {
 
-  process.send({
-    cmd: 'log',
-    log: 'Starting HTTP server'
-  });
+  process.send({cmd: 'log',
+                log: 'Starting HTTP server'});
   let server = express();
   server.use(cors());
 

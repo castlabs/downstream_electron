@@ -1,9 +1,9 @@
-const fs = window.require("fs");
-const {net} = window.require("electron");
-const EventEmitter = window.require("events").EventEmitter;
-const util = window.require("util");
-const downloadFileUtil = window.require("./download-file-util");
-const DownloadFileChunk = window.require("./download-file-chunk");
+const fs = require("fs");
+const {net} = require('electron');
+const EventEmitter = require("events").EventEmitter;
+const util = require("util");
+const downloadFileUtil = require("./download-file-util");
+const DownloadFileChunk = require("./download-file-chunk");
 
 /**
  *
@@ -47,8 +47,8 @@ DownloadFile.prototype._concatChunks = function () {
   self._chunks[0].writeProgress = 1;
   function countWriteProgress () {
     self.writeProgress = self._chunks.reduce(function (a, b) {
-      return a + b.writeProgress;
-    }, 0) / self._chunksNumber;
+        return a + b.writeProgress;
+      }, 0) / self._chunksNumber;
     self.emit("data");
   }
   function getWriteStream () {
@@ -197,7 +197,7 @@ DownloadFile.prototype._onDownloadSuccess = function (err) {
   for (let i = 0, j = err.length; i < j; i++) {
     if (err[i]) {
       if (err[i] === downloadFileUtil.errors.ABORTED ||
-        err[i] === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
+          err[i] === downloadFileUtil.errors.NO_SPACE_LEFT_ERROR) {
         aborted = true;
       }
       error = true;

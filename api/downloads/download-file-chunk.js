@@ -1,7 +1,7 @@
-const downloadFileUtil = window.require("./download-file-util");
-const fs = window.require("fs");
-const {net} = window, window.require("electron");
-const EventEmitter = window.require("events").EventEmitter;
+const downloadFileUtil = require("./download-file-util");
+const fs = require("fs");
+const {net} = require('electron');
+const EventEmitter = require("events").EventEmitter;
 
 /**
  *
@@ -86,12 +86,12 @@ Chunk.prototype.createFileStream = function (callback) {
             // no space left on disk, do not retry downloading
             self.resolve(downloadFileUtil.errors.NO_SPACE_LEFT_ERROR, error);
           } else {
-            self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
-              if (!retried) {
-                self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
-              }
-            });
-          }
+             self._retry(downloadFileUtil.errors.FILE_WRITING_ERROR, function (retried) {
+               if (!retried) {
+                 self.resolve(downloadFileUtil.errors.FILE_WRITING_ERROR, error);
+               }
+             });
+           }
         });
         this.on("finish", function () {
           if (!self.isDownloaded()) {
@@ -147,29 +147,29 @@ Chunk.prototype.start = function () {
     self._req.chunkedEncoding = self.options.useChunkedEncoding;
 
     self._req.on('response', (response) => {
-      response.on("error", function (error) {
-        if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
-          self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
-            if (!retried) {
+        response.on("error", function (error) {
+            if (error.code === "ESOCKETTIMEDOUT" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
+              self._retry(downloadFileUtil.errors.INTERNET, function (retried) {
+                if (!retried) {
+                  self.closeStreamAndRequest(function () {
+                    self.resolve(downloadFileUtil.errors.TIMEOUT, error);
+                  });
+                }
+              });
+            } else {
               self.closeStreamAndRequest(function () {
-                self.resolve(downloadFileUtil.errors.TIMEOUT, error);
+                self.resolve(downloadFileUtil.errors.CHUNK_ERROR);
               });
             }
           });
-        } else {
-          self.closeStreamAndRequest(function () {
-            self.resolve(downloadFileUtil.errors.CHUNK_ERROR);
+          response.on("data", function (data) {
+            if (response.statusCode === 200 || response.statusCode === 206) {
+              self.available += data.length;
+              self.downloaded += data.length;
+              self.events.emit("download", data.length);
+            }
           });
-        }
-      });
-      response.on("data", function (data) {
-        if (response.statusCode === 200 || response.statusCode === 206) {
-          self.available += data.length;
-          self.downloaded += data.length;
-          self.events.emit("download", data.length);
-        }
-      });
-      response.pipe(self.fileStream);
+          response.pipe(self.fileStream);
     });
     self._req.end();
   });
@@ -187,7 +187,7 @@ Chunk.prototype.closeStreamAndRequest = function (callback) {
       self.fileStream.destroy();
       delete self.fileStream;
     }
-    delete (self._req);
+    delete(self._req);
     callback();
   }
 
@@ -219,7 +219,7 @@ Chunk.prototype.closeStreamAndRequest = function (callback) {
 
 Chunk.prototype.reset = function (callback) {
   const self = this;
-  callback = callback || function () { };
+  callback = callback || function () {};
 
   self.closeStreamAndRequest(function () {
     self.offsetStartPosition = 0;

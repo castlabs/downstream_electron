@@ -1,6 +1,6 @@
 "use strict";
-const ManifestXML_1 = require("../manifest-xml");
-const StreamIndexNode_1 = require("./streamIndex-node");
+const ManifestXML_1 = require('../manifest-xml');
+const StreamIndexNode_1 = require('./streamIndex-node');
 
 
 ManifestXML_1.ManifestXML.prototype.getManifestType = function (xml) {

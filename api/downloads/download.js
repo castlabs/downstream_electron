@@ -1,13 +1,13 @@
 "use strict";
-const _ = window.require("underscore");
-const domain = window.require("domain");
-const DownloadFileNoHead = window.require("./download-file-no-head");
-const DownloadFile = window.require("./download-file");
-const {mkdirp} = window.require("mkdirp");
+const _ = require("underscore");
+const domain = require('domain');
+const DownloadFileNoHead = require("./download-file-no-head");
+const DownloadFile = require("./download-file");
+const {mkdirp} = require("mkdirp");
 
-const appSettings = window.require("../app-settings");
-const EventEmitter = window.require("events").EventEmitter;
-const STATUSES = window.require("./statuses");
+const appSettings = require("../app-settings");
+const EventEmitter = require("events").EventEmitter;
+const STATUSES = require("./statuses");
 
 
 /**

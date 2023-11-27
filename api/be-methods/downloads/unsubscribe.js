@@ -1,6 +1,6 @@
 "use strict";
 
-const translation = window.require("../../translation/index");
+const translation = require('../../translation/index');
 
 module.exports = function (api, onSuccess, onFailure, target, manifestIds) {
   if (typeof manifestIds === 'string') {

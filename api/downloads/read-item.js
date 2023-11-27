@@ -1,6 +1,6 @@
 "use strict";
-const jsonfile = window.require("jsonfile");
-const path = window.require("path");
+const jsonfile = require('jsonfile');
+const path = require("path");
 
 const appSettings = require('../app-settings');
 

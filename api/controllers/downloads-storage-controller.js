@@ -2,13 +2,13 @@
 "use strict";
 const _ = require("underscore");
 
-const appSettings = window.require("../app-settings");
-const ArrayStorage = window.require("./../util/array-storage");
-const ArrayStorageBridge = window.require("./../util/array-storage-bridge");
-const FlushItem = window.require("../downloads/flush-item");
-const Storage = window.require("./../util/storage");
-const StorageBridge = window.require("./../util/storage-bridge");
-const SyncItem = window.require("../downloads/sync-item");
+const appSettings = require('../app-settings');
+const ArrayStorage = require("./../util/array-storage");
+const ArrayStorageBridge = require("./../util/array-storage-bridge");
+const FlushItem = require("../downloads/flush-item");
+const Storage = require("./../util/storage");
+const StorageBridge = require("./../util/storage-bridge");
+const SyncItem = require("../downloads/sync-item");
 
 /**
  *
@@ -124,17 +124,17 @@ DownloadsStorageController.prototype._flush = function () {
   }
 
   Promise.all(flushItems)
-    .then(function () {
-      let i, j;
-      for (i = 0, j = items.length; i < j; i++) {
-        items[i].resolve();
-      }
-    }, function () {
-      let i, j;
-      for (i = 0, j = items.length; i < j; i++) {
-        items[i].reject();
-      }
-    })
+      .then(function () {
+        let i, j;
+        for (i = 0, j = items.length; i < j; i++) {
+          items[i].resolve();
+        }
+      }, function () {
+        let i, j;
+        for (i = 0, j = items.length; i < j; i++) {
+          items[i].reject();
+        }
+      })
 };
 
 /**
@@ -205,9 +205,9 @@ DownloadsStorageController.prototype.clear = function (manifestId, storageKeys) 
         }
       }
     }
-    delete (self._items[manifestId]);
+    delete(self._items[manifestId]);
     self.sync(manifestId, storageKeys)
-      .then(resolve, reject);
+        .then(resolve, reject);
   });
 };
 
@@ -228,11 +228,11 @@ DownloadsStorageController.prototype.create = function (manifestId) {
     self._createStorage(manifestId, self.stores.MANIFEST);
     self._createStorage(manifestId, self.stores.STATUS);
     self.sync(manifestId, [
-      self.stores.DOWNLOADS.DOWNLOADED,
-      self.stores.MANIFEST,
-      self.stores.STATUS,
-    ])
-      .then(resolve, reject);
+          self.stores.DOWNLOADS.DOWNLOADED,
+          self.stores.MANIFEST,
+          self.stores.STATUS,
+        ])
+        .then(resolve, reject);
   });
 };
 /**
@@ -244,14 +244,14 @@ DownloadsStorageController.prototype.createIfNotExists = function (manifestId) {
   const self = this;
   return new Promise(function (resolve, reject) {
     self.getItem(manifestId)
-      .then(function (result) {
-        if (result) {
-          resolve()
-        } else {
-          self.create(manifestId)
-            .then(resolve, reject);
-        }
-      }, reject);
+        .then(function (result) {
+          if (result) {
+            resolve()
+          } else {
+            self.create(manifestId)
+                .then(resolve, reject);
+          }
+        }, reject);
   });
 };
 
