@@ -31,7 +31,7 @@ import * as downstreamElectron from 'downstream-electron/downstream-electron-fe'
 
 const downstreamInstance = downstreamElectron.init(window);
 
-downstreamInstance.downloads.create('https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd', '').then(function (result: any) {
+downstreamInstance.downloads.create('https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd', '').then(function (result: any) {
     console.log(result);
     let manifestId = result.id;
 
@@ -41,17 +41,11 @@ downstreamInstance.downloads.create('https://storage.googleapis.com/shaka-demo-a
     };
     console.log(representations);
 
-    // downstreamElectron.downloads.createPersistent(result.id, persistentConfig).then(function (persistentSessionId) {
-    //     console.log('persistent', persistentSessionId);
-    // }, function (err: any) {
-    //     console.log('persistent error', err);
-    // });
-
     downstreamInstance.downloads.start(result.id, representations).then(function () {
-        downstreamInstance.downloads.subscribe(result.id, 1000, () => {
-
-        }, () => {
-
+        downstreamInstance.downloads.subscribe(result.id, 1000, (error: any, stats: any) => {
+            console.log(stats);
+        }, (error: any, info: any) => {
+            console.log(info);
         }).then(function () {
             console.log('subscribed');
         }, function (err: any) {
