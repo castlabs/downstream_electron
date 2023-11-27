@@ -1,53 +1,7 @@
-#status {
-  margin: 10px 0;
-}
-
-.error {
-  color: #ff0000;
-  font-weight: 700;
-}
-
-.success {
-  color: #14a937;
-  font-weight: 700;
-}
-
-.actions {
-  margin: 5px 0;
-}
-
-.statusMain {
-  text-align: center;
-  min-height: 25px;
-  line-height: 25px;
-}
-
-.status {
-  text-align: center;
-}
-
-.header {
-  margin: 5px 0 2px 0;
-}
-
-.main {
-  font-size: 13px;
-}
-
-.subscribe {
-  font-size: 13px;
-  /* text-align: center; */
-  margin: 0 0 0 50px;
-  display: inline-block;
-}
-
-.subscribe .progressItem {
-  display: block;
-}
-
-.progressItem .key {}
-
-.progressItem .stats {
-  color: #0057e7;
-  font-weight: 700;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  margin: auto;
+  max-width: 38rem;
+  padding: 2rem;
 }

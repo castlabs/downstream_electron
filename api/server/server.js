@@ -2,12 +2,12 @@
 /*eslint no-sync: ["off"]*/
 "use strict";
 
-const isPortTaken = window.require('../util/is-port-taken');
-const path = window.require('path');
-const fs = window.require('fs');
-var fork = window.require('child_process').fork;
-const appSettings = window.require("../app-settings");
-const {app} = window.require('electron');
+const isPortTaken = require('../util/is-port-taken');
+const path = require('path');
+const fs = require('fs');
+var fork = require('child_process').fork;
+const appSettings = require("../app-settings");
+const {app} = require('electron');
 
 const CHILD_SCRIPT_FILENAME = 'startServer.js';
 
@@ -87,10 +87,9 @@ OfflineContentServer.prototype._startServer = function (port, callback) {
 
       self._offlineController.getManifestInfo(manifestId, function (err, info) {
         if (err) {
-          return self.childProcess.send({
-            error: err,
-            requestId: requestId
-          });
+          return self.childProcess.send({error: err,
+                             requestId: requestId
+                            });
         }
         let downloadFolder = info.manifest.folder;
         if (!downloadFolder) {
