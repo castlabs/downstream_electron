@@ -1,9 +1,9 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const downloadFileUtil = require("../downloads/download-file-util");
+const fs = window.require('fs');
+const path = window.require('path');
+const downloadFileUtil = window.require("../downloads/download-file-util");
 
 function removeDir (dir, cb, ENOTEMPTY_attempts) {
   ENOTEMPTY_attempts = ENOTEMPTY_attempts || 0;
