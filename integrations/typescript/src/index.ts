@@ -38,6 +38,11 @@ const createWindow = (): void => {
     width: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      nodeIntegration: true,
+      // NOTE: !WARNING! use with caution it allows app to download content
+      //                 from any URL
+      webSecurity: false,
+      contextIsolation: false
     },
   });
 
