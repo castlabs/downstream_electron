@@ -261,7 +261,7 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
  * @returns {void}
  */
 DownstreamElectronFE.prototype._attachEvents = function () {
-  const ipcRenderer = window.require("electron").ipcRenderer;
+  const ipcRenderer = window.require('electron').ipcRenderer;
   ipcRenderer.on('downstreamElectronFE', this._processApi);
   this._window.addEventListener('beforeunload', this._beforeUnload);
 };

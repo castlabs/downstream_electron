@@ -60,7 +60,7 @@
  * app.on('ready', createWindow);
  */
 
-const electronApp = window.require("electron").app;
+const electronApp = window.require('electron').app;
 const path = window.require('path');
 let settings = {
   downloadingThreadsRules: {

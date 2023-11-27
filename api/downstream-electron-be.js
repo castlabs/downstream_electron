@@ -148,7 +148,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
  * @returns {void}
  */
 DownstreamElectronBE.prototype._attachEvents = function () {
-  const ipcMain = window.require("electron").ipcMain;
+  const ipcMain = require('electron').ipcMain;
   ipcMain.on("downstreamElectronBE", this._onApiRequest);
 };
 
@@ -211,7 +211,7 @@ DownstreamElectronBE.prototype._onApiRequest = function (evt, data, target) {
  */
 DownstreamElectronBE.prototype._send = function (response, target) {
   try {
-    const windows = window.require("electron").BrowserWindow.getAllWindows();
+    const windows = require('electron').BrowserWindow.getAllWindows();
     for (let i = 0, j = windows.length; i < j; i++) {
       if (windows[i].id === target) {
         windows[i].webContents.send('downstreamElectronFE', response);
