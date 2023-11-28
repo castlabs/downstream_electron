@@ -79,6 +79,6 @@
     "moment": "2.29.4",
     "underscore": "1.13.6",
     "url-parse": "1.5.10",
-    "xmldom": "0.6.0"
+    "@xmldom/xmldom": "0.7.0"
   }
 }

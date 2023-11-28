@@ -1,11 +1,11 @@
 "use strict";
 
-const XMLSerializer = require('xmldom').XMLSerializer;
+const XMLSerializer = require("@xmldom/xmldom").XMLSerializer;
 const appSettings = require("../app-settings");
 const parseManifestWithChoosenRepresentations = require("../util/parse-manifest-with-choosen-representations");
 const downloadFileUtil = require("../downloads/download-file-util");
 const saveFile = require("../util/save-file");
-const translation = require('../translation/index');
+const translation = require("../translation/index");
 
 /**
  *
@@ -104,7 +104,7 @@ ManifestController.prototype.removeFromCache = function (manifestIds) {
 
   manifestIds = manifestIds || [];
   for (let i = 0, j = manifestIds.length; i < j; i++) {
-    delete(this._manifests[manifestIds[i]]);
+    delete (this._manifests[manifestIds[i]]);
   }
 };
 
