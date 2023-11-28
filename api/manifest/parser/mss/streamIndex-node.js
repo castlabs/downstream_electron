@@ -1,23 +1,23 @@
 "use strict";
-const BASE64 = require('base64-js');
+const BASE64 = require("base64-js");
 const pssh = require("../pssh");
-const DOMParser = require('xmldom').DOMParser;
+const DOMParser = require("@xmldom/xmldom").DOMParser;
 
 const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 const PLAYREADY_SCHEME_ID_URI = 'urn:uuid:9a04f079-9840-4286-ab92-e65be0885f95';
 
 const __extends = (this && this.__extends) || function (d, b) {
-      for (let p in b) {
-        if (b.hasOwnProperty(p)) {
-          d[p] = b[p];
-        }
-      }
-      function __ () {
-        this.constructor = d;
-      }
+  for (let p in b) {
+    if (b.hasOwnProperty(p)) {
+      d[p] = b[p];
+    }
+  }
+  function __ () {
+    this.constructor = d;
+  }
 
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 const AdaptationSetNode_1 = require("../adaptation-set-node");
 const QualityLevelNode_1 = require("./qualityLevel-node");
 
@@ -35,7 +35,7 @@ const StreamIndexNode = (function (_super) {
       const qualityLevelNode = new QualityLevelNode_1.QualityLevelNode(qualityLevels[i], this.xml);
       this.representationColl[i] = qualityLevelNode;
       if (this.representationColl[0].hasMimeType()) {
-          this.attributeList['mimeType'] = this.representationColl[0].getMimeType();
+        this.attributeList['mimeType'] = this.representationColl[0].getMimeType();
       }
       if (this.representationColl[0].hasContentType()) {
         this.attributeList['mimeType'] = this.representationColl[0].getContentType();
@@ -71,53 +71,53 @@ const StreamIndexNode = (function (_super) {
   }
 
   StreamIndexNode.prototype.getKIDFromProtectionHeader = function (protectionHeader) {
-      let prHeader,
-          wrmHeader,
-          xmlReader,
-          KID;
+    let prHeader,
+      wrmHeader,
+      xmlReader,
+      KID;
 
-      // Get PlayReady header as byte array (base64 decoded)
-      prHeader = BASE64.toByteArray(protectionHeader.firstChild.data);
+    // Get PlayReady header as byte array (base64 decoded)
+    prHeader = BASE64.toByteArray(protectionHeader.firstChild.data);
 
-      // Get Right Management header (WRMHEADER) from PlayReady header
-      wrmHeader = this.getWRMHeaderFromPRHeader(prHeader);
+    // Get Right Management header (WRMHEADER) from PlayReady header
+    wrmHeader = this.getWRMHeaderFromPRHeader(prHeader);
 
-      // Convert from multi-byte to unicode
-      wrmHeader = new Uint16Array(wrmHeader.buffer);
+    // Convert from multi-byte to unicode
+    wrmHeader = new Uint16Array(wrmHeader.buffer);
 
-      // Convert to string
-      wrmHeader = String.fromCharCode.apply(null, wrmHeader);
+    // Convert to string
+    wrmHeader = String.fromCharCode.apply(null, wrmHeader);
 
-      // Parse <WRMHeader> to get KID field value
-      xmlReader = (new DOMParser()).parseFromString(wrmHeader, 'application/xml');
-      KID = xmlReader.getElementsByTagName('KID')[0].textContent;
+    // Parse <WRMHeader> to get KID field value
+    xmlReader = (new DOMParser()).parseFromString(wrmHeader, 'application/xml');
+    KID = xmlReader.getElementsByTagName('KID')[0].textContent;
 
-      // Get KID (base64 decoded) as byte array
-      KID = BASE64.toByteArray(KID);
+    // Get KID (base64 decoded) as byte array
+    KID = BASE64.toByteArray(KID);
 
-      // Convert UUID from little-endian to big-endian
-      this.convertUuidEndianness(KID);
+    // Convert UUID from little-endian to big-endian
+    this.convertUuidEndianness(KID);
 
-      return KID;
+    return KID;
   };
 
   StreamIndexNode.prototype.convertUuidEndianness = function (uuid) {
-      this.swapBytes(uuid, 0, 3);
-      this.swapBytes(uuid, 1, 2);
-      this.swapBytes(uuid, 4, 5);
-      this.swapBytes(uuid, 6, 7);
+    this.swapBytes(uuid, 0, 3);
+    this.swapBytes(uuid, 1, 2);
+    this.swapBytes(uuid, 4, 5);
+    this.swapBytes(uuid, 6, 7);
   };
 
   StreamIndexNode.prototype.swapBytes = function (bytes, pos1, pos2) {
-      let temp = bytes[pos1];
-      bytes[pos1] = bytes[pos2];
-      bytes[pos2] = temp;
+    let temp = bytes[pos1];
+    bytes[pos1] = bytes[pos2];
+    bytes[pos2] = temp;
   };
 
   StreamIndexNode.prototype.getWRMHeaderFromPRHeader = function getWRMHeaderFromPRHeader (prHeader) {
     let recordType,
-        recordLength,
-        recordValue;
+      recordLength,
+      recordValue;
     let i = 0;
 
     // Parse PlayReady header
@@ -132,22 +132,22 @@ const StreamIndexNode = (function (_super) {
 
     // Parse records
     while (i < prHeader.length) {
-        // Record type - 16 bits (LE format)
-        recordType = (prHeader[i + 1] * 256) + prHeader[i];
+      // Record type - 16 bits (LE format)
+      recordType = (prHeader[i + 1] * 256) + prHeader[i];
+      i += 2;
+
+      // Check if Rights Management header (record type = 0x01)
+      if (recordType === 0x01) {
+
+        // Record length - 16 bits (LE format)
+        recordLength = (prHeader[i + 1] * 256) + prHeader[i];
         i += 2;
 
-        // Check if Rights Management header (record type = 0x01)
-        if (recordType === 0x01) {
-
-            // Record length - 16 bits (LE format)
-            recordLength = (prHeader[i + 1] * 256) + prHeader[i];
-            i += 2;
-
-            // Record value => contains <WRMHEADER>
-            recordValue = new Uint8Array(recordLength);
-            recordValue.set(prHeader.subarray(i, i + recordLength));
-            return recordValue;
-        }
+        // Record value => contains <WRMHEADER>
+        recordValue = new Uint8Array(recordLength);
+        recordValue.set(prHeader.subarray(i, i + recordLength));
+        return recordValue;
+      }
     }
     return null;
   };
