@@ -104,7 +104,7 @@ ManifestController.prototype.removeFromCache = function (manifestIds) {
 
   manifestIds = manifestIds || [];
   for (let i = 0, j = manifestIds.length; i < j; i++) {
-    delete (this._manifests[manifestIds[i]]);
+    delete(this._manifests[manifestIds[i]]);
   }
 };
 
