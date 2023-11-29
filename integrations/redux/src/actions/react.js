@@ -48,8 +48,7 @@ function playVideo (link) {
       nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
+      webSecurity: false
     }
   });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 window.$ = window.jQuery = require('jquery');
-const { BrowserWindow } = require('@electron/remote');
+const {BrowserWindow} = require('@electron/remote');
 const fs = require('fs');
 const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
@@ -14,11 +14,11 @@ var videoPath;
 var audioPath;
 var activeSession;
 
-function _base64ToArrayBuffer(base64) {
+function _base64ToArrayBuffer (base64) {
   return _rawToArrayBuffer(atob(base64));
 }
 
-function _rawToArrayBuffer(raw) {
+function _rawToArrayBuffer (raw) {
   var len = raw.length;
   var bytes = new Uint8Array(len);
   for (var i = 0; i < len; i++) {
@@ -27,7 +27,7 @@ function _rawToArrayBuffer(raw) {
   return bytes.buffer;
 }
 
-function _keySystemConfig() {
+function _keySystemConfig () {
   var config = [{
     initDataTypes: ['cenc'],
     audioCapabilities: [{
@@ -45,7 +45,7 @@ function _keySystemConfig() {
   return config;
 }
 
-function _handleKeyStatusesChange(event) {
+function _handleKeyStatusesChange (event) {
   event.target.keyStatuses.forEach(function (status, keyId) {
     switch (status) {
       case "usable":
@@ -65,9 +65,9 @@ function _handleKeyStatusesChange(event) {
   })
 }
 
-function _createOrLoadMediaSession(resolve, pssh, session) {
+function _createOrLoadMediaSession (resolve, pssh, session) {
 
-  function _handleMessage(event) {
+  function _handleMessage (event) {
     console.log('message', event);
 
     var request = event.message;
@@ -88,7 +88,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
     xmlhttp.send(request);
   }
 
-  function _startSession(mediaKeys) {
+  function _startSession (mediaKeys) {
     var keySession = mediaKeys.createSession('persistent-license');
     activeSession = keySession;
 
@@ -156,7 +156,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
   );
 }
 
-function FakePersistentPlugin() {
+function FakePersistentPlugin () {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - persistent plugin', persistentConfig);
     return new Promise(function (resolve) {
@@ -193,7 +193,7 @@ const downstreamElectron = require(index).init(window, new FakePersistentPlugin(
 const playerUrl = `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
-function playVideo(link, offlineSessionId, playerUrl, config) {
+function playVideo (link, offlineSessionId, playerUrl, config) {
   let playerWindow = new BrowserWindow({
     width: 860,
     height: 600,
@@ -204,8 +204,7 @@ function playVideo(link, offlineSessionId, playerUrl, config) {
       nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
+      webSecurity: false
     }
   });
 
@@ -220,11 +219,11 @@ function playVideo(link, offlineSessionId, playerUrl, config) {
   });
 }
 
-function onDownloadProgress(err, stats) {
+function onDownloadProgress (err, stats) {
   console.log(stats, err);
 }
 
-function removeUI() {
+function removeUI () {
   $('#videoOffline').attr('hidden', true);
   $('#play').remove();
   $('#remove').remove();
@@ -235,7 +234,7 @@ function removeUI() {
   video.pause();
 }
 
-function onDownloadFinish(err, info) {
+function onDownloadFinish (err, info) {
   console.log(info, err);
 
   $('#mainActions').append($('</br>'));
@@ -310,7 +309,7 @@ function onDownloadFinish(err, info) {
   $('#videoOffline').removeAttr('hidden');
 }
 
-function onSubmit(e) {
+function onSubmit (e) {
   e.preventDefault();
   let value = document.getElementById('manifestUrl').value;
 
@@ -348,7 +347,7 @@ function onSubmit(e) {
   return false;
 }
 
-function addForm() {
+function addForm () {
   $("<form id='form'></form>").insertAfter($("#header"));
   $("#form").append($("<table style='width: 600px'><tr>"));
   $("#form").append($("<td><span style='margin-right: 5px'>Manifest Url</span></td>"));
@@ -359,7 +358,7 @@ function addForm() {
   $('#manifestUrl').val(streamUrl);
 }
 
-function onLoad() {
+function onLoad () {
   addForm();
   document.getElementById('form').addEventListener('submit', onSubmit);
 
