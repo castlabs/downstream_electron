@@ -3,7 +3,7 @@ const constants = require("../constants");
 
 const Manifest = require("../manifest/loader/manifest").Manifest;
 
-const XMLSerializer = require("xmldom").XMLSerializer;
+const XMLSerializer = require("@xmldom/xmldom").XMLSerializer;
 
 function getMimeType (value) {
   if (value.indexOf("video") !== -1) {
