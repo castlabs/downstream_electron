@@ -35,7 +35,7 @@ export const playOfflineStream = offlineUrl => {
  * @param {*} link 
  */
 function playVideo (link) {
-  const {BrowserWindow} = require('@electron/remote');
+  const {BrowserWindow} = require('electron');
 
   let playerWindow = new BrowserWindow({
     width: 860,

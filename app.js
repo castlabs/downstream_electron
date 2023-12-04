@@ -1,8 +1,6 @@
 const {BrowserWindow, app, components} = require('electron');
 const fs = require('fs');
 
-require('@electron/remote/main').initialize();
-
 // TESTING PRODUCTION
 let index = './index';
 if (!fs.existsSync(index)) {
@@ -47,6 +45,7 @@ function createWindow () {
     height: 700,
     resizable: true,
     webPreferences: {
+      preload: path.join(__dirname, "api/downstream-electron-preload.js"),
       plugins: true,
       nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
@@ -74,8 +73,4 @@ app.on('will-quit', onWillQuit);
 app.on('window-all-closed', () => {
   console.log('window-all-closed');
   app.quit();
-});
-
-app.on('browser-window-created', (_, window) => {
-  require("@electron/remote/main").enable(window.webContents);
 });

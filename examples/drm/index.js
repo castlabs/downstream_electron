@@ -1,8 +1,6 @@
 'use strict';
 
-window.$ = window.jQuery = require('jquery');
-const {BrowserWindow} = require('@electron/remote');
-const fs = require('fs');
+// const fs = require('fs');
 const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
@@ -178,19 +176,24 @@ function FakePersistentPlugin () {
   };
 }
 
+/*
 process.argv.forEach(function (val, index, array) {
   console.log(index + ': ' + val);
 });
+*/
 
 // TESTING PRODUCTION
-let index = '../../index';
-if (!fs.existsSync(index)) {
-  //DEV
-  index = '../../api/index';
-}
+// let index = '../../index';
+// if (!fs.existsSync(index)) {
+//DEV
+let index = '../../api/index';
+// }
 
-const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
-const playerUrl = `file://${__dirname}/../../player/index.html`;
+const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
+
+console.log(downstreamElectron);
+
+const playerUrl = ''; //`file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
 function playVideo (link, offlineSessionId, playerUrl, config) {
@@ -249,10 +252,10 @@ function onDownloadFinish (err, info) {
       console.log('sourceopen');
 
       var videoSourceBuffer = ms.addSourceBuffer(videoType);
-      videoSourceBuffer.appendBuffer(fs.readFileSync(videoPath).buffer);
+      // videoSourceBuffer.appendBuffer(fs.readFileSync(videoPath).buffer);
 
       var audioSourceBuffer = ms.addSourceBuffer(audioType);
-      audioSourceBuffer.appendBuffer(fs.readFileSync(audioPath).buffer);
+      // audioSourceBuffer.appendBuffer(fs.readFileSync(audioPath).buffer);
 
       downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
         console.log(result);

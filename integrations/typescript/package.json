@@ -40,7 +40,6 @@
     "typescript": "~4.5.4"
   },
   "dependencies": {
-    "@electron/remote": "^2.1.0",
     "downstream-electron": "git+https://github.com/castlabs/downstream_electron.git",
     "electron-squirrel-startup": "^1.0.0"
   }

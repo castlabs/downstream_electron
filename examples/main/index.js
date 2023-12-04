@@ -1,7 +1,6 @@
 'use strict';
 
-window.$ = window.jQuery = require('jquery');
-const {BrowserWindow, dialog} = require('@electron/remote');
+const {BrowserWindow, dialog} = require('electron');
 const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
@@ -41,7 +40,7 @@ if (!fs.existsSync(index)) {
 }
 
 const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
-const playerUrl = `file://${__dirname}/../../player/index.html`;
+const playerUrl = ''; //`file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
 function showStatusOK (message, contentStatus) {
