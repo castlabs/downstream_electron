@@ -205,31 +205,32 @@ function onDownloadFinish (err, info) {
     var video = document.querySelector('#videoOffline');
 
     ms.addEventListener('sourceopen', function () {
-      console.log('sourceopen');
+      window.utilsAPI.prepareTestFiles(videoPath, audioPath).then((result) => {
+        var videoSourceBuffer = ms.addSourceBuffer(videoType);
+        videoSourceBuffer.appendBuffer(result[0]);
 
-      var videoSourceBuffer = ms.addSourceBuffer(videoType);
-      // videoSourceBuffer.appendBuffer(fs.readFileSync(videoPath).buffer);
+        var audioSourceBuffer = ms.addSourceBuffer(audioType);
+        audioSourceBuffer.appendBuffer(result[1]);
 
-      var audioSourceBuffer = ms.addSourceBuffer(audioType);
-      // audioSourceBuffer.appendBuffer(fs.readFileSync(audioPath).buffer);
+        downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
+          console.log(result);
 
-      downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
-        console.log(result);
-
-        if (activeSession !== null) {
-          var video = document.querySelector('#videoOffline');
-          video.play();
-        } else {
-          _createOrLoadMediaSession(function (sessionId) {
+          if (activeSession !== null) {
             var video = document.querySelector('#videoOffline');
             video.play();
-          }, null, result.persistent);
-        }
+          } else {
+            _createOrLoadMediaSession(function (sessionId) {
+              var video = document.querySelector('#videoOffline');
+              video.play();
+            }, null, result.persistent);
+          }
 
-      }, function (err) {
-        console.log('play offline error', err);
-      });
+        }, function (err) {
+          console.log('play offline error', err);
+        });
+      })
     });
+
     video.src = URL.createObjectURL(ms);
   }));
 

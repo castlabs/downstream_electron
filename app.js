@@ -113,3 +113,15 @@ ipcMain.on('utilsAPI', (event, message, ...args) => {
     playVideo(...args);
   }
 });
+
+
+ipcMain.handle('utilsAPI', (event, message, ...args) => {
+  if (message === 'prepareTestFiles') {
+    var videoPath = args[0];
+    var audioPath = args[1];
+
+    return [
+      fs.readFileSync(videoPath).buffer,
+      fs.readFileSync(audioPath).buffer];
+  }
+});
