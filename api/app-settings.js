@@ -50,8 +50,7 @@
  *     height: 700,
  *     resizable: true,
  *     webPreferences: {
- *       plugins: true,
- *       nodeIntegration: true
+ *       plugins: true
  *     }
  *   });
  *   win.loadURL('file://index.html');

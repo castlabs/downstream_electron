@@ -1,8 +1,5 @@
 'use strict';
 
-window.$ = window.jQuery = require('jquery');
-const {BrowserWindow, dialog} = require('@electron/remote');
-const fs = require('fs');
 const fakePersistentSessionId = 'fake_';
 
 // fake persistent plugin - needed for easier testing
@@ -29,19 +26,7 @@ function FakePersistentPlugin () {
   };
 }
 
-process.argv.forEach(function (val, index, array) {
-  console.log(index + ': ' + val);
-});
-
-// TESTING PRODUCTION
-let index = '../../index';
-if (!fs.existsSync(index)) {
-  //DEV
-  index = '../../api/index';
-}
-
-const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
-const playerUrl = `file://${__dirname}/../../player/index.html`;
+const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
 const persistentConfig = {};
 
 function showStatusOK (message, contentStatus) {
@@ -354,7 +339,7 @@ function addItemActions (manifestId,
   //PLAY
   $(contentActions).append($('<input type="button" value="PLAY">').on('click', function () {
     downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
-      playVideo(result.offlineLink, result.persistent, playerUrl);
+      window.utilsAPI.playVideo(result.offlineLink, result.persistent, {});
       showStatusOK('play', contentStatus);
     }, function (err) {
       showStatusError('play', err, contentStatus);
@@ -418,34 +403,6 @@ function addItemActions (manifestId,
       showStatusError('Update Download Folder', 'Choose a folder');
     }
   }));
-
-}
-
-function playVideo (link, offlineSessionId, playerUrl) {
-  let playerWindow = new BrowserWindow({
-    width: 860,
-    height: 600,
-    show: true,
-    resizable: true,
-    webPreferences: {
-      plugins: true,
-      nodeIntegration: true,
-      nodeIntegration: true,
-      // NOTE: !WARNING! use with caution it allows app to download content
-      //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
-    }
-  });
-  playerWindow.loadURL(playerUrl);
-  playerWindow.webContents.openDevTools();
-  playerWindow.webContents.on('did-finish-load', function (evt, args) {
-    playerWindow.webContents.send('startPlaybackStream', {
-      url: link,
-      configuration: {},
-      offlineSessionId: offlineSessionId
-    });
-  });
 }
 
 function getSelectedRepresentations () {

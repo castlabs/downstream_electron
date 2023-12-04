@@ -1,8 +1,5 @@
 'use strict';
 
-window.$ = window.jQuery = require('jquery');
-const { BrowserWindow } = require('@electron/remote');
-const fs = require('fs');
 const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
@@ -14,11 +11,11 @@ var videoPath;
 var audioPath;
 var activeSession;
 
-function _base64ToArrayBuffer(base64) {
+function _base64ToArrayBuffer (base64) {
   return _rawToArrayBuffer(atob(base64));
 }
 
-function _rawToArrayBuffer(raw) {
+function _rawToArrayBuffer (raw) {
   var len = raw.length;
   var bytes = new Uint8Array(len);
   for (var i = 0; i < len; i++) {
@@ -27,7 +24,7 @@ function _rawToArrayBuffer(raw) {
   return bytes.buffer;
 }
 
-function _keySystemConfig() {
+function _keySystemConfig () {
   var config = [{
     initDataTypes: ['cenc'],
     audioCapabilities: [{
@@ -45,17 +42,17 @@ function _keySystemConfig() {
   return config;
 }
 
-function _handleKeyStatusesChange(event) {
+function _handleKeyStatusesChange (event) {
   event.target.keyStatuses.forEach(function (status, keyId) {
     switch (status) {
-      case "usable":
+      case 'usable':
         console.log('SESSION USABLE');
         break;
-      case "expired":
+      case 'expired':
         // Report an expired key.
         console.log('SESSION EXPIRED');
         break;
-      case "status-pending":
+      case 'status-pending':
         // The status is not yet known. Consider the key unusable until the status is updated.
         console.log('SESSION PENDING');
         break;
@@ -65,9 +62,9 @@ function _handleKeyStatusesChange(event) {
   })
 }
 
-function _createOrLoadMediaSession(resolve, pssh, session) {
+function _createOrLoadMediaSession (resolve, pssh, session) {
 
-  function _handleMessage(event) {
+  function _handleMessage (event) {
     console.log('message', event);
 
     var request = event.message;
@@ -84,11 +81,11 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
       resolve(xmlhttp.keySession.sessionId);
     }
 
-    xmlhttp.responseType = "arraybuffer";
+    xmlhttp.responseType = 'arraybuffer';
     xmlhttp.send(request);
   }
 
-  function _startSession(mediaKeys) {
+  function _startSession (mediaKeys) {
     var keySession = mediaKeys.createSession('persistent-license');
     activeSession = keySession;
 
@@ -156,7 +153,7 @@ function _createOrLoadMediaSession(resolve, pssh, session) {
   );
 }
 
-function FakePersistentPlugin() {
+function FakePersistentPlugin () {
   this.createPersistentSession = function (persistentConfig) {
     console.log('create - persistent plugin', persistentConfig);
     return new Promise(function (resolve) {
@@ -178,53 +175,14 @@ function FakePersistentPlugin() {
   };
 }
 
-process.argv.forEach(function (val, index, array) {
-  console.log(index + ': ' + val);
-});
-
-// TESTING PRODUCTION
-let index = '../../index';
-if (!fs.existsSync(index)) {
-  //DEV
-  index = '../../api/index';
-}
-
-const downstreamElectron = require(index).init(window, new FakePersistentPlugin());
-const playerUrl = `file://${__dirname}/../../player/index.html`;
+const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
 const persistentConfig = {};
 
-function playVideo(link, offlineSessionId, playerUrl, config) {
-  let playerWindow = new BrowserWindow({
-    width: 860,
-    height: 600,
-    show: true,
-    resizable: true,
-    webPreferences: {
-      plugins: true,
-      nodeIntegration: true,
-      // NOTE: !WARNING! use with caution it allows app to download content
-      //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
-    }
-  });
-
-  playerWindow.loadURL(playerUrl);
-  playerWindow.webContents.openDevTools();
-  playerWindow.webContents.on('did-finish-load', function (evt, args) {
-    playerWindow.webContents.send('startPlaybackStream', {
-      url: link,
-      configuration: config,
-      offlineSessionId: offlineSessionId
-    });
-  });
-}
-
-function onDownloadProgress(err, stats) {
+function onDownloadProgress (err, stats) {
   console.log(stats, err);
 }
 
-function removeUI() {
+function removeUI () {
   $('#videoOffline').attr('hidden', true);
   $('#play').remove();
   $('#remove').remove();
@@ -235,7 +193,7 @@ function removeUI() {
   video.pause();
 }
 
-function onDownloadFinish(err, info) {
+function onDownloadFinish (err, info) {
   console.log(info, err);
 
   $('#mainActions').append($('</br>'));
@@ -247,31 +205,32 @@ function onDownloadFinish(err, info) {
     var video = document.querySelector('#videoOffline');
 
     ms.addEventListener('sourceopen', function () {
-      console.log('sourceopen');
+      window.utilsAPI.prepareTestFiles(videoPath, audioPath).then((result) => {
+        var videoSourceBuffer = ms.addSourceBuffer(videoType);
+        videoSourceBuffer.appendBuffer(result[0]);
 
-      var videoSourceBuffer = ms.addSourceBuffer(videoType);
-      videoSourceBuffer.appendBuffer(fs.readFileSync(videoPath).buffer);
+        var audioSourceBuffer = ms.addSourceBuffer(audioType);
+        audioSourceBuffer.appendBuffer(result[1]);
 
-      var audioSourceBuffer = ms.addSourceBuffer(audioType);
-      audioSourceBuffer.appendBuffer(fs.readFileSync(audioPath).buffer);
+        downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
+          console.log(result);
 
-      downstreamElectron.downloads.getOfflineLink(manifestId).then(function (result) {
-        console.log(result);
-
-        if (activeSession !== null) {
-          var video = document.querySelector('#videoOffline');
-          video.play();
-        } else {
-          _createOrLoadMediaSession(function (sessionId) {
+          if (activeSession !== null) {
             var video = document.querySelector('#videoOffline');
             video.play();
-          }, null, result.persistent);
-        }
+          } else {
+            _createOrLoadMediaSession(function (sessionId) {
+              var video = document.querySelector('#videoOffline');
+              video.play();
+            }, null, result.persistent);
+          }
 
-      }, function (err) {
-        console.log('play offline error', err);
-      });
+        }, function (err) {
+          console.log('play offline error', err);
+        });
+      })
     });
+
     video.src = URL.createObjectURL(ms);
   }));
 
@@ -298,7 +257,7 @@ function onDownloadFinish(err, info) {
   }));
 
   $('#mainActions').append($('<input type="button" id="play" value="Play">').on('click', function () {
-    playVideo(streamUrl, '', playerUrl, {
+    window.utilsAPI.playVideo(streamUrl, '', {
       drm: {
         servers: {
           'com.widevine.alpha': licenseUrl
@@ -310,7 +269,7 @@ function onDownloadFinish(err, info) {
   $('#videoOffline').removeAttr('hidden');
 }
 
-function onSubmit(e) {
+function onSubmit (e) {
   e.preventDefault();
   let value = document.getElementById('manifestUrl').value;
 
@@ -348,7 +307,7 @@ function onSubmit(e) {
   return false;
 }
 
-function addForm() {
+function addForm () {
   $("<form id='form'></form>").insertAfter($("#header"));
   $("#form").append($("<table style='width: 600px'><tr>"));
   $("#form").append($("<td><span style='margin-right: 5px'>Manifest Url</span></td>"));
@@ -359,7 +318,7 @@ function addForm() {
   $('#manifestUrl').val(streamUrl);
 }
 
-function onLoad() {
+function onLoad () {
   addForm();
   document.getElementById('form').addEventListener('submit', onSubmit);
 

@@ -2,10 +2,6 @@
 'use strict';
 const WIDEVINE_SCHEME_ID_URI = 'urn:uuid:edef8ba9-79d6-4ace-a3c8-27dcd51d21ed';
 
-const ipcRenderer = require('electron').ipcRenderer;
-
-const translation = require("./translation/index");
-
 let downstreamElectronFE;
 
 function serialize (obj) {
@@ -73,10 +69,6 @@ function clonePersistentConfig (config) {
  * all methods described in ({@link DownstreamElectronFE.downloads})
  */
 function DownstreamElectronFE (window, persistent) {
-  let currentWindow = require('@electron/remote').getCurrentWindow();
-  if (currentWindow) {
-    this._windowId = currentWindow.id;
-  }
   this._promisesObj = {};
   this._subscribersId = {};
   this._promiseCounter = 0;
@@ -126,7 +118,7 @@ DownstreamElectronFE.prototype.downloads.createPersistent = function (args, reso
   if (this._persistent) {
     this.downloads.info(manifestId).then(function (info) {
       if (!info) {
-        reject(translation.getError(translation.e.manifests.NOT_FOUND, manifestId));
+        reject("Manifest with id='" + manifestId + "' not found.");
         return;
       }
       const existingPersistentSessionId = info.persistent;
@@ -249,7 +241,6 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
   let request = {};
   request.promiseId = promiseId;
   request.method = method;
-  request.windowId = this._windowId;
   request.args = serialize(args);
   this._send(request);
   return promise;
@@ -261,9 +252,15 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
  * @returns {void}
  */
 DownstreamElectronFE.prototype._attachEvents = function () {
-  const ipcRenderer = require('electron').ipcRenderer;
-  ipcRenderer.on('downstreamElectronFE', this._processApi);
-  this._window.addEventListener('beforeunload', this._beforeUnload);
+  this._window.downstreamElectronAPI.receive('downstreamElectronFE', this._processApi);
+  this._window.onbeforeunload = (e) => {
+    this._beforeUnload();
+    // Unlike usual browsers that a message box will be prompted to users, returning
+    // a non-void value will silently cancel the close.
+    // It is recommended to use the dialog API to let the user confirm closing the
+    // application.
+    e.returnValue = false
+  }
 };
 
 /**
@@ -500,7 +497,7 @@ DownstreamElectronFE.prototype._saveSubscribersId = function (promise, subscribe
  */
 DownstreamElectronFE.prototype._send = function (request) {
   try {
-    ipcRenderer.send('downstreamElectronBE', request);
+    this._window.downstreamElectronAPI.send('downstreamElectronBE', request);
   } catch (e) {
     console.error(e);
   }

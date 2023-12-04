@@ -35,7 +35,7 @@ export const playOfflineStream = offlineUrl => {
  * @param {*} link 
  */
 function playVideo (link) {
-  const {BrowserWindow} = require('@electron/remote');
+  const {BrowserWindow} = require('electron');
 
   let playerWindow = new BrowserWindow({
     width: 860,
@@ -44,12 +44,9 @@ function playVideo (link) {
     resizable: true,
     webPreferences: {
       plugins: true,
-      nodeIntegration: true,
-      nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
+      webSecurity: false
     }
   });
 

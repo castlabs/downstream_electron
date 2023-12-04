@@ -11,8 +11,7 @@
  *
  * https://electronjs.org/docs/tutorial/security
  *
- * To enable Node.js integration in this file, open up `main.js` and enable the `nodeIntegration`
- * flag:
+ * To enable Node.js integration in this file, open up `main.js`:
  *
  * ```
  *  // Create the browser window.
@@ -20,16 +19,14 @@
  *    width: 800,
  *    height: 600,
  *    webPreferences: {
- *      nodeIntegration: true
  *    }
  *  });
  * ```
  */
 
 import './index.css';
-import * as downstreamElectron from 'downstream-electron/downstream-electron-fe';
 
-const downstreamInstance = downstreamElectron.init(window);
+const downstreamInstance = window.downstreamElectronAPI.init(window);
 
 downstreamInstance.downloads.create('https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd', '').then(function (result: any) {
     console.log(result);

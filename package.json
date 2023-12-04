@@ -57,16 +57,16 @@
     "electron": "git+https://github.com/castlabs/electron-releases.git#v26.3.0+wvcus",
     "eslint": "^8.50.0",
     "jasmine-node": "3.0.0",
-    "jquery": "3.6.1",
+    "jquery": "^3.6.1",
     "jsdoc": "4.0.2",
     "jsdoc-webpack-plugin": "0.3.0",
     "junit-viewer": "4.11.1",
-    "shaka-player": "4.4.2",
+    "shaka-player": "4.7.0",
     "webpack": "5.88.2",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.11",
+    "@xmldom/xmldom": "0.7.7",
     "base64-js": "1.5.1",
     "biguint-format": "1.0.2",
     "cors": "2.8.5",
@@ -78,7 +78,6 @@
     "mkdirp": "^3.0.1",
     "moment": "2.29.4",
     "underscore": "1.13.6",
-    "url-parse": "1.5.10",
-    "@xmldom/xmldom": "0.7.7"
+    "url-parse": "1.5.10"
   }
 }

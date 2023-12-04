@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Electron API</title>
-    <script src="index.js"></script>
+
+    <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+
     <style>
         #status {
             margin: 10px 0;
@@ -52,15 +56,12 @@
             display: block;
         }
 
-        .progressItem .key {
-
-        }
+        .progressItem .key {}
 
         .progressItem .stats {
             color: #0057e7;
             font-weight: 700;
         }
-
     </style>
 </head>
 
@@ -68,7 +69,8 @@
 
     <h3 id="header">Simple DRM example</h3>
     <div id="videoOfflineWrapper">
-        <video id="videoOffline" crossOrigin="anonymous" hidden controls style="padding: 10px; width: 430px; height: 300px;">
+        <video id="videoOffline" crossOrigin="anonymous" hidden controls
+            style="padding: 10px; width: 430px; height: 300px;">
             Your browser does not support HTML5 video.
         </video>
     </div>

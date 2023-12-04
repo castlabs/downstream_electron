@@ -1,7 +1,8 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "info"] }] */
-"use strict";
+'use strict';
+
 const _ = require('underscore');
-const Snowflake = require("./util/snowflake-id");
+const Snowflake = require('./util/snowflake-id');
 
 const appSettings = require('./app-settings');
 const beMethods = require('./be-methods-all');
@@ -49,8 +50,7 @@ function deserialize (serializedJavascript) {
  *     height: 700,
  *     resizable: true,
  *     webPreferences: {
- *       plugins: true,
- *       nodeIntegration: true
+ *       plugins: true
  *     }
  *   });
  *   win.loadURL('file://index.html');
@@ -70,7 +70,7 @@ function deserialize (serializedJavascript) {
  */
 DownstreamElectronBE = function () {
   this._offlineContentPort = appSettings.getSettings().offlineContentPortStart;
-  _.bindAll(this, "_onApiRequest", "processSubscriber");
+  _.bindAll(this, '_onApiRequest', 'processSubscriber');
   this._createControllers();
   this._serveOfflineContent();
   this._attachEvents();
@@ -97,7 +97,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
   response.promiseId = promiseId;
   const onSuccess = function (result, subscribersId) {
     response.subscribersId = subscribersId;
-    response.status = "OK";
+    response.status = 'OK';
     response.result = result;
     response.manifestId = manifestId;
     self._send(response, target);
@@ -112,7 +112,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
       internalError: internalError
     });
     response.manifestId = manifestId;
-    response.status = "ERROR";
+    response.status = 'ERROR';
     response.error = err || {};
     response.error.errorId = errorId;
     response.error.details = internalError;
@@ -121,7 +121,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
 
     // @TODO log all errors that user have seen, the errorId will help to find stack
     try {
-      console.error(new Date(), "Error occurred", JSON.stringify(errorInfo));
+      console.error(new Date(), 'Error occurred', JSON.stringify(errorInfo));
     } catch (e) {
       //do nothing
     }
@@ -132,13 +132,13 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
   args.unshift(onSuccess);
   args.unshift(this);
   const method = this._getMethod(methodName);
-  if (typeof method === "function") {
+  if (typeof method === 'function') {
     method.apply(null, args);
   } else {
-    response.status = "ERROR";
+    response.status = 'ERROR';
     response.error = "Provided method '" + methodName + "' doesn't exists";
     this._send(response, target);
-    console.error("ERROR", "Provided method '" + methodName + "' doesn't exists");
+    console.error('ERROR', "Provided method '" + methodName + "' doesn't exists");
   }
 };
 
@@ -149,7 +149,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
  */
 DownstreamElectronBE.prototype._attachEvents = function () {
   const ipcMain = require('electron').ipcMain;
-  ipcMain.on("downstreamElectronBE", this._onApiRequest);
+  ipcMain.on('downstreamElectronBE', this._onApiRequest);
 };
 
 /**
@@ -171,7 +171,7 @@ DownstreamElectronBE.prototype._createControllers = function () {
  * @private
  */
 DownstreamElectronBE.prototype._getMethod = function (methodName) {
-  const names = methodName.split(".");
+  const names = methodName.split('.');
   let i, j, method;
   method = beMethods[names[0]];
   for (i = 1, j = names.length; i < j; i++) {
@@ -192,7 +192,7 @@ DownstreamElectronBE.prototype._onApiRequest = function (evt, data, target) {
   const promiseId = data.promiseId;
   const argsObj = deserialize(data.args) || {};
   const method = data.method;
-  const windowId = data.windowId;
+  const windowId = evt.sender.getOwnerBrowserWindow().id;
   target = windowId;
   let args = [];
   let i = 0;
@@ -219,7 +219,7 @@ DownstreamElectronBE.prototype._send = function (response, target) {
       }
     }
   } catch (err) {
-    console.error("internal error ocurred", err);
+    console.error('internal error ocurred', err);
   }
 };
 
@@ -247,9 +247,9 @@ DownstreamElectronBE.prototype.getOfflinePath = function (manifestId) {
   let offlinePath = appSettings.getSettings().offlineDomain;
   let offlineContentPort = this._offlineContentPort;
   if (offlineContentPort) {
-    offlinePath += ":" + offlineContentPort;
+    offlinePath += ':' + offlineContentPort;
   }
-  offlinePath += "/" + encodeURIComponent(appSettings.getSettings().downloadsName) + "/" + encodeURIComponent(manifestId) + "/";
+  offlinePath += '/' + encodeURIComponent(appSettings.getSettings().downloadsName) + '/' + encodeURIComponent(manifestId) + '/';
   return offlinePath;
 };
 
@@ -265,7 +265,7 @@ DownstreamElectronBE.prototype.getOfflinePath = function (manifestId) {
 DownstreamElectronBE.prototype.processSubscriber = function (subscriberId, err, result, target, subscriberFinished) {
   let response = {};
   response.subscriberId = subscriberId;
-  response.status = err ? "ERROR" : "OK";
+  response.status = err ? 'ERROR' : 'OK';
   response.err = err;
   response.result = result;
   response.subscriberFinished = subscriberFinished;
