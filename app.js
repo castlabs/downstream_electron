@@ -1,4 +1,9 @@
-const {BrowserWindow, app, components} = require('electron');
+const {
+  BrowserWindow,
+  app,
+  components,
+  ipcMain
+} = require('electron');
 const fs = require('fs');
 
 // TESTING PRODUCTION
@@ -45,7 +50,7 @@ function createWindow () {
     height: 700,
     resizable: true,
     webPreferences: {
-      preload: path.join(__dirname, "api/downstream-electron-preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       plugins: true,
       nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
@@ -73,4 +78,38 @@ app.on('will-quit', onWillQuit);
 app.on('window-all-closed', () => {
   console.log('window-all-closed');
   app.quit();
+});
+
+function playVideo (link, offlineSessionId, config) {
+  let playerWindow = new BrowserWindow({
+    width: 860,
+    height: 600,
+    show: true,
+    resizable: true,
+    webPreferences: {
+      plugins: true,
+      preload: path.join(__dirname, 'player/preload.js'),
+      // NOTE: !WARNING! use with caution it allows app to download content
+      //                 from any URL
+      webSecurity: false
+    }
+  });
+
+  const playerUrl = `file://${__dirname}/player/index.html`;
+
+  playerWindow.loadURL(playerUrl);
+  playerWindow.webContents.openDevTools();
+  playerWindow.webContents.on('did-finish-load', function (evt, args) {
+    playerWindow.webContents.send('utilsAPI', 'startPlaybackStream', {
+      url: link,
+      configuration: config,
+      offlineSessionId: offlineSessionId
+    });
+  });
+}
+
+ipcMain.on('utilsAPI', (event, message, ...args) => {
+  if (message === 'playVideo') {
+    playVideo(...args);
+  }
 });

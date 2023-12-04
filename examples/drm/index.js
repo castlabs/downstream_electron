@@ -177,33 +177,7 @@ function FakePersistentPlugin () {
 
 
 const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
-const playerUrl = ''; // `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
-
-function playVideo (link, offlineSessionId, playerUrl, config) {
-  let playerWindow = new BrowserWindow({
-    width: 860,
-    height: 600,
-    show: true,
-    resizable: true,
-    webPreferences: {
-      plugins: true,
-      // NOTE: !WARNING! use with caution it allows app to download content
-      //                 from any URL
-      webSecurity: false
-    }
-  });
-
-  playerWindow.loadURL(playerUrl);
-  playerWindow.webContents.openDevTools();
-  playerWindow.webContents.on('did-finish-load', function (evt, args) {
-    playerWindow.webContents.send('startPlaybackStream', {
-      url: link,
-      configuration: config,
-      offlineSessionId: offlineSessionId
-    });
-  });
-}
 
 function onDownloadProgress (err, stats) {
   console.log(stats, err);
@@ -283,7 +257,7 @@ function onDownloadFinish (err, info) {
   }));
 
   $('#mainActions').append($('<input type="button" id="play" value="Play">').on('click', function () {
-    playVideo(streamUrl, '', playerUrl, {
+    window.utilsAPI.playVideo(streamUrl, '', {
       drm: {
         servers: {
           'com.widevine.alpha': licenseUrl

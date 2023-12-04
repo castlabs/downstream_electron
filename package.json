@@ -61,7 +61,7 @@
     "jsdoc": "4.0.2",
     "jsdoc-webpack-plugin": "0.3.0",
     "junit-viewer": "4.11.1",
-    "shaka-player": "4.4.2",
+    "shaka-player": "4.7.0",
     "webpack": "5.88.2",
     "webpack-cli": "^5.1.4"
   },

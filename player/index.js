@@ -1,25 +1,31 @@
-const { ipcRenderer } = require('electron');
-const ShakaPlayer = require('shaka-player').Player;
+window.utilsAPI.receive('utilsAPI', (event, message, args) => {
+  console.log('event: ', event);
+  console.log('message: ', message);
+  console.log('args: ', args);
 
-ipcRenderer.on('startPlaybackStream', (evt, args) => {
-  var url = args.url;
-  var configuration = args.configuration;
-  var video = document.querySelector('#video');
+  if (message === 'startPlaybackStream') {
+    var url = args.url;
+    var configuration = args.configuration;
+    var video = document.querySelector('#video');
 
-  window.player = new ShakaPlayer(video);
-  window.player.configure(configuration);
-  window.player.load(url).then(function () {
-    var promise = video.play();
-    if (promise !== undefined) {
-      promise.then(_ => {
-        console.log('autoplay started');
-      }).catch(error => {
-        console.log('autoplay was prevented', error);
-      });
-    }
-  });
+    var player = new shaka.Player();
+    window.player = player;
 
-  window.onbeforeunload = function () {
-    window.player.dispose();
-  };
+    player.attach(video);
+    player.configure(configuration);
+    player.load(url).then(function () {
+      var promise = video.play();
+      if (promise !== undefined) {
+        promise.then(_ => {
+          console.log('autoplay started');
+        }).catch(error => {
+          console.log('autoplay was prevented', error);
+        });
+      }
+    });
+
+    window.onbeforeunload = function () {
+      window.player.dispose();
+    };
+  }
 });
