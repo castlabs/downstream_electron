@@ -1,6 +1,5 @@
 'use strict';
 
-// const fs = require('fs');
 const streamUrl = 'https://storage.googleapis.com/shaka-demo-assets/sintel-widevine/dash.mpd';
 const licenseUrl = 'https://cwip-shaka-proxy.appspot.com/no_auth';
 
@@ -176,24 +175,9 @@ function FakePersistentPlugin () {
   };
 }
 
-/*
-process.argv.forEach(function (val, index, array) {
-  console.log(index + ': ' + val);
-});
-*/
-
-// TESTING PRODUCTION
-// let index = '../../index';
-// if (!fs.existsSync(index)) {
-//DEV
-let index = '../../api/index';
-// }
 
 const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
-
-console.log(downstreamElectron);
-
-const playerUrl = ''; //`file://${__dirname}/../../player/index.html`;
+const playerUrl = ''; // `file://${__dirname}/../../player/index.html`;
 const persistentConfig = {};
 
 function playVideo (link, offlineSessionId, playerUrl, config) {

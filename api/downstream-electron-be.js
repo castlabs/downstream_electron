@@ -149,7 +149,7 @@ DownstreamElectronBE.prototype._apiMethods = function (methodName, promiseId, ar
  */
 DownstreamElectronBE.prototype._attachEvents = function () {
   const ipcMain = require('electron').ipcMain;
-  ipcMain.on("downstreamElectronBE", this._onApiRequest);
+  ipcMain.on('downstreamElectronBE', this._onApiRequest);
 };
 
 /**
