@@ -73,7 +73,6 @@ function DownstreamElectronFE (window, persistent) {
   this._subscribersId = {};
   this._promiseCounter = 0;
   this._window = window;
-  this._windowId = window.id;
   this._persistent = persistent;
   bindAll(this, '_processApi', '_beforeUnload');
 
@@ -242,7 +241,6 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
   let request = {};
   request.promiseId = promiseId;
   request.method = method;
-  request.windowId = this._windowId;
   request.args = serialize(args);
   this._send(request);
   return promise;
@@ -255,7 +253,7 @@ DownstreamElectronFE.prototype._apiCall = function (method, args, originalMethod
  */
 DownstreamElectronFE.prototype._attachEvents = function () {
   this._window.downstreamElectronAPI.receive('downstreamElectronFE', this._processApi);
-  // this._window.addEventListener('beforeunload', this._beforeUnload);
+  window.addEventListener('onbeforeunload', this._beforeUnload);
 };
 
 /**

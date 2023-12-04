@@ -1,5 +1,5 @@
 const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const webpack = require("webpack");
 const packageJson = require("./package.json");
 
@@ -53,6 +53,9 @@ module.exports = {
     ],
     "downstream-electron-fe": [
       "./api/downstream-electron-fe"
+    ],
+    "downstream-electron-preload": [
+      "./api/downstream-electron-preload"
     ],
     "startServer": [
       "./api/server/startServer"
