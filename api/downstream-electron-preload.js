@@ -9,9 +9,7 @@ const downstreamElectron = require('./downstream-electron-fe.js');
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld(
   'downstreamElectronAPI', {
-  init: (window, persitance) => {
-    return downstreamElectron.init(window, persitance);
-  },
+  init: (window, persitance) => downstreamElectron.init(window, persitance),
   send: (channel, data) => {
     // whitelist channels
     let validChannels = ['downstreamElectronBE'];

@@ -45,14 +45,14 @@ function _keySystemConfig () {
 function _handleKeyStatusesChange (event) {
   event.target.keyStatuses.forEach(function (status, keyId) {
     switch (status) {
-      case "usable":
+      case 'usable':
         console.log('SESSION USABLE');
         break;
-      case "expired":
+      case 'expired':
         // Report an expired key.
         console.log('SESSION EXPIRED');
         break;
-      case "status-pending":
+      case 'status-pending':
         // The status is not yet known. Consider the key unusable until the status is updated.
         console.log('SESSION PENDING');
         break;
@@ -81,7 +81,7 @@ function _createOrLoadMediaSession (resolve, pssh, session) {
       resolve(xmlhttp.keySession.sessionId);
     }
 
-    xmlhttp.responseType = "arraybuffer";
+    xmlhttp.responseType = 'arraybuffer';
     xmlhttp.send(request);
   }
 
@@ -188,7 +188,6 @@ function playVideo (link, offlineSessionId, playerUrl, config) {
     resizable: true,
     webPreferences: {
       plugins: true,
-      nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
       webSecurity: false

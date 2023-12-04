@@ -11,8 +11,7 @@
  *
  * https://electronjs.org/docs/tutorial/security
  *
- * To enable Node.js integration in this file, open up `main.js` and enable the `nodeIntegration`
- * flag:
+ * To enable Node.js integration in this file, open up `main.js`:
  *
  * ```
  *  // Create the browser window.
@@ -20,7 +19,6 @@
  *    width: 800,
  *    height: 600,
  *    webPreferences: {
- *      nodeIntegration: true
  *    }
  *  });
  * ```

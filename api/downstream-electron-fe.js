@@ -366,7 +366,7 @@ DownstreamElectronFE.prototype._processApi = function (obj, evt) {
     if (evt.subscribersId) {
       this._saveSubscribersId(promiseObj, evt.subscribersId);
     }
-    delete (this._promisesObj[promiseId]);
+    delete(this._promisesObj[promiseId]);
   } else if (evt.subscriberId) {
     this._executeSubscriber(evt.subscriberId, evt.err, result, evt.subscriberFinished);
   } else {
@@ -416,7 +416,7 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
     for (let i = 0, j = manifestId.length; i < j; i++) {
       if (typeof self._subscribersId[subscriberKey].manifestId === 'string') {
         if (self._subscribersId[subscriberKey].manifestId === manifestId[i]) {
-          delete (self._subscribersId[subscriberKey]);
+          delete(self._subscribersId[subscriberKey]);
           break;
         }
       } else {
@@ -425,7 +425,7 @@ DownstreamElectronFE.prototype._removeLocalSubscribers = function (manifestId) {
           self._subscribersId[subscriberKey].manifestId.splice(pos, 1);
         }
         if (!self._subscribersId[subscriberKey].manifestId.length) {
-          delete (self._subscribersId[subscriberKey]);
+          delete(self._subscribersId[subscriberKey]);
           break;
         }
       }
