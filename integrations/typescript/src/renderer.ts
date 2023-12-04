@@ -25,9 +25,8 @@
  */
 
 import './index.css';
-import * as downstreamElectron from 'downstream-electron/downstream-electron-fe';
 
-const downstreamInstance = downstreamElectron.init(window);
+const downstreamInstance = window.downstreamElectronAPI.init(window);
 
 downstreamInstance.downloads.create('https://demo.cf.castlabs.com/media/TOS/abr/Manifest_clean_sizes.mpd', '').then(function (result: any) {
     console.log(result);

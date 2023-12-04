@@ -20,6 +20,7 @@
   },
   "include": [
     "src/**/*",
-    "decs.d.ts"
+    "decs.d.ts",
+    "renderer.d.ts"
   ]
 }

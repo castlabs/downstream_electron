@@ -1,6 +1,4 @@
 const {BrowserWindow, app, components} = require('electron');
-require('@electron/remote/main').initialize();
-
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -30,8 +28,7 @@ function createWindow () {
       nodeIntegration: true,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false,
-      contextIsolation: false
+      webSecurity: false
     }
   });
 
@@ -74,8 +71,4 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-app.on('browser-window-created', (_, window) => {
-  require("@electron/remote/main").enable(window.webContents);
 });

@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
-    "downstream-electron": "git+https://github.com/mackode/downstream_electron.git",
+    "downstream-electron": "git+https://github.com/mackode/downstream_electron.git#feature/DFE-42-context-isolation",
     "electron-is-dev": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

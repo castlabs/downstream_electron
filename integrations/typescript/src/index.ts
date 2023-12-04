@@ -36,7 +36,8 @@ const createWindow = (): void => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       // NOTE: !WARNING! use with caution it allows app to download content
       //                 from any URL
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     },
   });
 
