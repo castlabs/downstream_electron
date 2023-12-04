@@ -175,7 +175,6 @@ function FakePersistentPlugin () {
   };
 }
 
-
 const downstreamElectron = window.downstreamElectronAPI.init(window, new FakePersistentPlugin());
 const persistentConfig = {};
 

@@ -1,8 +1,4 @@
 window.utilsAPI.receive('utilsAPI', (event, message, args) => {
-  console.log('event: ', event);
-  console.log('message: ', message);
-  console.log('args: ', args);
-
   if (message === 'startPlaybackStream') {
     var url = args.url;
     var configuration = args.configuration;
