@@ -1,3 +1,5 @@
+** This integration is deprecated. Please check 'typescript'. **
+
 # Redux Integration
 
 Integration support `npm` and `yarn` managers.

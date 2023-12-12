@@ -1,3 +1,11 @@
+# 0.7.0
+ * Updated Electron version to 26.3.0
+ * Imaplemented new communication model between backend and frontend
+ * Enabled context isolation (preload scripts can be used)
+ * Added Electron Forge integration and example
+ * Updated 'xmldom' dependency
+ * Deprecated 'redux' integration and example
+
 # 0.6.0
  * Updated Electron version to 26.2.2
  * Updated dependencies
