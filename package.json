@@ -20,7 +20,7 @@
     "files"
   ],
   "main": "index.js",
-  "homepage": "https://castlabs.com/resources/downstream/",
+  "homepage": "https://castlabs.com/",
   "scripts": {
     "update": "ncu -u",
     "build": "NODE_OPTIONS=\"--openssl-legacy-provider\" && webpack",

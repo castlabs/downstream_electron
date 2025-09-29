@@ -4,9 +4,9 @@
 
 DOWNstream is an open-source plugin to use with Electron allowing encrypted MPEG-DASH and Smooth Streaming streams to be safely downloaded and stored locally on a user’s Windows or Mac computer.
 
-## castLabs Electron Release for Content Security
+## Castlabs Electron Release for Content Security
 
-To simplify the use of Widevine DRM and allow protected playback of offline content within Electron castLabs has created a fork with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. Such a release is installed by the default npm package scripts, see [Development](#development) and [Build](#build) sections below.
+To simplify the use of Widevine DRM and allow protected playback of offline content within Electron Castlabs has created a fork with support for Widevine CDM installation, Verified Media Path (VMP), and protected storage of offline licenses. Such a release is installed by the default npm package scripts, see [Development](#development) and [Build](#build) sections below.
 
 More information is available here:
 
@@ -14,7 +14,7 @@ https://github.com/castlabs/electron-releases
 
 ## Development
 
-1. *(optional)* `npm run clean`
+1. _(optional)_ `npm run clean`
 2. `npm install`
 3. `npm start`
 
@@ -27,9 +27,9 @@ https://github.com/castlabs/electron-releases
 ## Examples
 
 1. `npm install`
-2. `npm start -- example=`*name*
+2. `npm start -- example=`_name_
 
-- (*default*) Example: **main**
+- (_default_) Example: **main**
 
 Extended example showing most of the features of the **downstream_electron** library
 
@@ -58,7 +58,7 @@ with React & Redux frameworks.
 
 ## Documentation
 
-Documentation is available publicly at 
+Documentation is available publicly at
 https://castlabs.github.io/downstream_electron/
 
 1. `npm run jsdoc`
@@ -78,10 +78,6 @@ https://castlabs.github.io/downstream_electron/
 ## Known issues
 
 - Electron installation in macOS (https://github.com/castlabs/electron-releases/issues/144) - we recommend to use one of the workaround mentioned in the GitHub issue.
-
-## More information
-
-https://castlabs.com/resources/downstream/
 
 ## License
 

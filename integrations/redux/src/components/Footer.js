@@ -16,7 +16,7 @@ const Footer = ({ removeAll, visible }) => (
       {visible &&
         <button className="App-button-bottom" onClick={() => removeAll()}>Remove All Downloaded</button>
       }
-      <span>castLabs @ 2019</span>
+      <span>Castlabs @ 2019</span>
     </div>
   </footer>
 )
