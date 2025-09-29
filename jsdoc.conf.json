@@ -10,7 +10,7 @@
     "cleverLinks": false,
     "monospaceLinks": false,
     "name": "DOWNstream For Electron",
-    "footerText": "castLabs DOWNstream For Electron",
+    "footerText": "Castlabs DOWNstream For Electron",
     "default": {
       "outputSourceFiles": false,
       "useLongnameInNav": true
